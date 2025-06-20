@@ -1,195 +1,130 @@
-"use client"
+//@ts-nocheck
 
-import { useEffect, useRef } from "react"
-import { motion } from "framer-motion"
+"use client";
 
-export function Hero() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+import Link from "next/link";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
+import { Button } from "@/components/ui/moving-border";
+import Beams from "@/components/ui/Beams";
+import RotatingText from "@/components/ui/RotatingText";
+import { LayoutGroup } from "framer-motion";
 
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
+const Hero = () => {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
 
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
-
-    canvas.width = 500
-    canvas.height = 500
-
-    // Node class
-    class Node {
-      x: number
-      y: number
-      size: number
-      color: string
-      type: string
-
-      constructor(x: number, y: number, type: string) {
-        this.x = x
-        this.y = y
-        this.type = type
-
-        if (type === "person") {
-          this.size = 8
-          this.color = "#64ffda"
-        } else if (type === "task") {
-          this.size = 6
-          this.color = "#ff79c6"
-        } else {
-          this.size = 10
-          this.color = "#bd93f9"
-        }
-      }
-
-      draw() {
-        ctx!.fillStyle = this.color
-        ctx!.beginPath()
-        ctx!.arc(this.x, this.y, this.size, 0, Math.PI * 2)
-        ctx!.fill()
-
-        ctx!.strokeStyle = this.color
-        ctx!.lineWidth = 2
-        ctx!.beginPath()
-        ctx!.arc(this.x, this.y, this.size + 3, 0, Math.PI * 2)
-        ctx!.stroke()
-      }
-    }
-
-    // Create nodes
-    const centerX = canvas.width / 2
-    const centerY = canvas.height / 2
-    const aiNode = new Node(centerX, centerY, "ai")
-
-    const personNodes: Node[] = []
-    const taskNodes: Node[] = []
-    const radius = 150
-
-    // Create person nodes in a circle
-    for (let i = 0; i < 8; i++) {
-      const angle = (i / 8) * Math.PI * 2
-      const x = centerX + Math.cos(angle) * radius
-      const y = centerY + Math.sin(angle) * radius
-      personNodes.push(new Node(x, y, "person"))
-    }
-
-    // Create task nodes
-    for (let i = 0; i < 12; i++) {
-      const angle = (i / 12) * Math.PI * 2
-      const distance = Math.random() * 50 + 70
-      const x = centerX + Math.cos(angle) * distance
-      const y = centerY + Math.sin(angle) * distance
-      taskNodes.push(new Node(x, y, "task"))
-    }
-
-    // Animation variables
-    let animationFrame: number
-    let time = 0
-
-    // Animation loop
-    function animate() {
-      if (!canvas) return;
-      ctx!.clearRect(0, 0, canvas.width, canvas.height)
-
-      // Draw connections between AI and people
-      personNodes.forEach((person, index) => {
-        ctx!.strokeStyle = `rgba(100, 255, 218, ${0.3 + Math.sin(time + index) * 0.2})`
-        ctx!.lineWidth = 1
-        ctx!.beginPath()
-        ctx!.moveTo(aiNode.x, aiNode.y)
-        ctx!.lineTo(person.x, person.y)
-        ctx!.stroke()
-      })
-
-      // Draw connections between AI and tasks
-      taskNodes.forEach((task, index) => {
-        // Animate task movement
-        task.x = centerX + Math.cos(time * 0.5 + index) * (70 + (index % 3) * 20)
-        task.y = centerY + Math.sin(time * 0.5 + index) * (70 + (index % 3) * 20)
-
-        ctx!.strokeStyle = `rgba(255, 121, 198, ${0.4 + Math.sin(time * 0.8 + index) * 0.2})`
-        ctx!.lineWidth = 1
-        ctx!.beginPath()
-        ctx!.moveTo(aiNode.x, aiNode.y)
-        ctx!.lineTo(task.x, task.y)
-        ctx!.stroke()
-      })
-
-      // Randomly connect tasks to people
-      if (Math.random() > 0.95) {
-        const taskIndex = Math.floor(Math.random() * taskNodes.length)
-        const personIndex = Math.floor(Math.random() * personNodes.length)
-
-        ctx!.strokeStyle = "rgba(189, 147, 249, 0.6)"
-        ctx!.lineWidth = 2
-        ctx!.beginPath()
-        ctx!.moveTo(taskNodes[taskIndex].x, taskNodes[taskIndex].y)
-        ctx!.lineTo(personNodes[personIndex].x, personNodes[personIndex].y)
-        ctx!.stroke()
-
-        // Draw a small animation at the person node
-        ctx!.fillStyle = "rgba(189, 147, 249, 0.3)"
-        ctx!.beginPath()
-        ctx!.arc(personNodes[personIndex].x, personNodes[personIndex].y, 15, 0, Math.PI * 2)
-        ctx!.fill()
-      }
-
-      // Draw all nodes
-      aiNode.draw()
-      personNodes.forEach((node) => node.draw())
-      taskNodes.forEach((node) => node.draw())
-
-      time += 0.01
-      animationFrame = requestAnimationFrame(animate)
-    }
-
-    animate()
-
-    return () => {
-      cancelAnimationFrame(animationFrame)
-    }
-  }, [])
+  const textY = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
-      <div className="container mx-auto px-4 py-16 flex flex-col lg:flex-row items-center">
-        <motion.div
-          className="lg:w-1/2 text-center lg:text-left mb-12 lg:mb-0"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-display leading-tight">
-            <span className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-              Redefining Work Allocation
-            </span>{" "}
-            <br />
-            <span className="text-white">with AI and Blockchain</span>
-          </h1>
-          <p className="text-xl text-gray-300 mb-8 max-w-lg mx-auto lg:mx-0">
-            Connect your teams, automate task distribution, and build with transparency using Zenith's intelligent work
-            allocation platform.
-          </p>          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white text-lg py-3 px-8 rounded-lg transition-all duration-200 font-medium">
-              Request Demo
-            </button>
-            <button className="border border-cyan-500 text-cyan-400 hover:bg-cyan-500/10 text-lg py-3 px-8 rounded-lg transition-all duration-200 font-medium">
-              Learn More
-            </button>
-          </div>
-        </motion.div>
+    <section
+      ref={heroRef}
+      className="relative min-h-screen w-full overflow-hidden"
+    >
+      {/* Beams Background */}
+      <motion.div className="absolute inset-0 z-0">
+        <Beams
+          beamWidth={2}
+          beamHeight={15}
+          beamNumber={12}
+          lightColor="#2563eb"
+          speed={2}
+          noiseIntensity={1.75}
+          scale={0.2}
+          rotation={0}
+          className="w-full h-full"
+        />
+      </motion.div>
+
+      {/* Dark Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/20 z-10" />
+
+      {/* Hero Content */}
+      <motion.div
+        style={{ y: textY }}
+        className="relative z-20 mx-auto flex h-screen max-w-5xl flex-col justify-center px-4 py-8 text-center sm:px-6 md:px-16 lg:px-24"
+      >
+        <LayoutGroup>
+          <motion.h1
+            className="font-['Poppins'] text-7xl leading-snug text-sky-100"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+          >
+            <motion.div layout className="inline-flex items-baseline space-x-2">
+              <motion.span
+                layout
+                transition={{ type: "spring", stiffness: 400, damping: 40 }}
+              >
+                You&nbsp;
+              </motion.span>
+              <motion.span layout>
+                <div
+                  className="
+                  inline-flex items-center justify-center
+                  w-[22rem]
+                  bg-sky-50   
+                  whitespace-nowrap
+                  border border-white rounded-lg
+                  overflow-hidden
+                  px-3 py-3
+                  "
+                  style={{ color: "#b91c1c" }}
+                >
+                  <RotatingText
+                    texts={["Plan", "Build", "Deploy"]}
+                    mainClassName="font-['Poppins'] text-7xl font-bold"
+                    style={{ color: "#2563eb" }}
+                    initial={{ y: "100%" }}
+                    animate={{ y: 0 }}
+                    exit={{ y: "-120%" }}
+                    transition={{ type: "spring", damping: 30, stiffness: 400 }}
+                    rotationInterval={2000}
+                  />
+                </div>
+              </motion.span>
+              &nbsp;
+            </motion.div>
+
+            <motion.div
+              layout
+              transition={{ type: "spring", stiffness: 400, damping: 40 }}
+            >
+              Under One Roof
+            </motion.div>
+          </motion.h1>
+        </LayoutGroup>
+
+        <div className="mt-8 sm:mt-12 text-lg text-sky-100 font-['Poppins']">
+          <span>Unified planning, building, testing, and deployment</span>
+          <br />
+          <span>
+            AI‑native, blockchain‑secure, audit‑ready workflow for your teams.
+          </span>
+        </div>
 
         <motion.div
-          className="lg:w-1/2 relative"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          className="absolute bottom-20 inset-x-0 flex justify-center space-x-4 sm:space-x-6"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.5 }}
         >
-          <div className="relative w-full max-w-md mx-auto">
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-full blur-3xl"></div>
-            <canvas ref={canvasRef} className="w-full h-auto relative z-10" width="500" height="500"></canvas>
-          </div>
+          <Button className="rounded-lg border border-white/10 bg-[#2563eb] px-6 py-3 text-lg font-['Poppins'] backdrop-blur-3xl hover:cursor-pointer">
+            Get Started
+          </Button>
+          <Link href="#features">
+            <Button className="rounded-lg border border-white/20 px-6 py-3 text-lg font-['Poppins'] backdrop-blur-md transition-transform duration-300 hover:scale-105 hover:cursor-pointer hover:bg-white hover:text-black">
+              Learn More
+            </Button>
+          </Link>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
-  )
-}
+  );
+};
+
+export default Hero;

@@ -1,6 +1,6 @@
 import { AnimatedBackground } from "@/app/landing/animated-background"
 import { Navbar } from "@/app/landing/navbar"
-import { Hero } from "@/app/landing/hero"
+import Hero from "@/app/landing/hero"
 import { Features } from "@/app/landing/features"
 import { HowItWorks } from "@/app/landing/how-it-works"
 import { TechStack } from "@/app/landing/tech-stack"
