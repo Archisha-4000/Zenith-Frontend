@@ -37,9 +37,9 @@ export default function LandingNavbar() {
   });
 
   const navItems = [
-    { id: "features", name: "DOCS", link: "#features" },
-    { id: "how-it-works", name: "PRICING", link: "#how" },
-    { id: "faqs", name: "TUTORIAL", link: "#faqs" },
+    { id: "features", name: "DOCS", link: "#docs" },
+    { id: "pricing", name: "PRICING", link: "#pricing" },
+    { id: "faqs", name: "TUTORIAL", link: "#" },
   ];
 
   const handleScroll = (href: string) => {

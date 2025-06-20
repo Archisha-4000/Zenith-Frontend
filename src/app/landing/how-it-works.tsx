@@ -1,33 +1,51 @@
-"use client"
+//@ts-nocheck
+"use client";
 
-import { motion } from "framer-motion"
-import { Link, Cpu, Share2 } from "lucide-react"
+import { motion } from "framer-motion";
+import { Link, Cpu, Share2 } from "lucide-react";
+import Beams from "@/components/ui/Beams";
 
 const steps = [
   {
     icon: Link,
     title: "Connect",
-    description: "Integrate employee data and GitHub repositories to create a comprehensive knowledge base.",
+    description:
+      "Integrate employee data and GitHub repositories to create a comprehensive knowledge base.",
     color: "from-cyan-500 to-blue-600",
   },
   {
     icon: Cpu,
     title: "Analyze",
-    description: "AI scans project requirements and employee skills to determine optimal task allocation.",
+    description:
+      "AI scans project requirements and employee skills to determine optimal task allocation.",
     color: "from-blue-500 to-purple-600",
   },
   {
     icon: Share2,
     title: "Distribute",
-    description: "Tasks are automatically assigned with transparency and auditability via blockchain.",
+    description:
+      "Tasks are automatically assigned with transparency and auditability via blockchain.",
     color: "from-purple-500 to-pink-600",
   },
-]
+];
 
 export function HowItWorks() {
   return (
     <section id="how-it-works" className="py-24 relative">
-      <div className="container mx-auto px-4">
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <Beams
+          beamWidth={2}
+          beamHeight={15}
+          beamNumber={12}
+          lightColor="#2563eb"
+          speed={2}
+          noiseIntensity={1.75}
+          scale={0.2}
+          rotation={0}
+          className="w-full h-full"
+        />{" "}
+      </div>
+      <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <motion.h2
             className="text-3xl md:text-4xl font-bold mb-4 font-display"
@@ -36,22 +54,23 @@ export function HowItWorks() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+            <span className="font-['Kagitingan'] text-white bg-clip-text text-5xl">
               How Zenith Works
             </span>
           </motion.h2>
           <motion.p
-            className="text-xl text-gray-300 max-w-2xl mx-auto"
+            className="text-xl text-gray-300 max-w-2xl mx-auto font-['Poppins']"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            Our streamlined process ensures efficient work distribution with complete transparency.
+            Our streamlined process ensures efficient work distribution with
+            complete transparency.
           </motion.p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8 justify-center">
+        <div className="flex flex-col lg:flex-row gap-8 justify-center text-['Poppins']">
           {steps.map((step, index) => (
             <motion.div
               key={index}
@@ -67,7 +86,9 @@ export function HowItWorks() {
                 >
                   <step.icon className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4 text-center text-white">{step.title}</h3>
+                <h3 className="text-2xl font-bold mb-4 text-center text-white">
+                  {step.title}
+                </h3>
                 <p className="text-gray-300 text-center">{step.description}</p>
               </div>
 
@@ -80,5 +101,5 @@ export function HowItWorks() {
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -1,69 +1,64 @@
-"use client"
-
-import { motion } from "framer-motion"
-
-const technologies = [
-  { name: "Ethereum", logo: "ETH" },
-  { name: "IPFS", logo: "IPFS" },
-  { name: "OpenAI", logo: "AI" },
-  { name: "TensorFlow", logo: "TF" },
-  { name: "GitHub", logo: "GH" },
-  { name: "Solidity", logo: "SOL" },
-]
+"use client";
+import { PricingCard } from "@/components/ui/dark-gradient-pricing";
 
 export function TechStack() {
   return (
-    <section className="py-20 relative">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <motion.h2
-            className="text-3xl md:text-4xl font-bold mb-4 font-display"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-              Powered by Cutting-Edge Technology
-            </span>
-          </motion.h2>
-          <motion.p
-            className="text-xl text-gray-300 max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            We combine the best of blockchain and AI technologies to deliver a secure, transparent, and intelligent
-            platform.
-          </motion.p>
+    <section id="pricing" className="relative overflow-hidden">
+      <div className="relative z-10 mx-auto max-w-5xl px-4 py-20 md:px-8">
+        <div className="mb-12 space-y-3">
+          <h2 className="text-center text-white font-['Kagitingan'] bg-clip-text text-5xl leading-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight">
+            Pricing
+          </h2>
+          <p className="text-center text-base text-muted-foreground md:text-lg">
+            Use it for free for yourself, upgrade when your team needs advanced
+            control.
+          </p>
         </div>
-
-        <motion.div
-          className="flex flex-wrap justify-center gap-8"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          {technologies.map((tech, index) => (
-            <motion.div
-              key={index}
-              className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-6 flex flex-col items-center hover:border-cyan-500/50 transition-all duration-300 w-32 h-32"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -5 }}
-            >
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center mb-3">
-                <span className="text-2xl font-bold text-cyan-400">{tech.logo}</span>
-              </div>
-              <span className="text-white font-medium">{tech.name}</span>
-            </motion.div>
-          ))}
-        </motion.div>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <PricingCard
+            tier="Free"
+            price="$0/mo"
+            bestFor="Best for 1-5 users"
+            CTA="Get started free"
+            benefits={[
+              { text: "One workspace", checked: true },
+              { text: "Email support", checked: true },
+              { text: "1 day data retention", checked: false },
+              { text: "Custom roles", checked: false },
+              { text: "Priority support", checked: false },
+              { text: "SSO", checked: false },
+            ]}
+          />
+          <PricingCard
+            tier="Pro"
+            price="$79/mo"
+            bestFor="Best for 5-50 users"
+            CTA="14-day free trial"
+            benefits={[
+              { text: "Five workspaces", checked: true },
+              { text: "Email support", checked: true },
+              { text: "7 day data retention", checked: true },
+              { text: "Custom roles", checked: true },
+              { text: "Priority support", checked: false },
+              { text: "SSO", checked: false },
+            ]}
+          />
+          <PricingCard
+            tier="Enterprise"
+            price="Contact us"
+            bestFor="Best for 50+ users"
+            CTA="Contact us"
+            benefits={[
+              { text: "Unlimited workspaces", checked: true },
+              { text: "Email support", checked: true },
+              { text: "30 day data retention", checked: true },
+              { text: "Custom roles", checked: true },
+              { text: "Priority support", checked: true },
+              { text: "SSO", checked: true },
+            ]}
+          />
+        </div>
       </div>
     </section>
-  )
+  );
 }

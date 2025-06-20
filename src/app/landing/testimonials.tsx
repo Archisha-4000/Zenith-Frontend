@@ -1,8 +1,9 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { useState } from "react"
-import { ChevronLeft, ChevronRight, Quote } from "lucide-react"
+import { motion } from "framer-motion";
+import { useState } from "react";
+import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import Beams from "@/components/ui/Beams";
 
 const testimonials = [
   {
@@ -26,31 +27,46 @@ const testimonials = [
     role: "Lead Developer",
     company: "CodeCraft Inc.",
   },
-]
+];
 
 export function Testimonials() {
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const nextTestimonial = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length)
-  }
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+  };
 
   const prevTestimonial = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length)
-  }
+    setCurrentIndex(
+      (prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length
+    );
+  };
 
   return (
     <section id="testimonials" className="py-24 relative">
-      <div className="container mx-auto px-4">
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <Beams
+          beamWidth={2}
+          beamHeight={15}
+          beamNumber={12}
+          lightColor="#2563eb"
+          speed={2}
+          noiseIntensity={1.75}
+          scale={0.2}
+          rotation={0}
+          className="w-full h-full"
+        />{" "}
+      </div>
+      <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <motion.h2
-            className="text-3xl md:text-4xl font-bold mb-4 font-display"
+            className="text-3xl md:text-4xl font-bold mb-4 font-['Poppins']"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+            <span className=" text-white font-['Kagitingan'] bg-clip-text text-5xl">
               What Our Clients Say
             </span>
           </motion.h2>
@@ -61,7 +77,8 @@ export function Testimonials() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            Organizations are achieving remarkable results with Zenith's intelligent work allocation platform.
+            Organizations are achieving remarkable results with Zenith's
+            intelligent work allocation platform.
           </motion.p>
         </div>
 
@@ -74,15 +91,18 @@ export function Testimonials() {
             transition={{ duration: 0.5 }}
             className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-8 md:p-12 relative"
           >
-            <Quote className="absolute top-8 left-8 h-12 w-12 text-cyan-500/20" />
-            <div className="text-center">
+            <Quote className="absolute top-8 left-8 h-12 w-12 text-cyan-500/20 " />
+            <div className="text-center font-['Poppins']">
               <p className="text-xl md:text-2xl text-gray-200 mb-8 relative z-10">
                 "{testimonials[currentIndex].quote}"
               </p>
               <div>
-                <p className="text-lg font-semibold text-white">{testimonials[currentIndex].author}</p>
+                <p className="text-lg font-semibold text-white">
+                  {testimonials[currentIndex].author}
+                </p>
                 <p className="text-cyan-400">
-                  {testimonials[currentIndex].role}, {testimonials[currentIndex].company}
+                  {testimonials[currentIndex].role},{" "}
+                  {testimonials[currentIndex].company}
                 </p>
               </div>
             </div>
@@ -119,5 +139,5 @@ export function Testimonials() {
         </div>
       </div>
     </section>
-  )
+  );
 }
