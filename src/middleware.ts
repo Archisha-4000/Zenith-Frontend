@@ -13,6 +13,6 @@ export const config = {
      * - favicon.ico, sitemap.xml, robots.txt
      * - image files
      */
-    '/((?!_next|favicon.ico|sitemap.xml|robots.txt|.*\.jpg|.*\.png|.*\.svg|.*\.gif).*)',
+    '/((?!_next|setup|admin|admin//*|favicon.ico|sitemap.xml|robots.txt|.*\.jpg|.*\.png|.*\.svg|.*\.gif).*)',
   ],
 }
