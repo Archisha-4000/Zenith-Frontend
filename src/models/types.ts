@@ -33,11 +33,33 @@ export type User = {
   };
   role: "admin" | "manager" | "employee";
   job_role: string;
-  seniorty: "junior" | "mid" | "senior";
+  seniority: "junior" | "mid" | "senior";
   skills: string[];
   current_workload: number;
   hourly_rate: number;
-  performance_rating: number
+  performance_rating: number;
+  is_on_leave: boolean;
+  created_at: Date;
+};
+
+// Client-compatible version of User with string IDs
+export type ClientUser = {
+  _id: string;
+  org_id: string;
+  employee_id: string;
+  name: string;
+  email: string;
+  auth_provider: {
+    type: "civic";
+    provider_user_id: string;
+  };
+  role: "admin" | "manager" | "employee";
+  job_role: string;
+  seniority: "junior" | "mid" | "senior";
+  skills: string[];
+  current_workload: number;
+  hourly_rate: number;
+  performance_rating: number;
   is_on_leave: boolean;
   created_at: Date;
 };
