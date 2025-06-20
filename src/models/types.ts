@@ -26,11 +26,18 @@ export type User = {
   org_id: ObjectId;
   employee_id: string;
   name: string;
+  email: string;
   auth_provider: {
     type: "civic";
     provider_user_id: string;
   };
   role: "admin" | "manager" | "employee";
+  job_role: string;
+  seniorty: "junior" | "mid" | "senior";
+  skills: string[];
+  current_workload: number;
+  hourly_rate: number;
+  performance_rating: number
   is_on_leave: boolean;
   created_at: Date;
 };
