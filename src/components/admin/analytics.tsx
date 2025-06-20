@@ -184,7 +184,7 @@ export function Analytics() {
                     variant="outline"
                     className={
                       skill.gap > 20
-                        ? "bg-red-900/50 text-red-400 border-red-800"
+                        ? "bg-red-900/50 text-red-400 border-rose-800"
                         : skill.gap > 0
                           ? "bg-yellow-900/50 text-yellow-400 border-yellow-600"
                           : "bg-green-900/50 text-green-400 border-green-600"
@@ -238,7 +238,7 @@ export function Analytics() {
                           On Time
                         </Badge>
                       ) : (
-                        <Badge variant="outline" className="bg-red-900/50 text-red-400 border-red-800">
+                        <Badge variant="outline" className="bg-red-900/50 text-red-400 border-rose-800">
                           Delayed
                         </Badge>
                       )}

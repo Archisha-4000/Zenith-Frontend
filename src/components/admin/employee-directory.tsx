@@ -86,7 +86,7 @@ export function EmployeeDirectory() {
           <h1 className="text-3xl font-bold text-white">Employee Directory</h1>
           <p className="text-zinc-400 mt-1">Manage employees, assign roles, and monitor performance</p>
         </div>
-        <Button className="bg-red-800 hover:bg-red-700 text-white">
+        <Button className="bg-rose-800 hover:bg-red-700 text-white">
           <UserPlus className="w-4 h-4 mr-2" />
           Add Employee
         </Button>

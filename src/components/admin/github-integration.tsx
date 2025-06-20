@@ -116,7 +116,7 @@ export function GitHubIntegration() {
             <Github className="w-4 h-4 mr-2" />
             Sync Repositories
           </Button>
-          <Button className="bg-red-800 hover:bg-red-700 text-white">
+          <Button className="bg-rose-800 hover:bg-red-700 text-white">
             <ExternalLink className="w-4 h-4 mr-2" />
             Open GitHub
           </Button>

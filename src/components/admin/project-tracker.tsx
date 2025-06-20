@@ -75,7 +75,7 @@ export function ProjectTracker() {
       case "On Track":
         return "bg-green-900/50 text-green-400 border-green-600"
       case "Delayed":
-        return "bg-red-900/50 text-red-400 border-red-800"
+        return "bg-red-900/50 text-red-400 border-rose-800"
       case "Nearly Complete":
         return "bg-blue-900/50 text-blue-400 border-blue-600"
       default:
@@ -86,7 +86,7 @@ export function ProjectTracker() {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "Critical":
-        return "bg-red-900/50 text-red-400 border-red-800"
+        return "bg-red-900/50 text-red-400 border-rose-800"
       case "High":
         return "bg-orange-900/50 text-orange-400 border-orange-600"
       case "Medium":
@@ -103,7 +103,7 @@ export function ProjectTracker() {
           <h1 className="text-3xl font-bold text-white">Project Tracker</h1>
           <p className="text-zinc-400 mt-1">Monitor project progress and team performance</p>
         </div>
-        <Button className="bg-red-800 hover:bg-red-700 text-white">
+        <Button className="bg-rose-800 hover:bg-red-700 text-white">
           <Plus className="w-4 h-4 mr-2" />
           New Project
         </Button>

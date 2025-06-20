@@ -142,7 +142,7 @@ export function ActivityLogs() {
       case "success":
         return "bg-green-900/50 text-green-400 border-green-600"
       case "error":
-        return "bg-red-900/50 text-red-400 border-red-800"
+        return "bg-red-900/50 text-red-400 border-rose-800"
       case "warning":
         return "bg-yellow-900/50 text-yellow-400 border-yellow-600"
       case "pending":

@@ -28,7 +28,7 @@ export function BarChart({ data, height = 200, className, showValues = true }: B
               <div
                 className={cn(
                   "w-full rounded-t-lg transition-all duration-300 hover:opacity-80",
-                  item.color || "bg-red-800"
+                  item.color || "bg-rose-800"
                 )}
                 style={{
                   height: `${(item.value / maxValue) * (height - 40)}px`,
@@ -202,7 +202,7 @@ export function Heatmap({ data, rows, cols, className }: HeatmapProps) {
           return (
             <div
               key={index}
-              className="w-4 h-4 rounded-sm bg-red-800 hover:scale-110 transition-transform cursor-pointer"
+              className="w-4 h-4 rounded-sm bg-rose-800 hover:scale-110 transition-transform cursor-pointer"
               style={{ opacity }}
               title={`${item.name}: ${item.value}`}
             />

@@ -128,7 +128,7 @@ export default function TestDBPage() {
 
         {/* Result Display */}
         {result && (
-          <div className={`mt-6 p-4 rounded ${result.success ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+          <div className={`mt-6 p-4 rounded ${result.success ? 'bg-green-100 text-green-800' : 'bg-red-100 text-rose-800'}`}>
             <h3 className="font-semibold mb-2">Result:</h3>
             <p>{result.message}</p>
             {result.data && (

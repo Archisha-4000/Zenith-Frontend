@@ -74,7 +74,7 @@ export function TabsTrigger({ value, children, className, disabled }: TabsTrigge
       className={cn(
         "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
         isActive 
-          ? "bg-red-800 text-white shadow-sm" 
+          ? "bg-rose-800 text-white shadow-sm" 
           : "text-gray-400 hover:text-white hover:bg-gray-700",
         className
       )}

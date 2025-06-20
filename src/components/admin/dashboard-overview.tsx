@@ -109,7 +109,7 @@ export function DashboardOverview() {
                       project.status === "On Track"
                         ? "bg-green-900/50 text-green-400 border-green-600"
                         : project.status === "Delayed"
-                          ? "bg-red-900/50 text-red-400 border-red-800"
+                          ? "bg-red-900/50 text-red-400 border-rose-800"
                           : project.status === "Nearly Complete"
                             ? "bg-blue-900/50 text-blue-400 border-blue-600"
                             : "bg-yellow-900/50 text-yellow-400 border-yellow-600"

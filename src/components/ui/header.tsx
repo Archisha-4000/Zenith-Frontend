@@ -101,7 +101,7 @@ export function Header({
             <input
               type="text"
               placeholder="Search employees, projects, tasks..."
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-800 focus:border-transparent"
+              className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rose-800 focus:border-transparent"
             />
           </div>
         </div>
@@ -124,7 +124,7 @@ export function Header({
             className="relative text-gray-400 hover:text-white p-2 hover:bg-gray-800 rounded-lg transition-colors"
           >
             <Bell size={18} />
-            <span className="absolute -top-1 -right-1 bg-red-800 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 bg-rose-800 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
               {notifications.length}
             </span>
           </button>
@@ -175,7 +175,7 @@ export function Header({
             onClick={() => setShowProfileMenu(!showProfileMenu)}
             className="flex items-center space-x-3 p-2 hover:bg-gray-800 rounded-lg transition-colors"
           >
-            <div className="w-8 h-8 bg-gradient-to-br from-red-800 to-red-700 rounded-full flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-br from-rose-800 to-red-700 rounded-full flex items-center justify-center">
               <span className="text-white text-sm font-medium">A</span>
             </div>
             <div className="hidden md:block text-left">
@@ -190,7 +190,7 @@ export function Header({
             <div className="absolute right-0 mt-2 w-56 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50">
               <div className="p-4 border-b border-gray-700">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-red-800 to-red-700 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-gradient-to-br from-rose-800 to-red-700 rounded-full flex items-center justify-center">
                     <span className="text-white font-medium">A</span>
                   </div>
                   <div>

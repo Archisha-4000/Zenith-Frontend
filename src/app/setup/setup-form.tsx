@@ -98,7 +98,7 @@ export function SetupForm({ userId, userName }: SetupFormProps) {
 
         {/* Error Message */}
         {error && (
-          <div className="mb-6 p-4 bg-red-900/20 border border-red-800 rounded-lg text-red-400">
+          <div className="mb-6 p-4 bg-red-900/20 border border-rose-800 rounded-lg text-red-400">
             {error}
           </div>
         )}
@@ -168,7 +168,7 @@ export function SetupForm({ userId, userName }: SetupFormProps) {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-red-800 to-red-700 hover:from-red-700 hover:to-red-800 disabled:from-red-800 disabled:to-red-900 disabled:cursor-not-allowed text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] disabled:transform-none"
+              className="w-full bg-gradient-to-r from-rose-800 to-red-700 hover:from-red-700 hover:to-rose-800 disabled:from-rose-800 disabled:to-red-900 disabled:cursor-not-allowed text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] disabled:transform-none"
             >
               {isLoading ? (
                 <div className="flex items-center justify-center">

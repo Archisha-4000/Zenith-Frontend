@@ -106,7 +106,7 @@ export function BlockchainLedger() {
       case "Pending":
         return "bg-yellow-900/50 text-yellow-400 border-yellow-600"
       case "Failed":
-        return "bg-red-900/50 text-red-400 border-red-800"
+        return "bg-red-900/50 text-red-400 border-rose-800"
       default:
         return "bg-gray-900/50 text-gray-400 border-gray-600"
     }
@@ -128,7 +128,7 @@ export function BlockchainLedger() {
             <Download className="w-4 h-4 mr-2" />
             Export Ledger
           </Button>
-          <Button className="bg-red-800 hover:bg-red-700 text-white">
+          <Button className="bg-rose-800 hover:bg-red-700 text-white">
             <ExternalLink className="w-4 h-4 mr-2" />
             View on Explorer
           </Button>

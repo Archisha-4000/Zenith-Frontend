@@ -23,7 +23,7 @@ export function Badge({
     default: "bg-gray-800 text-gray-300 border border-gray-700",
     success: "bg-green-900/20 text-green-400 border border-green-800",
     warning: "bg-yellow-900/20 text-yellow-400 border border-yellow-800",
-    error: "bg-red-900/20 text-red-400 border border-red-800",
+    error: "bg-red-900/20 text-red-400 border border-rose-800",
     info: "bg-blue-900/20 text-blue-400 border border-blue-800"
   }
   

@@ -125,7 +125,7 @@ export function Sidebar({
           className={cn(
             "w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 group",
             isActive
-              ? "bg-red-800 text-white shadow-lg"
+              ? "bg-rose-800 text-white shadow-lg"
               : "text-gray-400 hover:text-white hover:bg-gray-800/50",
             collapsed && "justify-center px-2"
           )}
@@ -149,7 +149,7 @@ export function Sidebar({
               "px-2 py-0.5 text-xs rounded-full font-medium",
               isActive
                 ? "bg-white/20 text-white"
-                : "bg-red-800 text-white"
+                : "bg-rose-800 text-white"
             )}>
               {item.badge}
             </span>
@@ -180,7 +180,7 @@ export function Sidebar({
         <div className="flex items-center justify-between h-16 px-4 border-b border-gray-800">
           {!collapsed && (
             <div className="flex items-center">
-              <div className="w-8 h-8 bg-gradient-to-br from-red-800 to-red-700 rounded-lg flex items-center justify-center shadow-lg">
+              <div className="w-8 h-8 bg-gradient-to-br from-rose-800 to-red-700 rounded-lg flex items-center justify-center shadow-lg">
                 <span className="text-white font-bold text-sm">Z</span>
               </div>
               <div className="ml-3">
@@ -191,7 +191,7 @@ export function Sidebar({
           )}
           
           {collapsed && (
-            <div className="w-8 h-8 bg-gradient-to-br from-red-800 to-red-700 rounded-lg flex items-center justify-center shadow-lg mx-auto">
+            <div className="w-8 h-8 bg-gradient-to-br from-rose-800 to-red-700 rounded-lg flex items-center justify-center shadow-lg mx-auto">
               <span className="text-white font-bold text-sm">Z</span>
             </div>
           )}
@@ -213,7 +213,7 @@ export function Sidebar({
         {/* Sidebar Footer */}
         <div className="p-4 border-t border-gray-800">
           {!collapsed && (
-            <div className="mb-4 p-3 bg-red-900/20 border border-red-800 rounded-lg">
+            <div className="mb-4 p-3 bg-red-900/20 border border-rose-800 rounded-lg">
               <div className="flex items-center">
                 <Bell size={16} className="text-red-400 mr-2" />
                 <div className="flex-1 min-w-0">
@@ -245,7 +245,7 @@ export function Sidebar({
           {!collapsed && (
             <div className="mt-4 pt-4 border-t border-gray-800">
               <div className="flex items-center">
-                <div className="w-8 h-8 bg-red-800 rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 bg-rose-800 rounded-full flex items-center justify-center">
                   <span className="text-white text-sm font-medium">A</span>
                 </div>
                 <div className="ml-3 min-w-0 flex-1">
