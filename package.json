@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@civic/auth": "^0.8.0",
+    "@react-three/drei": "^10.3.0",
+    "@react-three/fiber": "^9.1.2",
+    "@tabler/icons-react": "^3.31.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.18.1",
     "lucide-react": "^0.516.0",
@@ -23,7 +26,8 @@
     "scheduler": "^0.26.0",
     "source-map-js": "^1.2.1",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "three": "^0.177.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.10",

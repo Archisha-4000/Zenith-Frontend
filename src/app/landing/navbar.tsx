@@ -1,98 +1,119 @@
-"use client"
+// src/app/landing/LandingNavbar.tsx
+"use client";
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { Menu, X } from "lucide-react"
-import { UserButton } from "@civic/auth/react"
-import { GradientUserButton } from "@/components/ui/gradient-user-button"
+import { useState, useEffect } from "react";
+import Link from "next/link";
 
-export function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+import {
+  Navbar,
+  NavBody,
+  NavItems,
+  MobileNav,
+  MobileNavHeader,
+  MobileNavToggle,
+  MobileNavMenu,
+  NavbarLogo,
+} from "@/components/ui/resizable-navbar";
+import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { UserButton } from "@civic/auth/react";
 
+export default function LandingNavbar() {
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const { scrollY } = useScroll();
+  const [visible, setVisible] = useState(false);
+  const [active, setActive] = useState<string | null>(null);
+
+  // smooth scroll
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true)
-      } else {
-        setIsScrolled(false)
-      }
-    }
-
-    window.addEventListener("scroll", handleScroll)
+    document.documentElement.style.scrollBehavior = "smooth";
     return () => {
-      window.removeEventListener("scroll", handleScroll)
+      document.documentElement.style.scrollBehavior = "auto";
+    };
+  }, []);
+
+  // toggle visible state on scroll
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setVisible(latest > 30);
+  });
+
+  const navItems = [
+    { id: "features", name: "DOCS", link: "#features" },
+    { id: "how-it-works", name: "PRICING", link: "#how" },
+    { id: "faqs", name: "TUTORIAL", link: "#faqs" },
+  ];
+
+  const handleScroll = (href: string) => {
+    const el = document.querySelector(href);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+      setIsMobileOpen(false);
     }
-  }, [])
+  };
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-black/30 backdrop-blur-lg shadow-lg" : "bg-transparent"
-      }`}
-    >
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center">
-          <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent font-display">
-            Zenith
-          </span>
-        </Link>
+    <div className="w-full">
+      {/* Fixed Resizable Navbar */}
+      <Navbar className="fixed inset-x-0 top-0 z-50 pt-2">
+        {/* Desktop NavBody */}
+        <NavBody visible={visible}>
+          {/* Logo on left */}
+          <NavbarLogo />
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
-          <Link href="#features" className="text-white/80 hover:text-white transition-colors">
-            Features
-          </Link>
-          <Link href="#how-it-works" className="text-white/80 hover:text-white transition-colors">
-            How It Works
-          </Link>          <Link href="#testimonials" className="text-white/80 hover:text-white transition-colors">
-            Testimonials
-          </Link>
-          <GradientUserButton />
-        </nav>
+          {/* Centered nav items */}
+          <NavItems
+            className="font-['Poppins'] text-base"
+            items={navItems.map((item) => ({
+              name: item.name,
+              link: item.link,
+            }))}
+            onItemClick={() => setIsMobileOpen(false)}
+          />
 
-        {/* Mobile Menu Button */}
-        <button className="md:hidden text-white" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
-
-      {/* Mobile Navigation */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-black/95 backdrop-blur-lg">
-          <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-            <Link
-              href="#features"
-              className="text-white/80 hover:text-white transition-colors py-2"
-              onClick={() => setIsMobileMenuOpen(false)}
+          {/* User avatar section on right */}
+          <div className="flex items-center gap-4">
+            <motion.div
+              className="hidden md:flex items-center relative z-[100]"
+              animate={{ scale: visible ? 0.85 : 1 }}
+              style={{ transformStyle: "preserve-3d" }}
             >
-              Features
-            </Link>
-            <Link
-              href="#how-it-works"
-              className="text-white/80 hover:text-white transition-colors py-2"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              How It Works
-            </Link>
-            <Link
-              href="#testimonials"
-              className="text-white/80 hover:text-white transition-colors py-2"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Testimonials
-            </Link>
-            <div className="flex flex-col space-y-2 pt-2">
-              <div className="inline-flex items-center justify-center border border-cyan-500 text-cyan-400 hover:bg-cyan-500/10 w-full px-4 py-2 rounded-lg transition-all duration-200 font-medium min-h-[40px] [&>*]:!bg-transparent [&>*]:!border-none [&>*]:!text-cyan-400 [&>*]:!p-0 [&>*]:!m-0 [&>*]:!font-medium [&>*]:!text-sm [&>*]:!leading-none [&>button]:!bg-transparent [&>button]:!border-none [&>button]:!text-cyan-400 [&>button]:!p-0 [&>button]:!m-0 [&>button]:!font-medium [&>button]:!text-sm [&>button]:!leading-none [&>button]:!min-h-0 [&>button]:!h-auto">
-                <UserButton />
-              </div>
-              <button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white w-full px-4 py-2 rounded-lg transition-all duration-200 font-medium">
-                Get Started
-              </button>
-            </div>
+              <UserButton />
+            </motion.div>
           </div>
-        </div>
-      )}
-    </header>
-  )
+        </NavBody>
+
+        {/* Mobile Nav */}
+        <MobileNav visible={visible}>
+          <MobileNavHeader>
+            <NavbarLogo />
+            <MobileNavToggle
+              isOpen={isMobileOpen}
+              onClick={() => setIsMobileOpen((o) => !o)}
+            />
+          </MobileNavHeader>
+
+          <MobileNavMenu
+            isOpen={isMobileOpen}
+            onClose={() => setIsMobileOpen(false)}
+          >
+            {/* Mobile Links */}
+            {navItems.map((item) => (
+              <Link
+                key={item.id}
+                href={item.link}
+                onClick={() => handleScroll(item.link)}
+                className="block px-4 py-2 text-white dark:text-white font-['Kagitingan']"
+              >
+                {item.name}
+              </Link>
+            ))}
+
+            {/* Mobile user section */}
+            <div className="mt-4 border-t border-neutral-200 dark:border-neutral-700 pt-4 flex justify-start">
+              <UserButton />
+            </div>
+          </MobileNavMenu>
+        </MobileNav>
+      </Navbar>
+    </div>
+  );
 }
