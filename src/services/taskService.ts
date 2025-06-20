@@ -117,3 +117,60 @@ export async function getTasksByEmail(email: string): Promise<any[]> {
     return serializedTask;
   });
 }
+
+export async function updateTaskStatusForEmployee(
+  id: string,
+  status: "pending" | "in_progress" | "completed"
+): Promise<any | null> {
+  const { tasks } = await getCollections();
+  
+  // Map employee dashboard status to internal status
+  let internalStatus: "pending" | "started" | "done";
+  switch (status) {
+    case "pending":
+      internalStatus = "pending";
+      break;
+    case "in_progress":
+      internalStatus = "started";
+      break;
+    case "completed":
+      internalStatus = "done";
+      break;
+    default:
+      throw new Error("Invalid status");
+  }
+  
+  // Handle status changes to update timestamps
+  const updateData: any = { status: internalStatus };
+  if (internalStatus === "started") {
+    updateData.started_at = new Date();
+  }
+  if (internalStatus === "done") {
+    updateData.completed_at = new Date();
+  }
+  
+  await tasks.updateOne(
+    { _id: new ObjectId(id) },
+    { $set: updateData }
+  );
+
+  // Return the updated task with serialized data for the client
+  const updatedTask = await tasks.findOne({ _id: new ObjectId(id) });
+  if (!updatedTask) return null;
+
+  // Convert to serializable format
+  const serializedTask: any = {};
+  for (const [key, value] of Object.entries(updatedTask)) {
+    if (value instanceof ObjectId) {
+      serializedTask[key] = value.toString();
+    } else if (value instanceof Date) {
+      serializedTask[key] = value.toISOString();
+    } else if (value && typeof value === 'object' && value.constructor === Object) {
+      serializedTask[key] = JSON.parse(JSON.stringify(value));
+    } else {
+      serializedTask[key] = value;
+    }
+  }
+  
+  return serializedTask;
+}

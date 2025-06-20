@@ -171,3 +171,22 @@ export async function deleteTaskAction(taskId: string): Promise<ActionResult<boo
     return { success: false, error: "Failed to delete task" };
   }
 }
+
+export async function updateEmployeeTaskStatusAction(taskId: string, status: "pending" | "in_progress" | "completed"): Promise<ActionResult<any>> {
+  try {
+    const { updateTaskStatusForEmployee } = await import("@/services/taskService");
+    const task = await updateTaskStatusForEmployee(taskId, status);
+    
+    if (!task) {
+      return { success: false, error: "Task not found" };
+    }
+
+    // Revalidate relevant paths
+    revalidatePath("/employee");
+    
+    return { success: true, data: task };
+  } catch (error) {
+    console.error("Failed to update task status:", error);
+    return { success: false, error: "Failed to update task status" };
+  }
+}
