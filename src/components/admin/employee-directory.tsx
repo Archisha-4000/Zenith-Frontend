@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -8,81 +8,54 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Search, Filter, MoreHorizontal, UserPlus, Crown, Activity, Github, Shield, Upload, X, CheckCircle, AlertCircle } from "lucide-react"
-import { createUserFromDataAction } from "@/actions/user"
+import { Search, Filter, MoreHorizontal, UserPlus, Crown, Activity, Github, Shield, Upload, X, CheckCircle, AlertCircle, User, Mail, MapPin, Calendar, Star, Clock, DollarSign } from "lucide-react"
+import { createUserFromDataAction, getCurrentUserAction, getUsersByOrgAction } from "@/actions/user"
+import { ClientUser } from "@/models/types"
 
 export function EmployeeDirectory() {
   const [searchTerm, setSearchTerm] = useState("")
   const [uploading, setUploading] = useState(false)
   const [uploadResult, setUploadResult] = useState<{ success: boolean; message: string; count?: number } | null>(null)
+  const [employees, setEmployees] = useState<ClientUser[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedEmployee, setSelectedEmployee] = useState<ClientUser | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  // Load employees from database on component mount
+  const loadEmployees = async () => {
+    setLoading(true)
+    try {      // First get current user to determine their organization
+      const currentUserResult = await getCurrentUserAction()
+      if (currentUserResult.success && currentUserResult.data) {
+        console.log('Current user org_id:', currentUserResult.data.org_id) // Debug log
+        // Then get all users from the same organization
+        const orgUsersResult = await getUsersByOrgAction(currentUserResult.data.org_id)
+        console.log('Org users result:', orgUsersResult) // Debug log
+        if (orgUsersResult.success) {
+          setEmployees(orgUsersResult.data || [])
+        }
+      } else {
+        console.log('Failed to get current user:', currentUserResult) // Debug log
+      }
+    } catch (error) {
+      console.error("Failed to load employees:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
-  const employees = [
-    {
-      id: 1,
-      name: "Alice Johnson",
-      email: "alice@company.com",
-      role: "Senior Developer",
-      department: "Blockchain Core",
-      skills: ["Solidity", "React", "Node.js"],
-      workload: 85,
-      status: "Active",
-      githubConnected: true,
-      blockchainVerified: true,
-      tasksCompleted: 47,
-      avatar: "/placeholder.svg?height=32&width=32",
-    },
-    {
-      id: 2,
-      name: "Bob Smith",
-      email: "bob@company.com",
-      role: "Project Manager",
-      department: "Frontend Team",
-      skills: ["Management", "Agile", "React"],
-      workload: 70,
-      status: "Active",
-      githubConnected: true,
-      blockchainVerified: true,
-      tasksCompleted: 23,
-      avatar: "/placeholder.svg?height=32&width=32",
-    },
-    {
-      id: 3,
-      name: "Carol Davis",
-      email: "carol@company.com",
-      role: "Security Analyst",
-      department: "Security Team",
-      skills: ["Security", "Auditing", "Python"],
-      workload: 92,
-      status: "Active",
-      githubConnected: false,
-      blockchainVerified: true,
-      tasksCompleted: 31,
-      avatar: "/placeholder.svg?height=32&width=32",
-    },
-    {
-      id: 4,
-      name: "David Wilson",
-      email: "david@company.com",
-      role: "Backend Developer",
-      department: "Backend Team",
-      skills: ["Node.js", "PostgreSQL", "Docker"],
-      workload: 45,
-      status: "Available",
-      githubConnected: true,
-      blockchainVerified: false,
-      tasksCompleted: 18,
-      avatar: "/placeholder.svg?height=32&width=32",
-    },  ]
-  
+  useEffect(() => {
+    loadEmployees()
+  }, [])
+
   const filteredEmployees = employees.filter(
     (employee) =>
       employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      employee.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      employee.job_role.toLowerCase().includes(searchTerm.toLowerCase()) ||
       employee.skills.some((skill) => skill.toLowerCase().includes(searchTerm.toLowerCase())),
   )
   
-  const parseCSV = (csvText: string) => {
+  const parseCSV = (csvText: string, orgId: string) => {
     const lines = csvText.split('\n').filter(line => line.trim() !== '')
     if (lines.length < 2) {
       throw new Error('CSV must have at least a header row and one data row')
@@ -99,41 +72,61 @@ export function EmployeeDirectory() {
       const values = line.split(',').map(value => value.trim().replace(/"/g, ''))
       const rowData: any = {}
       
+      // First, capture ALL fields from the CSV without filtering
       headers.forEach((header, headerIndex) => {
         const value = values[headerIndex]
-        if (value !== undefined && value !== null) {          if (header === 'name') rowData.name = value
-          else if (header === 'employee_id' || header === 'employeeid') rowData.employeeId = value
-          else if (header === 'email') rowData.email = value
-          else if (header === 'role' && !header.includes('job')) rowData.role = value.toLowerCase()
-          else if (header === 'job_role' || header === 'jobrole' || header === 'job role') rowData.jobRole = value
-          else if (header === 'seniority') rowData.seniority = value.toLowerCase()
-          else if (header === 'skills') {
-            // Handle skills array - split by # and filter out empty strings
-            rowData.skills = value.split('#').map(s => s.trim()).filter(s => s.length > 0)
-          }
-          else if (header === 'current_workload' || header === 'currentworkload' || header === 'workload') {
-            // Parse workload as number, handle empty values
-            const parsed = parseFloat(value)
-            rowData.currentWorkload = isNaN(parsed) ? 0 : parsed
-          }
-          else if (header === 'hourly_rate' || header === 'hourlyrate' || header === 'rate') {
-            // Parse hourly rate as number, handle empty values
-            const parsed = parseFloat(value)
-            rowData.hourlyRate = isNaN(parsed) ? 0 : parsed
-          }
-          else if (header === 'performance_rating' || header === 'performancerating' || header === 'rating') {
-            // Parse performance rating as number, handle empty values
-            const parsed = parseFloat(value)
-            rowData.performanceRating = isNaN(parsed) ? 0 : parsed
-          }
-          else if (header === 'provider_user_id' || header === 'provideruserid' || header === 'userid') rowData.providerUserId = value
-          else if (header === 'is_on_leave' || header === 'isonleave' || header === 'onleave') rowData.isOnLeave = value.toLowerCase() === 'true'
+        if (value !== undefined && value !== null && value !== '') {
+          rowData[header] = value
         }
       })
 
+      // Then map specific fields to standardized property names for known fields
+      // This preserves all original data while also providing standardized access
+      if (rowData.name) rowData.name = rowData.name
+      if (rowData.employee_id || rowData.employeeid) rowData.employeeId = rowData.employee_id || rowData.employeeid
+      if (rowData.email) rowData.email = rowData.email
+      if (rowData.role && !rowData.role.includes('job')) rowData.role = rowData.role.toLowerCase()
+      if (rowData.job_role || rowData.jobrole || rowData['job role']) {
+        rowData.jobRole = rowData.job_role || rowData.jobrole || rowData['job role']
+      }
+      if (rowData.seniority) rowData.seniority = rowData.seniority.toLowerCase()
+      if (rowData.skills) {
+        // Handle skills array - split by # and filter out empty strings
+        rowData.skills = rowData.skills.split('#').map((s: string) => s.trim()).filter((s: string) => s.length > 0)
+      }
+      if (rowData.current_workload || rowData.currentworkload || rowData.workload) {
+        const workloadValue = rowData.current_workload || rowData.currentworkload || rowData.workload
+        const parsed = parseFloat(workloadValue)
+        rowData.currentWorkload = isNaN(parsed) ? 0 : parsed
+      }
+      if (rowData.hourly_rate || rowData.hourlyrate || rowData.rate) {
+        const rateValue = rowData.hourly_rate || rowData.hourlyrate || rowData.rate
+        const parsed = parseFloat(rateValue)
+        rowData.hourlyRate = isNaN(parsed) ? 0 : parsed
+      }
+      if (rowData.performance_rating || rowData.performancerating || rowData.rating) {
+        const ratingValue = rowData.performance_rating || rowData.performancerating || rowData.rating
+        const parsed = parseFloat(ratingValue)
+        rowData.performanceRating = isNaN(parsed) ? 0 : parsed
+      }
+      if (rowData.provider_user_id || rowData.provideruserid || rowData.userid) {
+        rowData.providerUserId = rowData.provider_user_id || rowData.provideruserid || rowData.userid
+      }      if (rowData.is_on_leave || rowData.isonleave || rowData.onleave) {
+        const leaveValue = rowData.is_on_leave || rowData.isonleave || rowData.onleave
+        rowData.isOnLeave = leaveValue.toLowerCase() === 'true'
+      }
+
+      // Handle org_id from CSV - convert to MongoDB ObjectId format
+      if (rowData.org_id || rowData.orgid) {
+        const orgIdValue = rowData.org_id || rowData.orgid
+        // Store in MongoDB ObjectId format
+        rowData.org_id = { "$oid": orgIdValue }
+        rowData.orgId = orgIdValue // Also keep the string version for compatibility
+      }
+
       // Validate required fields
-      if (!rowData.name || !rowData.employeeId) {
-        throw new Error(`Row ${index + 2}: Missing required fields (name, employeeId)`)
+      if (!rowData.name || (!rowData.employeeId && !rowData.employee_id && !rowData.employeeid)) {
+        throw new Error(`Row ${index + 2}: Missing required fields (name, employee_id)`)
       }
 
       // Validate role if provided
@@ -144,8 +137,12 @@ export function EmployeeDirectory() {
       // Validate seniority if provided
       if (rowData.seniority && !['junior', 'mid', 'senior'].includes(rowData.seniority)) {
         throw new Error(`Row ${index + 2}: Invalid seniority "${rowData.seniority}". Must be junior, mid, or senior`)
-      }      // Add default orgId (you might want to make this configurable)
-      rowData.orgId = "675faaaa0000000000000001" // Valid ObjectId format - Replace with actual org ID
+      }
+
+      // If no org_id in CSV, use the current user's organization ID
+      if (!rowData.orgId) {
+        rowData.orgId = orgId
+      }
 
       return rowData
     })
@@ -163,8 +160,18 @@ export function EmployeeDirectory() {
     setUploadResult(null)
 
     try {
+      // Get current user's organization first
+      const currentUserResult = await getCurrentUserAction()
+      if (!currentUserResult.success || !currentUserResult.data) {
+        setUploadResult({
+          success: false,
+          message: 'Unable to determine current user organization'
+        })
+        return
+      }
+
       const text = await file.text()
-      const userData = parseCSV(text)
+      const userData = parseCSV(text, currentUserResult.data.org_id) // Pass org_id to parser
       
       console.log('Parsed CSV data:', userData) // Debug log
         const createdUsers: any[] = []
@@ -200,13 +207,14 @@ export function EmployeeDirectory() {
           success: false,
           message: `Partially successful: Created ${createdUsers.length} users, failed ${errors.length}. Errors: ${errors.join('; ')}`,
           count: createdUsers.length
-        })
-      } else {
+        })      } else {
         setUploadResult({
           success: true,
           message: `Successfully uploaded ${createdUsers.length} employees`,
           count: createdUsers.length
         })
+        // Reload employees list after successful upload
+        loadEmployees()
       }
     } catch (error) {
       setUploadResult({
@@ -338,128 +346,237 @@ export function EmployeeDirectory() {
             </Button>
           </div>
         </CardContent>
-      </Card>
-
-      {/* Employee Table */}
+      </Card>      {/* Employee Table */}
       <Card className="bg-zinc-800 border-zinc-700">
         <CardHeader>
           <CardTitle className="text-white">Team Members</CardTitle>
-          <CardContent className="text-zinc-400">{filteredEmployees.length} employees found</CardContent>
+          <CardContent className="text-zinc-400">
+            {loading ? "Loading..." : `${filteredEmployees.length} employees found`}
+          </CardContent>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow className="border-zinc-700">
-                <TableHead className="text-zinc-400">Employee</TableHead>
-                <TableHead className="text-zinc-400">Department</TableHead>
-                <TableHead className="text-zinc-400">Skills</TableHead>
-                <TableHead className="text-zinc-400">Workload</TableHead>
-                <TableHead className="text-zinc-400">Status</TableHead>
-                <TableHead className="text-zinc-400">Integrations</TableHead>
-                <TableHead className="text-zinc-400">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredEmployees.map((employee) => (
-                <TableRow key={employee.id} className="border-zinc-700">
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      <Avatar className="w-8 h-8">
-                        <AvatarImage src={employee.avatar || "/placeholder.svg"} />
-                        <AvatarFallback className="bg-zinc-600 text-white">
-                          {employee.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-medium text-white">{employee.name}</p>
-                        <p className="text-sm text-zinc-400">{employee.role}</p>
+          {loading ? (
+            <div className="text-center py-8 text-zinc-400">Loading employees...</div>
+          ) : employees.length === 0 ? (
+            <div className="text-center py-8 text-zinc-400">
+              The organization does not have any employees yet
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow className="border-zinc-700">
+                  <TableHead className="text-zinc-400">Employee</TableHead>
+                  <TableHead className="text-zinc-400">Job Role</TableHead>
+                  <TableHead className="text-zinc-400">Skills</TableHead>
+                  <TableHead className="text-zinc-400">Availability</TableHead>
+                  <TableHead className="text-zinc-400">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredEmployees.map((employee) => (
+                  <TableRow key={employee._id} className="border-zinc-700">
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <Avatar className="w-8 h-8">
+                          <AvatarImage src="/placeholder.svg" />
+                          <AvatarFallback className="bg-zinc-600 text-white">
+                            {employee.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-medium text-white">{employee.name}</p>
+                          <p className="text-sm text-zinc-400">{employee.email}</p>
+                        </div>
                       </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-zinc-300">{employee.department}</TableCell>
-                  <TableCell>
-                    <div className="flex flex-wrap gap-1">
-                      {employee.skills.slice(0, 2).map((skill, index) => (
-                        <Badge key={index} variant="outline" className="bg-zinc-700 text-zinc-300 border-zinc-500">
-                          {skill}
-                        </Badge>
-                      ))}
-                      {employee.skills.length > 2 && (
-                        <Badge variant="outline" className="bg-zinc-700 text-zinc-300 border-zinc-500">
-                          +{employee.skills.length - 2}
-                        </Badge>
-                      )}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <div className="w-16 h-2 bg-zinc-600 rounded-full overflow-hidden">
-                        <div
-                          className={`h-full ${
-                            employee.workload > 80
-                              ? "bg-red-500"
-                              : employee.workload > 60
-                                ? "bg-yellow-500"
-                                : "bg-green-500"
-                          }`}
-                          style={{ width: `${employee.workload}%` }}
-                        />
+                    </TableCell>
+                    <TableCell className="text-zinc-300">{employee.job_role || "Not specified"}</TableCell>
+                    <TableCell>
+                      <div className="flex flex-wrap gap-1">
+                        {employee.skills.slice(0, 2).map((skill, index) => (
+                          <Badge key={index} variant="outline" className="bg-zinc-700 text-zinc-300 border-zinc-500">
+                            {skill}
+                          </Badge>
+                        ))}
+                        {employee.skills.length > 2 && (
+                          <Badge variant="outline" className="bg-zinc-700 text-zinc-300 border-zinc-500">
+                            +{employee.skills.length - 2}
+                          </Badge>
+                        )}
                       </div>
-                      <span className="text-sm text-zinc-300">{employee.workload}%</span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant="outline"
+                        className={
+                          employee.is_on_leave
+                            ? "bg-red-900/50 text-red-400 border-red-600"
+                            : "bg-green-900/50 text-green-400 border-green-600"
+                        }
+                      >
+                        <Activity className="w-3 h-3 mr-1" />
+                        {employee.is_on_leave ? "On Leave" : "Available"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0 text-zinc-400 hover:text-white">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="bg-zinc-700 border-zinc-600">
+                          <DropdownMenuItem 
+                            className="text-zinc-300 hover:bg-zinc-600"
+                            onClick={() => {
+                              setSelectedEmployee(employee)
+                              setIsModalOpen(true)
+                            }}
+                          >
+                            View Details
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* User Details Modal */}
+      {isModalOpen && selectedEmployee && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setIsModalOpen(false)}
+          />
+          
+          {/* Modal */}
+          <div className="relative bg-zinc-800 border border-zinc-700 rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-white">Employee Details</h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsModalOpen(false)}
+                className="text-zinc-400 hover:text-white"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            
+            <div className="space-y-6">
+              {/* Profile Section */}
+              <div className="flex items-center gap-4">
+                <Avatar className="w-16 h-16">
+                  <AvatarImage src="/placeholder.svg" />
+                  <AvatarFallback className="bg-zinc-600 text-white text-lg">
+                    {selectedEmployee.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="text-xl font-semibold text-white">{selectedEmployee.name}</h3>
+                  <p className="text-zinc-400">{selectedEmployee.job_role || "Not specified"}</p>
+                  <Badge className={`mt-1 ${selectedEmployee.role === 'admin' ? 'bg-red-600' : selectedEmployee.role === 'manager' ? 'bg-blue-600' : 'bg-green-600'}`}>
+                    {selectedEmployee.role}
+                  </Badge>
+                </div>
+              </div>
+              
+              {/* Details Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-zinc-400" />
+                    <span className="text-sm text-zinc-400">Email:</span>
+                    <span className="text-white">{selectedEmployee.email}</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <User className="w-4 h-4 text-zinc-400" />
+                    <span className="text-sm text-zinc-400">Employee ID:</span>
+                    <span className="text-white">{selectedEmployee.employee_id}</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <Star className="w-4 h-4 text-zinc-400" />
+                    <span className="text-sm text-zinc-400">Seniority:</span>
+                    <span className="text-white capitalize">{selectedEmployee.seniority}</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-zinc-400" />
+                    <span className="text-sm text-zinc-400">Workload:</span>
+                    <span className="text-white">{selectedEmployee.current_workload}%</span>
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <DollarSign className="w-4 h-4 text-zinc-400" />
+                    <span className="text-sm text-zinc-400">Hourly Rate:</span>
+                    <span className="text-white">${selectedEmployee.hourly_rate}</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <Star className="w-4 h-4 text-zinc-400" />
+                    <span className="text-sm text-zinc-400">Performance:</span>
+                    <span className="text-white">{selectedEmployee.performance_rating}/10</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <Activity className="w-4 h-4 text-zinc-400" />
+                    <span className="text-sm text-zinc-400">Status:</span>
                     <Badge
                       variant="outline"
                       className={
-                        employee.status === "Active"
-                          ? "bg-green-900/50 text-green-400 border-green-600"
-                          : "bg-blue-900/50 text-blue-400 border-blue-600"
+                        selectedEmployee.is_on_leave
+                          ? "bg-red-900/50 text-red-400 border-red-600"
+                          : "bg-green-900/50 text-green-400 border-green-600"
                       }
                     >
-                      <Activity className="w-3 h-3 mr-1" />
-                      {employee.status}
+                      {selectedEmployee.is_on_leave ? "On Leave" : "Available"}
                     </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <div
-                        className={`w-2 h-2 rounded-full ${employee.githubConnected ? "bg-green-500" : "bg-red-500"}`}
-                      />
-                      <Github className="w-4 h-4 text-zinc-400" />
-                      <div
-                        className={`w-2 h-2 rounded-full ${employee.blockchainVerified ? "bg-green-500" : "bg-red-500"}`}
-                      />
-                      <Shield className="w-4 h-4 text-zinc-400" />
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0 text-zinc-400 hover:text-white">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="bg-zinc-700 border-zinc-600">
-                        <DropdownMenuItem className="text-zinc-300 hover:bg-zinc-600">View Profile</DropdownMenuItem>
-                        <DropdownMenuItem className="text-zinc-300 hover:bg-zinc-600">
-                          <Crown className="w-4 h-4 mr-2" />
-                          Promote to Manager
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="text-zinc-300 hover:bg-zinc-600">Assign Tasks</DropdownMenuItem>
-                        <DropdownMenuItem className="text-red-400 hover:bg-red-900/50">Remove Access</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-zinc-400" />
+                    <span className="text-sm text-zinc-400">Joined:</span>
+                    <span className="text-white">
+                      {new Date(selectedEmployee.created_at).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Skills Section */}
+              <div>
+                <h4 className="text-lg font-semibold text-white mb-3">Skills</h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedEmployee.skills.length > 0 ? (
+                    selectedEmployee.skills.map((skill, index) => (
+                      <Badge key={index} variant="outline" className="bg-zinc-700 text-zinc-300 border-zinc-500">
+                        {skill}
+                      </Badge>
+                    ))
+                  ) : (
+                    <span className="text-zinc-400">No skills specified</span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

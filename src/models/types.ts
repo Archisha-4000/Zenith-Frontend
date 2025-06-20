@@ -40,6 +40,7 @@ export type User = {
   performance_rating: number;
   is_on_leave: boolean;
   created_at: Date;
+  [key: string]: any; // Allow additional fields from CSV
 };
 
 // Client-compatible version of User with string IDs
@@ -62,6 +63,7 @@ export type ClientUser = {
   performance_rating: number;
   is_on_leave: boolean;
   created_at: Date;
+  [key: string]: any; // Allow additional fields from CSV
 };
 
 export type Device = {

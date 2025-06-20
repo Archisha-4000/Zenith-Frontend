@@ -1,6 +1,7 @@
 "use server";
 
-import { createUser, getUserById, getUsersByOrgId, updateUser, deleteUser } from "@/services/userService";
+import { createUser, getUserById, getUsersByOrgId, updateUser, deleteUser, getUserByEmail } from "@/services/userService";
+import { getCollections } from "@/lib/db/collections";
 import { revalidatePath } from "next/cache";
 import { ActionResult, validateRequired } from "./utils";
 import { User, ClientUser } from "@/models/types";
@@ -70,16 +71,6 @@ export async function getUserAction(id: string): Promise<ActionResult<User>> {
   } catch (error) {
     console.error("Failed to get user:", error);
     return { success: false, error: "Failed to get user" };
-  }
-}
-
-export async function getUsersByOrgAction(orgId: string): Promise<ActionResult<User[]>> {
-  try {
-    const users = await getUsersByOrgId(orgId);
-    return { success: true, data: users };
-  } catch (error) {
-    console.error("Failed to get users:", error);
-    return { success: false, error: "Failed to get users" };
   }
 }
 
@@ -159,16 +150,7 @@ export async function createUserFromDataAction(userData: {
   orgId: string;
   employeeId: string;
   name: string;
-  email?: string;
-  role?: "admin" | "manager" | "employee";
-  jobRole?: string;
-  seniority?: "junior" | "mid" | "senior";
-  skills?: string[];
-  currentWorkload?: number;
-  hourlyRate?: number;
-  performanceRating?: number;
-  providerUserId?: string;
-  isOnLeave?: boolean;
+  [key: string]: any; // Allow any additional fields from CSV
 }): Promise<ActionResult<ClientUser>> {
   try {
     // Validation - only require the essential fields
@@ -179,39 +161,101 @@ export async function createUserFromDataAction(userData: {
     });
     if (fieldErrors) {
       return { success: false, fieldErrors };
+    }    // Determine the org_id to use
+    let orgIdToUse: ObjectId;
+    
+    // If CSV has org_id in ObjectId format, use that
+    if (userData.org_id && typeof userData.org_id === 'object' && userData.org_id.$oid) {
+      orgIdToUse = new ObjectId(userData.org_id.$oid);
+    } else {
+      // Otherwise use the provided orgId (from current user)
+      if (!ObjectId.isValid(userData.orgId)) {
+        return { success: false, error: `Invalid organization ID format: ${userData.orgId}` };
+      }
+      orgIdToUse = new ObjectId(userData.orgId);
     }
 
-    // Validate ObjectId format for orgId
-    if (!ObjectId.isValid(userData.orgId)) {
-      return { success: false, error: `Invalid organization ID format: ${userData.orgId}` };
-    }
-
-    const user = await createUser({
-      org_id: new ObjectId(userData.orgId),
+    // Prepare the user data, extracting known fields and preserving all others
+    const userInput = {
+      org_id: orgIdToUse,
       employee_id: userData.employeeId,
       name: userData.name,
       email: userData.email,
       auth_provider: {
-        type: "civic",
+        type: "civic" as const,
         provider_user_id: userData.providerUserId || ""
       },
-      role: userData.role,
+      role: userData.role as "admin" | "manager" | "employee" | undefined,
       job_role: userData.jobRole,
-      seniority: userData.seniority,
+      seniority: userData.seniority as "junior" | "mid" | "senior" | undefined,
       skills: userData.skills,
       current_workload: userData.currentWorkload,
       hourly_rate: userData.hourlyRate,
       performance_rating: userData.performanceRating,
-      is_on_leave: userData.isOnLeave
-    });
+      is_on_leave: userData.isOnLeave,
+      // Include all additional fields from CSV
+      ...Object.keys(userData).reduce((acc, key) => {
+        // Skip fields we've already mapped to avoid duplicates and internal ObjectId fields
+        if (!['orgId', 'employeeId', 'name', 'email', 'role', 'jobRole', 
+              'seniority', 'skills', 'currentWorkload', 'hourlyRate', 
+              'performanceRating', 'providerUserId', 'isOnLeave', 'org_id'].includes(key)) {
+          acc[key] = userData[key];
+        }
+        return acc;
+      }, {} as Record<string, any>)
+    };    const user = await createUser(userInput);
 
     // Revalidate relevant paths
     revalidatePath("/dashboard/users");
-    revalidatePath(`/dashboard/organizations/${userData.orgId}`);
+    revalidatePath(`/dashboard/organizations/${orgIdToUse.toString()}`);
     
     return { success: true, data: user };
   } catch (error) {
     console.error("Failed to create user:", error);
     return { success: false, error: error instanceof Error ? error.message : "Failed to create user" };
+  }
+}
+
+export async function getCurrentUserAction(): Promise<ActionResult<ClientUser>> {
+  try {
+    // This would typically get the current user from session/auth
+    // For demo purposes, we'll get the first user from the database
+    // TODO: Replace with actual authentication logic
+    
+    const { users } = await getCollections();
+    const user = await users.findOne({});
+    
+    if (!user) {
+      return { success: false, error: "No users found in database" };
+    }    // Convert to ClientUser format
+    const clientUser: ClientUser = {
+      ...user,
+      _id: user._id.toString(),
+      org_id: user.org_id instanceof ObjectId ? user.org_id.toHexString() : String(user.org_id),
+      created_at: user.created_at
+    };
+    
+    return { success: true, data: clientUser };
+  } catch (error) {
+    console.error("Failed to get current user:", error);
+    return { success: false, error: "Failed to get current user" };
+  }
+}
+
+export async function getUsersByOrgAction(orgId: string): Promise<ActionResult<ClientUser[]>> {
+  try {
+    const users = await getUsersByOrgId(orgId);
+      // Convert all users to ClientUser format
+    const clientUsers: ClientUser[] = users.map(user => ({
+      ...user,
+      _id: user._id.toString(),
+      org_id: user.org_id instanceof ObjectId ? user.org_id.toHexString() : String(user.org_id),
+      created_at: user.created_at
+    }));
+    
+    return { success: true, data: clientUsers };
+  } catch (error) {
+    console.error("Failed to get users by organization:", error);
+    return { success: false, error: "Failed to get users by organization" };
   }
 }
