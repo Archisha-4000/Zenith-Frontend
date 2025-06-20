@@ -12,6 +12,7 @@
     "@civic/auth": "^0.8.0",
     "@react-three/drei": "^10.3.0",
     "@react-three/fiber": "^9.1.2",
+    "@tabler/icons-react": "^3.31.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.18.1",
     "lucide-react": "^0.516.0",
