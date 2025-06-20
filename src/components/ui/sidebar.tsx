@@ -316,3 +316,60 @@ export function Sidebar({
     </>
   )
 }
+
+// Context and Provider for Sidebar
+interface SidebarContextType {
+  open: boolean
+  setOpen: (open: boolean) => void
+  collapsed: boolean
+  setCollapsed: (collapsed: boolean) => void
+}
+
+const SidebarContext = React.createContext<SidebarContextType | null>(null)
+
+interface SidebarProviderProps {
+  children: React.ReactNode
+  defaultOpen?: boolean
+  defaultCollapsed?: boolean
+}
+
+export function SidebarProvider({ children, defaultOpen = true, defaultCollapsed = false }: SidebarProviderProps) {
+  const [open, setOpen] = React.useState(defaultOpen)
+  const [collapsed, setCollapsed] = React.useState(defaultCollapsed)
+  
+  return (
+    <SidebarContext.Provider value={{ open, setOpen, collapsed, setCollapsed }}>
+      <div className="flex min-h-screen">
+        {children}
+      </div>
+    </SidebarContext.Provider>
+  )
+}
+
+interface SidebarInsetProps {
+  children: React.ReactNode
+  className?: string
+}
+
+export function SidebarInset({ children, className }: SidebarInsetProps) {
+  const context = React.useContext(SidebarContext)
+  const collapsed = context?.collapsed || false
+  
+  return (
+    <div className={cn(
+      "flex-1 transition-all duration-300",
+      collapsed ? "lg:ml-16" : "lg:ml-64",
+      className
+    )}>
+      {children}
+    </div>
+  )
+}
+
+export function useSidebar() {
+  const context = React.useContext(SidebarContext)
+  if (!context) {
+    throw new Error('useSidebar must be used within SidebarProvider')
+  }
+  return context
+}

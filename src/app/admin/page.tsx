@@ -15,6 +15,8 @@ import { ActivityLogs } from "@/components/admin/activity-logs"
 
 export default function AdminDashboard() {
   const [activeSection, setActiveSection] = useState("overview")
+  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
   const renderContent = () => {
     switch (activeSection) {
@@ -42,11 +44,20 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white">
+    <div className="min-h-screen bg-black text-white">
       <SidebarProvider defaultOpen={true}>
-        <AdminSidebar activeSection={activeSection} setActiveSection={setActiveSection} />
+        <AdminSidebar 
+          activeSection={activeSection} 
+          setActiveSectionAction={setActiveSection}
+          isOpen={sidebarOpen}
+          onToggleAction={() => setSidebarOpen(!sidebarOpen)}
+          collapsed={sidebarCollapsed}
+          onCollapseToggleAction={() => setSidebarCollapsed(!sidebarCollapsed)}
+        />
         <SidebarInset>
-          <main className="flex-1 p-6">{renderContent()}</main>
+          <main className="flex-1 p-6 bg-gradient-to-br from-black via-gray-900 to-black min-h-screen">
+            {renderContent()}
+          </main>
         </SidebarInset>
       </SidebarProvider>
     </div>
