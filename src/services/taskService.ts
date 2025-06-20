@@ -91,3 +91,29 @@ export async function deleteTask(id: string): Promise<boolean> {
   const result = await tasks.deleteOne({ _id: new ObjectId(id) });
   return result.deletedCount > 0;
 }
+
+export async function getTasksByEmail(email: string): Promise<any[]> {
+  const { tasks } = await getCollections();
+  const rawTasks = await tasks.find({ assigned_to_email: email }).toArray();
+  
+  // Convert MongoDB objects to plain serializable objects
+  return rawTasks.map(task => {
+    const serializedTask: any = {};
+    
+    // Convert all properties
+    for (const [key, value] of Object.entries(task)) {
+      if (value instanceof ObjectId) {
+        serializedTask[key] = value.toString();
+      } else if (value instanceof Date) {
+        serializedTask[key] = value.toISOString();
+      } else if (value && typeof value === 'object' && value.constructor === Object) {
+        // Handle nested objects
+        serializedTask[key] = JSON.parse(JSON.stringify(value));
+      } else {
+        serializedTask[key] = value;
+      }
+    }
+    
+    return serializedTask;
+  });
+}

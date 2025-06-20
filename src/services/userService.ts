@@ -89,7 +89,27 @@ export async function deleteUser(id: string): Promise<boolean> {
   return result.deletedCount > 0;
 }
 
-export async function getUserByEmail(email: string): Promise<User | null> {
+export async function getUserByEmail(email: string): Promise<any | null> {
   const { users } = await getCollections();
-  return await users.findOne({ email: email });
+  const user = await users.findOne({ email: email });
+  
+  if (!user) return null;
+  
+  // Convert MongoDB objects to plain serializable objects
+  const serializedUser: any = {};
+  
+  for (const [key, value] of Object.entries(user)) {
+    if (value instanceof ObjectId) {
+      serializedUser[key] = value.toString();
+    } else if (value instanceof Date) {
+      serializedUser[key] = value.toISOString();
+    } else if (value && typeof value === 'object' && value.constructor === Object) {
+      // Handle nested objects
+      serializedUser[key] = JSON.parse(JSON.stringify(value));
+    } else {
+      serializedUser[key] = value;
+    }
+  }
+  
+  return serializedUser;
 }
