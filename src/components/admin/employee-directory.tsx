@@ -52,8 +52,12 @@ export function EmployeeDirectory() {
     (employee) =>
       employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       employee.job_role.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      employee.skills.some((skill) => skill.toLowerCase().includes(searchTerm.toLowerCase())),
-  )
+      employee.skills.some((skill) => skill.toLowerCase().includes(searchTerm.toLowerCase())),  )
+  
+  // Helper function to check if employee is on leave (handles both string and boolean values)
+  const isEmployeeOnLeave = (isOnLeave: any): boolean => {
+    return isOnLeave === "TRUE" || isOnLeave === true
+  }
   
   const parseCSV = (csvText: string, orgId: string) => {
     const lines = csvText.split('\n').filter(line => line.trim() !== '')
@@ -107,13 +111,12 @@ export function EmployeeDirectory() {
       if (rowData.performance_rating || rowData.performancerating || rowData.rating) {
         const ratingValue = rowData.performance_rating || rowData.performancerating || rowData.rating
         const parsed = parseFloat(ratingValue)
-        rowData.performanceRating = isNaN(parsed) ? 0 : parsed
-      }
+        rowData.performanceRating = isNaN(parsed) ? 0 : parsed      }
       if (rowData.provider_user_id || rowData.provideruserid || rowData.userid) {
         rowData.providerUserId = rowData.provider_user_id || rowData.provideruserid || rowData.userid
-      }      if (rowData.is_on_leave || rowData.isonleave || rowData.onleave) {
+      }if (rowData.is_on_leave || rowData.isonleave || rowData.onleave) {
         const leaveValue = rowData.is_on_leave || rowData.isonleave || rowData.onleave
-        rowData.isOnLeave = leaveValue.toLowerCase() === 'true'
+        rowData.isOnLeave = leaveValue.toLowerCase() === "true"
       }
 
       // Handle org_id from CSV - convert to MongoDB ObjectId format
@@ -407,17 +410,16 @@ export function EmployeeDirectory() {
                         )}
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <Badge
+                    <TableCell>                      <Badge
                         variant="outline"
                         className={
-                          employee.is_on_leave
+                          isEmployeeOnLeave(employee.is_on_leave)
                             ? "bg-red-900/50 text-red-400 border-red-600"
                             : "bg-green-900/50 text-green-400 border-green-600"
                         }
                       >
                         <Activity className="w-3 h-3 mr-1" />
-                        {employee.is_on_leave ? "On Leave" : "Available"}
+                        {isEmployeeOnLeave(employee.is_on_leave) ? "On Leave" : "Available"}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -535,16 +537,15 @@ export function EmployeeDirectory() {
                   
                   <div className="flex items-center gap-2">
                     <Activity className="w-4 h-4 text-zinc-400" />
-                    <span className="text-sm text-zinc-400">Status:</span>
-                    <Badge
+                    <span className="text-sm text-zinc-400">Status:</span>                    <Badge
                       variant="outline"
                       className={
-                        selectedEmployee.is_on_leave
+                        isEmployeeOnLeave(selectedEmployee.is_on_leave)
                           ? "bg-red-900/50 text-red-400 border-red-600"
                           : "bg-green-900/50 text-green-400 border-green-600"
                       }
                     >
-                      {selectedEmployee.is_on_leave ? "On Leave" : "Available"}
+                      {isEmployeeOnLeave(selectedEmployee.is_on_leave) ? "On Leave" : "Available"}
                     </Badge>
                   </div>
                   

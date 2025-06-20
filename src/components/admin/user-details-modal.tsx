@@ -9,10 +9,10 @@ import { X, Mail, User as UserIcon, Briefcase, TrendingUp, DollarSign, Star, Cal
 interface UserDetailsModalProps {
   user: User | null
   isOpen: boolean
-  onClose: () => void
+  onCloseAction: () => void
 }
 
-export function UserDetailsModal({ user, isOpen, onClose }: UserDetailsModalProps) {
+export function UserDetailsModal({ user, isOpen, onCloseAction }: UserDetailsModalProps) {
   if (!isOpen || !user) return null
 
   const formatDate = (date: Date) => {
@@ -56,7 +56,7 @@ export function UserDetailsModal({ user, isOpen, onClose }: UserDetailsModalProp
       {/* Backdrop with blur */}
       <div 
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onClose}
+        onClick={onCloseAction}
       />
       
       {/* Modal Content */}
@@ -76,7 +76,7 @@ export function UserDetailsModal({ user, isOpen, onClose }: UserDetailsModalProp
             <Button
               variant="ghost"
               size="sm"
-              onClick={onClose}
+              onClick={onCloseAction}
               className="text-zinc-400 hover:text-white"
             >
               <X className="w-5 h-5" />
