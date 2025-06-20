@@ -36,7 +36,7 @@ export function KanbanColumn({
     blue: "border-blue-600 bg-blue-900/20",
     yellow: "border-yellow-600 bg-yellow-900/20",
     green: "border-green-600 bg-green-900/20",
-    red: "border-red-600 bg-red-900/20"
+    red: "border-red-800 bg-red-900/20"
   }
   
   return (
@@ -93,7 +93,7 @@ export function KanbanCard({
   return (
     <div
       className={cn(
-        "bg-gray-800 border border-gray-700 rounded-lg p-4 cursor-pointer hover:border-red-600/50 transition-colors",
+        "bg-gray-800 border border-gray-700 rounded-lg p-4 cursor-pointer hover:border-red-800/50 transition-colors",
         className
       )}
       onClick={onClick}
@@ -141,7 +141,7 @@ export function KanbanCard({
                 className="w-6 h-6 rounded-full"
               />
             ) : (
-              <div className="w-6 h-6 rounded-full bg-red-600 flex items-center justify-center text-xs text-white">
+              <div className="w-6 h-6 rounded-full bg-red-800 flex items-center justify-center text-xs text-white">
                 {assignee.name.split(' ').map(n => n[0]).join('')}
               </div>
             )}

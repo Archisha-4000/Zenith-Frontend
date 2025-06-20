@@ -106,7 +106,7 @@ export function BlockchainLedger() {
       case "Pending":
         return "bg-yellow-900/50 text-yellow-400 border-yellow-600"
       case "Failed":
-        return "bg-red-900/50 text-red-400 border-red-600"
+        return "bg-red-900/50 text-red-400 border-red-800"
       default:
         return "bg-gray-900/50 text-gray-400 border-gray-600"
     }
@@ -128,7 +128,7 @@ export function BlockchainLedger() {
             <Download className="w-4 h-4 mr-2" />
             Export Ledger
           </Button>
-          <Button className="bg-red-600 hover:bg-red-700 text-white">
+          <Button className="bg-red-800 hover:bg-red-700 text-white">
             <ExternalLink className="w-4 h-4 mr-2" />
             View on Explorer
           </Button>
@@ -216,7 +216,6 @@ export function BlockchainLedger() {
             <TableHeader>
               <TableRow className="border-zinc-700">
                 <TableHead className="text-zinc-400">Transaction Hash</TableHead>
-                <TableHead className="text-zinc-400">Type</TableHead>
                 <TableHead className="text-zinc-400">Employee</TableHead>
                 <TableHead className="text-zinc-400">Project</TableHead>
                 <TableHead className="text-zinc-400">Amount</TableHead>
@@ -242,11 +241,6 @@ export function BlockchainLedger() {
                         <Copy className="h-3 w-3" />
                       </Button>
                     </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className="bg-zinc-700 text-zinc-300 border-zinc-500">
-                      {tx.type}
-                    </Badge>
                   </TableCell>
                   <TableCell className="text-white">{tx.employee}</TableCell>
                   <TableCell className="text-zinc-300">{tx.project}</TableCell>

@@ -99,7 +99,7 @@ export function PaymentsPanel() {
       case "Completed":
         return "bg-blue-900/50 text-blue-400 border-blue-600"
       case "Failed":
-        return "bg-red-900/50 text-red-400 border-red-600"
+        return "bg-red-900/50 text-red-400 border-red-800"
       default:
         return "bg-gray-900/50 text-gray-400 border-gray-600"
     }
@@ -117,7 +117,7 @@ export function PaymentsPanel() {
             <FileText className="w-4 h-4 mr-2" />
             Export Report
           </Button>
-          <Button className="bg-red-600 hover:bg-red-700 text-white">
+          <Button className="bg-red-800 hover:bg-red-700 text-white">
             <Send className="w-4 h-4 mr-2" />
             Bulk Payment
           </Button>

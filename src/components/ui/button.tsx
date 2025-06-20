@@ -19,9 +19,9 @@ export function Button({
   const baseStyles = "inline-flex items-center justify-center font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
   
   const variants = {
-    primary: "bg-red-600 hover:bg-red-700 text-white",
+    primary: "bg-red-800 hover:bg-red-700 text-white",
     secondary: "bg-gray-700 hover:bg-gray-600 text-white",
-    outline: "border border-red-600 text-red-600 hover:bg-red-600 hover:text-white",
+    outline: "border border-red-800 text-red-800 hover:bg-red-800 hover:text-white",
     ghost: "text-gray-400 hover:text-white hover:bg-gray-800",
     danger: "bg-red-800 hover:bg-red-900 text-white"
   }

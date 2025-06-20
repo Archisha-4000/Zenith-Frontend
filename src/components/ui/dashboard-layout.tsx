@@ -51,7 +51,7 @@ export function DashboardLayout({ children, activeTab = 'overview', onTabChange 
         {/* Sidebar Header */}
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-800">
           <div className="flex items-center">
-            <div className="w-8 h-8 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-br from-red-800 to-red-700 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">Z</span>
             </div>
             <span className="ml-3 text-lg font-semibold">Zenith Admin</span>
@@ -77,7 +77,7 @@ export function DashboardLayout({ children, activeTab = 'overview', onTabChange 
                 className={cn(
                   "w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200",
                   activeTab === item.id
-                    ? "bg-red-600 text-white"
+                    ? "bg-red-800 text-white"
                     : "text-gray-400 hover:text-white hover:bg-gray-800"
                 )}
               >
@@ -124,7 +124,7 @@ export function DashboardLayout({ children, activeTab = 'overview', onTabChange 
             <button className="relative text-gray-400 hover:text-white transition-colors">
               <Bell size={20} />
               {notifications > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-red-800 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                   {notifications}
                 </span>
               )}
@@ -137,7 +137,7 @@ export function DashboardLayout({ children, activeTab = 'overview', onTabChange 
 
             {/* Admin Profile */}
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-red-800 rounded-full flex items-center justify-center">
                 <span className="text-white text-sm font-medium">A</span>
               </div>
               <div className="hidden md:block">

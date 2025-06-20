@@ -29,10 +29,10 @@ export function Progress({
   }
   
   const variantStyles = {
-    default: "bg-red-600",
+    default: "bg-red-800",
     success: "bg-green-600",
     warning: "bg-yellow-600",
-    error: "bg-red-600"
+    error: "bg-red-800"
   }
   
   return (
@@ -84,10 +84,10 @@ export function CircularProgress({
   const strokeDashoffset = circumference - (percentage / 100) * circumference
   
   const variantStyles = {
-    default: "stroke-red-600",
+    default: "stroke-red-800",
     success: "stroke-green-600",
     warning: "stroke-yellow-600",
-    error: "stroke-red-600"
+    error: "stroke-red-800"
   }
   
   return (

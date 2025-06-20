@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { AdminSidebar } from "@/components/admin/admin-sidebar"
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import { DashboardOverview } from "@/components/admin/dashboard-overview"
 import { EmployeeDirectory } from "@/components/admin/employee-directory"
 import { ProjectTracker } from "@/components/admin/project-tracker"
@@ -16,7 +15,6 @@ import { ActivityLogs } from "@/components/admin/activity-logs"
 export default function AdminDashboard() {
   const [activeSection, setActiveSection] = useState("overview")
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
   const renderContent = () => {
     switch (activeSection) {
@@ -44,22 +42,16 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <SidebarProvider defaultOpen={true}>
-        <AdminSidebar 
-          activeSection={activeSection} 
-          setActiveSectionAction={setActiveSection}
-          isOpen={sidebarOpen}
-          onToggleAction={() => setSidebarOpen(!sidebarOpen)}
-          collapsed={sidebarCollapsed}
-          onCollapseToggleAction={() => setSidebarCollapsed(!sidebarCollapsed)}
-        />
-        <SidebarInset>
-          <main className="flex-1 p-6 bg-gradient-to-br from-black via-gray-900 to-black min-h-screen">
-            {renderContent()}
-          </main>
-        </SidebarInset>
-      </SidebarProvider>
+    <div className="min-h-screen bg-black text-white flex">
+      <AdminSidebar 
+        activeSection={activeSection} 
+        setActiveSectionAction={setActiveSection}
+        isOpen={sidebarOpen}
+        onToggleAction={() => setSidebarOpen(!sidebarOpen)}
+      />
+      <main className="flex-1 p-6 bg-gradient-to-br from-black via-gray-900 to-black min-h-screen">
+        {renderContent()}
+      </main>
     </div>
   )
 }

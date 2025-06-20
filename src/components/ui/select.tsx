@@ -61,7 +61,7 @@ export function SelectTrigger({ children, className, placeholder }: SelectTrigge
       type="button"
       onClick={() => setOpen(!open)}
       className={cn(
-        "flex h-10 w-full items-center justify-between rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50",
+        "flex h-10 w-full items-center justify-between rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-red-800 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50",
         className
       )}
     >
@@ -155,7 +155,7 @@ export function SelectItem({ children, value, className, disabled }: SelectItemP
       onClick={handleClick}
       className={cn(
         "relative flex w-full cursor-pointer select-none items-center rounded-sm py-2 pl-8 pr-2 text-sm outline-none transition-colors hover:bg-gray-700 hover:text-white",
-        isSelected && "bg-red-600 text-white",
+        isSelected && "bg-red-800 text-white",
         disabled && "pointer-events-none opacity-50",
         className
       )}

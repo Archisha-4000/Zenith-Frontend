@@ -29,20 +29,14 @@ interface AdminSidebarProps {
   setActiveSectionAction: (section: string) => void
   isOpen: boolean
   onToggleAction: () => void
-  collapsed?: boolean
-  onCollapseToggleAction?: () => void
 }
 
 export function AdminSidebar({ 
   activeSection, 
   setActiveSectionAction, 
   isOpen, 
-  onToggleAction,
-  collapsed = false,
-  onCollapseToggleAction 
+  onToggleAction
 }: AdminSidebarProps) {
-  const [showUserMenu, setShowUserMenu] = React.useState(false)
-
   const handleItemSelect = (itemId: string) => {
     setActiveSectionAction(itemId)
   }
@@ -53,8 +47,6 @@ export function AdminSidebar({
       onToggleAction={onToggleAction}
       activeItem={activeSection}
       onItemSelectAction={handleItemSelect}
-      collapsed={collapsed}
-      onCollapseToggle={onCollapseToggleAction}
       className="bg-black border-gray-800"
     />
   )

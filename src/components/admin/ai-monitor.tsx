@@ -98,7 +98,7 @@ export function AIMonitor() {
             <Settings className="w-4 h-4 mr-2" />
             Configure AI
           </Button>
-          <Button className="bg-red-600 hover:bg-red-700 text-white">
+          <Button className="bg-red-800 hover:bg-red-700 text-white">
             <RefreshCw className="w-4 h-4 mr-2" />
             Force Rebalance
           </Button>
@@ -180,7 +180,7 @@ export function AIMonitor() {
                     variant="outline"
                     className={
                       task.priority === "High"
-                        ? "bg-red-900/50 text-red-400 border-red-600"
+                        ? "bg-red-900/50 text-red-400 border-red-800"
                         : task.priority === "Medium"
                           ? "bg-yellow-900/50 text-yellow-400 border-yellow-600"
                           : "bg-green-900/50 text-green-400 border-green-600"
@@ -229,7 +229,7 @@ export function AIMonitor() {
                     variant="outline"
                     className={
                       rec.impact === "High"
-                        ? "bg-red-900/50 text-red-400 border-red-600"
+                        ? "bg-red-900/50 text-red-400 border-red-800"
                         : "bg-yellow-900/50 text-yellow-400 border-yellow-600"
                     }
                   >

@@ -18,7 +18,7 @@ interface StatCardProps {
 export function StatCard({ title, value, subtitle, icon, trend, className }: StatCardProps) {
   return (
     <div className={cn(
-      "bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-6 hover:border-red-600/30 transition-colors",
+      "bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-6 hover:border-red-800/30 transition-colors",
       className
     )}>
       <div className="flex items-center justify-between">
@@ -69,7 +69,7 @@ export function MetricCard({
   className 
 }: MetricCardProps) {
   const colorStyles = {
-    red: "from-red-600 to-red-700",
+    red: "from-red-800 to-red-700",
     green: "from-green-600 to-green-700",
     blue: "from-blue-600 to-blue-700",
     yellow: "from-yellow-600 to-yellow-700",

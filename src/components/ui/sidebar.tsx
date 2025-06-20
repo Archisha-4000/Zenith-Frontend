@@ -16,20 +16,14 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-  Bell,
-  Activity,
-  Zap,
-  Building,
-  UserCog,
-  Wallet
+  Bell
 } from 'lucide-react'
 
 export interface SidebarItem {
   id: string
   label: string
   icon: React.ElementType
-  badge?: number
-  subItems?: SidebarItem[]
+  badge?: number | null
 }
 
 interface SidebarProps {
@@ -50,46 +44,26 @@ const sidebarItems: SidebarItem[] = [
   },
   { 
     id: 'employees', 
-    label: 'Employee & Managers', 
+    label: 'Employee Directory', 
     icon: Users,
-    badge: 23,
-    subItems: [
-      { id: 'employees-list', label: 'All Employees', icon: Users },
-      { id: 'managers', label: 'Managers', icon: UserCog },
-      { id: 'departments', label: 'Departments', icon: Building },
-    ]
+    badge: 23
   },
   { 
     id: 'projects', 
     label: 'Project Tracker', 
     icon: FolderOpen,
-    badge: 8,
-    subItems: [
-      { id: 'active-projects', label: 'Active Projects', icon: Activity },
-      { id: 'completed-projects', label: 'Completed', icon: Shield },
-      { id: 'pending-projects', label: 'Pending', icon: FileText },
-    ]
+    badge: 8
   },
   { 
-    id: 'ai-engine', 
+    id: 'ai-monitor', 
     label: 'AI Task Engine', 
     icon: Bot,
-    badge: 1,
-    subItems: [
-      { id: 'ai-status', label: 'Engine Status', icon: Zap },
-      { id: 'ai-assignments', label: 'Task Assignments', icon: Bot },
-      { id: 'ai-optimization', label: 'Optimization', icon: BarChart3 },
-    ]
+    badge: 1
   },
   { 
     id: 'payments', 
     label: 'Payments & Invoices', 
-    icon: CreditCard,
-    subItems: [
-      { id: 'pending-payments', label: 'Pending Payments', icon: CreditCard },
-      { id: 'payment-history', label: 'Payment History', icon: FileText },
-      { id: 'invoices', label: 'Invoices', icon: Wallet },
-    ]
+    icon: CreditCard
   },
   { 
     id: 'github', 
@@ -109,7 +83,7 @@ const sidebarItems: SidebarItem[] = [
     icon: BarChart3 
   },
   { 
-    id: 'audit', 
+    id: 'logs', 
     label: 'Activity Logs', 
     icon: FileText 
   },
@@ -124,31 +98,25 @@ export function Sidebar({
   collapsed = false,
   onCollapseToggle
 }: SidebarProps) {
-  const [expandedItems, setExpandedItems] = React.useState<Set<string>>(new Set())
 
-  const toggleExpanded = (itemId: string) => {
-    const newExpanded = new Set(expandedItems)
-    if (newExpanded.has(itemId)) {
-      newExpanded.delete(itemId)
-    } else {
-      newExpanded.add(itemId)
-    }
-    setExpandedItems(newExpanded)
-  }
+  const [items, setItems] = React.useState<SidebarItem[]>(sidebarItems)
 
   const handleItemClick = (item: SidebarItem) => {
-    if (item.subItems && item.subItems.length > 0) {
-      toggleExpanded(item.id)
-    } else {
-      onItemSelectAction(item.id)
+    // Clear the badge when item is clicked
+    if (item.badge && item.badge > 0) {
+      setItems(prevItems => 
+        prevItems.map(prevItem => 
+          prevItem.id === item.id 
+            ? { ...prevItem, badge: null }
+            : prevItem
+        )
+      )
     }
+    onItemSelectAction(item.id)
   }
 
-  const renderSidebarItem = (item: SidebarItem, level = 0) => {
-    const hasSubItems = item.subItems && item.subItems.length > 0
-    const isExpanded = expandedItems.has(item.id)
+  const renderSidebarItem = (item: SidebarItem) => {
     const isActive = activeItem === item.id
-    const isSubItemActive = item.subItems?.some(subItem => activeItem === subItem.id)
 
     return (
       <div key={item.id}>
@@ -156,11 +124,10 @@ export function Sidebar({
           onClick={() => handleItemClick(item)}
           className={cn(
             "w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 group",
-            level > 0 && "ml-4 pl-8",
-            isActive || isSubItemActive
-              ? "bg-red-600 text-white shadow-lg"
+            isActive
+              ? "bg-red-800 text-white shadow-lg"
               : "text-gray-400 hover:text-white hover:bg-gray-800/50",
-            collapsed && level === 0 && "justify-center px-2"
+            collapsed && "justify-center px-2"
           )}
         >
           <div className="flex items-center min-w-0 flex-1">
@@ -169,7 +136,7 @@ export function Sidebar({
               className={cn(
                 "flex-shrink-0",
                 !collapsed && "mr-3",
-                isActive || isSubItemActive ? "text-white" : "text-gray-400"
+                isActive ? "text-white" : "text-gray-400"
               )} 
             />
             {!collapsed && (
@@ -177,38 +144,17 @@ export function Sidebar({
             )}
           </div>
           
-          {!collapsed && (
-            <div className="flex items-center space-x-2">
-              {item.badge && item.badge > 0 && (
-                <span className={cn(
-                  "px-2 py-0.5 text-xs rounded-full font-medium",
-                  isActive || isSubItemActive
-                    ? "bg-white/20 text-white"
-                    : "bg-red-600 text-white"
-                )}>
-                  {item.badge}
-                </span>
-              )}
-              
-              {hasSubItems && (
-                <ChevronRight 
-                  size={14} 
-                  className={cn(
-                    "transition-transform duration-200",
-                    isExpanded && "rotate-90"
-                  )} 
-                />
-              )}
-            </div>
+          {!collapsed && item.badge && item.badge > 0 && (
+            <span className={cn(
+              "px-2 py-0.5 text-xs rounded-full font-medium",
+              isActive
+                ? "bg-white/20 text-white"
+                : "bg-red-800 text-white"
+            )}>
+              {item.badge}
+            </span>
           )}
         </button>
-
-        {/* Sub Items */}
-        {hasSubItems && isExpanded && !collapsed && (
-          <div className="mt-1 space-y-1">
-            {item.subItems!.map(subItem => renderSidebarItem(subItem, level + 1))}
-          </div>
-        )}
       </div>
     )
   }
@@ -234,7 +180,7 @@ export function Sidebar({
         <div className="flex items-center justify-between h-16 px-4 border-b border-gray-800">
           {!collapsed && (
             <div className="flex items-center">
-              <div className="w-8 h-8 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center shadow-lg">
+              <div className="w-8 h-8 bg-gradient-to-br from-red-800 to-red-700 rounded-lg flex items-center justify-center shadow-lg">
                 <span className="text-white font-bold text-sm">Z</span>
               </div>
               <div className="ml-3">
@@ -245,7 +191,7 @@ export function Sidebar({
           )}
           
           {collapsed && (
-            <div className="w-8 h-8 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center shadow-lg mx-auto">
+            <div className="w-8 h-8 bg-gradient-to-br from-red-800 to-red-700 rounded-lg flex items-center justify-center shadow-lg mx-auto">
               <span className="text-white font-bold text-sm">Z</span>
             </div>
           )}
@@ -259,11 +205,9 @@ export function Sidebar({
               {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
             </button>
           )}
-        </div>
-
-        {/* Navigation */}
+        </div>        {/* Navigation */}
         <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-          {sidebarItems.map(item => renderSidebarItem(item))}
+          {items.map(item => renderSidebarItem(item))}
         </nav>
 
         {/* Sidebar Footer */}
@@ -301,7 +245,7 @@ export function Sidebar({
           {!collapsed && (
             <div className="mt-4 pt-4 border-t border-gray-800">
               <div className="flex items-center">
-                <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 bg-red-800 rounded-full flex items-center justify-center">
                   <span className="text-white text-sm font-medium">A</span>
                 </div>
                 <div className="ml-3 min-w-0 flex-1">
@@ -352,15 +296,8 @@ interface SidebarInsetProps {
 }
 
 export function SidebarInset({ children, className }: SidebarInsetProps) {
-  const context = React.useContext(SidebarContext)
-  const collapsed = context?.collapsed || false
-  
   return (
-    <div className={cn(
-      "flex-1 transition-all duration-300",
-      collapsed ? "lg:ml-16" : "lg:ml-64",
-      className
-    )}>
+    <div className={cn("flex-1", className)}>
       {children}
     </div>
   )
