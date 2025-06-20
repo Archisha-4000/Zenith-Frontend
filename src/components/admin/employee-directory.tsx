@@ -21,6 +21,7 @@ export function EmployeeDirectory() {
   const [selectedEmployee, setSelectedEmployee] = useState<ClientUser | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [isInfoOpen, setIsInfoOpen] = useState(false)
   // Load employees from database on component mount
   const loadEmployees = async () => {
     setLoading(true)
@@ -246,12 +247,12 @@ export function EmployeeDirectory() {
           <Button 
             onClick={handleUploadClick}
             disabled={uploading}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-rose-800 hover:bg-rose-700 text-white"
           >
             <Upload className="w-4 h-4 mr-2" />
             {uploading ? "Uploading..." : "Upload CSV"}
           </Button>
-          <Button className="bg-rose-800 hover:bg-red-700 text-white">
+          <Button className="bg-rose-800 hover:bg-rose-700 text-white">
             <UserPlus className="w-4 h-4 mr-2" />
             Add Employee
           </Button>
@@ -294,10 +295,46 @@ export function EmployeeDirectory() {
           </CardContent>
         </Card>
       )}      {/* CSV Format Help */}
+
+
       <Card className="bg-zinc-800 border-zinc-700">
-        <CardContent className="p-4">
-          <div className="text-sm text-zinc-400">
-            <h4 className="font-medium text-white mb-2">CSV Format Requirements:</h4>
+        <div
+          onClick={() => setIsInfoOpen(!isInfoOpen)}
+          className="cursor-pointer group"
+        >
+          <CardHeader className="flex flex-row items-center justify-between py-6">
+            <CardTitle className="text-3xl font-['Poppins'] text-rose-500/80 drop-shadow-md flex items-center gap-3">
+              CSV Upload Requirements              
+              <span className={`transition-transform duration-300 ease-in-out transform ${isInfoOpen ? 'rotate-180' : 'rotate-0'}`}>
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="stroke-current text-cyan-400 group-hover:text-cyan-300"
+                >
+                  <path
+                    d="M18 15L12 9L6 15"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+            </CardTitle>
+          </CardHeader>
+        </div>
+
+        <div
+          className={`transition-all duration-500 ease-in-out ${
+            isInfoOpen
+              ? 'opacity-100 max-h-[2000px]'
+              : 'opacity-0 max-h-0 overflow-hidden'
+          }`}
+        >
+          <CardContent>
+                      <div className="text-sm text-zinc-400">
             <p className="mb-2">Your CSV file should include the following columns (case-insensitive):</p>            <ul className="list-disc list-inside space-y-1 ml-4">
               <li><strong>name</strong> - Full name of the employee (required)</li>
               <li><strong>employee_id</strong> or <strong>employeeId</strong> - Unique employee identifier (required)</li>
@@ -327,8 +364,12 @@ export function EmployeeDirectory() {
               <strong>Note:</strong> Fields like _id, created_at, and auth_provider.provider_user_id are automatically generated and should not be included in the CSV.
             </p>
           </div>
-        </CardContent>
+          </CardContent>
+        </div>
       </Card>
+
+
+
 
       {/* Search and Filters */}
       <Card className="bg-zinc-800 border-zinc-700">
