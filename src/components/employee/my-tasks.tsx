@@ -389,7 +389,7 @@ export function EmployeeMyTasks({ user, tasks: propTasks }: EmployeeMyTasksProps
         <div className="relative p-6 min-h-[120px] flex items-center group">
           {timelinePosition.isVisible && (
             <div
-              className={`absolute h-10 rounded-lg ${
+              className={`absolute h-10 rounded-full ${
                 statusConf.color
               } opacity-90 hover:opacity-100 transition-all cursor-pointer shadow-lg border-2 border-white/20`}
               style={{
@@ -399,12 +399,8 @@ export function EmployeeMyTasks({ user, tasks: propTasks }: EmployeeMyTasksProps
               }}
               title={`${task.title} - ${statusConf.label}
 Created: ${formatDate(task.created_at).toLocaleDateString()}
-Due: ${formatDate(task.due_date).toLocaleDateString()}`}
-            >
+Due: ${formatDate(task.due_date).toLocaleDateString()}`}            >
               <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-white/10 to-white/5"></div>
-              <div className="absolute inset-x-2 top-1/2 transform -translate-y-1/2 text-xs font-medium text-white truncate">
-                {task.title}
-              </div>
             </div>
           )}
 
