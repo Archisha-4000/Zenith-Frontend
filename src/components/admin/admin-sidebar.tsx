@@ -47,7 +47,7 @@ export function AdminSidebar({
       onToggleAction={onToggleAction}
       activeItem={activeSection}
       onItemSelectAction={handleItemSelect}
-      className="bg-black border-gray-800"
+      className="bg-zinc-900/80 backdrop-blur-sm border-zinc-800"
     />
   )
 }

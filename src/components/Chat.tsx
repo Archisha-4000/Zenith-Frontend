@@ -148,7 +148,7 @@ export default function ChatUI() {
                 key={message.id}
                 className={`relative max-w-[85%] p-4 rounded-xl transition-all ${
                   message.role === "user"
-                    ? "ml-auto bg-gradient-to-br from-rose-700 to-red-600 text-white shadow-lg"
+                    ? "ml-auto bg-gradient-to-br from-rose-700 to-rose-800 text-white shadow-lg"
                     : "mr-auto bg-gray-800 border border-gray-700 text-gray-300 hover:border-gray-600"
                 }`}
               >
