@@ -19,13 +19,24 @@ import {
   X
 } from 'lucide-react'
 
+interface SidebarItem {
+  id: string
+  label: string
+  icon: React.ComponentType<{ size?: number; className?: string }>
+  component?: React.ReactNode
+}
+
 interface DashboardLayoutProps {
   children: React.ReactNode
   activeTab?: string
   onTabChange?: (tab: string) => void
+  sidebarItems?: SidebarItem[]
+  title?: string
+  subtitle?: string
+  userRole?: 'admin' | 'manager' | 'employee'
 }
 
-const sidebarItems = [
+const defaultAdminSidebarItems: SidebarItem[] = [
   { id: 'overview', label: 'Dashboard Overview', icon: LayoutDashboard },
   { id: 'employees', label: 'Employee & Manager Directory', icon: Users },
   { id: 'projects', label: 'Project Tracker', icon: FolderOpen },
@@ -37,9 +48,22 @@ const sidebarItems = [
   { id: 'audit', label: 'Activity Logs', icon: FileText },
 ]
 
-export function DashboardLayout({ children, activeTab = 'overview', onTabChange }: DashboardLayoutProps) {
+export function DashboardLayout({ 
+  children, 
+  activeTab = 'overview', 
+  onTabChange, 
+  sidebarItems = defaultAdminSidebarItems,
+  title,
+  subtitle,
+  userRole = 'admin'
+}: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = React.useState(false)
   const [notifications] = React.useState(3) // Mock notification count
+
+  const displayTitle = title || sidebarItems.find(item => item.id === activeTab)?.label || 'Dashboard'
+  const brandName = userRole === 'manager' ? 'Zenith Manager' : 'Zenith Admin'
+  const userInitial = userRole === 'manager' ? 'M' : 'A'
+  const userTitle = userRole === 'manager' ? 'Team Manager' : 'Organization Admin'
 
   return (
     <div className="min-h-screen bg-black text-white flex">
@@ -54,7 +78,7 @@ export function DashboardLayout({ children, activeTab = 'overview', onTabChange 
             <div className="w-8 h-8 bg-gradient-to-br from-rose-800 to-red-700 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">Z</span>
             </div>
-            <span className="ml-3 text-lg font-semibold">Zenith Admin</span>
+            <span className="ml-3 text-lg font-semibold">{brandName}</span>
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
@@ -113,10 +137,12 @@ export function DashboardLayout({ children, activeTab = 'overview', onTabChange 
               className="lg:hidden text-gray-400 hover:text-white mr-4"
             >
               <Menu size={20} />
-            </button>
-            <h1 className="text-xl font-semibold text-white">
-              {sidebarItems.find(item => item.id === activeTab)?.label || 'Dashboard'}
+            </button>            <h1 className="text-xl font-semibold text-white">
+              {displayTitle}
             </h1>
+            {subtitle && (
+              <p className="text-sm text-gray-400 ml-4">{subtitle}</p>
+            )}
           </div>
 
           <div className="flex items-center space-x-4">
@@ -136,13 +162,12 @@ export function DashboardLayout({ children, activeTab = 'overview', onTabChange 
             </button>
 
             {/* Admin Profile */}
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-rose-800 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-medium">A</span>
+            <div className="flex items-center space-x-3">            <div className="w-8 h-8 bg-rose-800 rounded-full flex items-center justify-center">
+                <span className="text-white text-sm font-medium">{userInitial}</span>
               </div>
               <div className="hidden md:block">
-                <p className="text-sm font-medium text-white">Admin User</p>
-                <p className="text-xs text-gray-400">Organization Admin</p>
+                <p className="text-sm font-medium text-white">{userRole === 'manager' ? 'Manager User' : 'Admin User'}</p>
+                <p className="text-xs text-gray-400">{userTitle}</p>
               </div>
             </div>
           </div>

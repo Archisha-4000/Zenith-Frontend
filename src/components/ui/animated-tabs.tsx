@@ -181,7 +181,7 @@ const AnimatedTabs = ({
       className={cn("w-full max-w-5xl mx-auto flex flex-col gap-6", className)}
     >
       {/* Tab Buttons */}
-      <div className="relative flex gap-2 flex-wrap items-center justify-between bg-gradient-to-br from-[#1b1b2f]/80 via-[#0e0e20]/80 to-[#0a0a14]/90 p-3 rounded-xl border border-cyan-400/20 backdrop-blur-xl shadow-[0_0_40px_rgba(0,255,255,0.08)] overflow-hidden">
+      <div className="relative flex gap-2 flex-wrap items-center justify-between bg-gradient-to-br from-[#1b1b2f]/80 via-[#0e0e20]/80 to-[#0a0a14]/90 p-3 rounded-xl border border-red-400/20 backdrop-blur-xl shadow-[0_0_40px_rgba(0,255,255,0.08)] overflow-hidden">
         <div className="flex flex-wrap gap-2">
           {tabs.map((tab) => (
             <button
@@ -196,7 +196,7 @@ const AnimatedTabs = ({
               {activeTab === tab.id && (
                 <motion.div
                   layoutId="active-tab"
-                  className="absolute inset-0 bg-cyan-400/10 border border-cyan-300/20 backdrop-blur-sm rounded-md shadow-[0_0_20px_#00ffff66]"
+                  className="absolute inset-0 bg-red-400/10 border border-red-300/20 backdrop-blur-sm rounded-md shadow-[0_0_20px_#E11D48]"
                   transition={{ type: "spring", duration: 0.6 }}
                 />
               )}
@@ -219,18 +219,17 @@ const AnimatedTabs = ({
       </div>
 
       {/* Tab Content */}
-      <div className="relative p-6 rounded-xl bg-gradient-to-br from-[#0e0e1a] via-[#121222] to-[#0c0c18] border border-cyan-400/20 backdrop-blur-xl shadow-[0_0_60px_rgba(0,255,255,0.07)] overflow-hidden before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_30%_30%,rgba(0,255,255,0.03),transparent_60%)] before:blur-xl before:content-[''] after:absolute after:inset-0 after:bg-[radial-gradient(circle_at_bottom_right,_rgba(0,136,255,0.03),transparent_60%)] after:blur-2xl after:content-[''] min-h-[200px]">
+      <div className="relative p-6 rounded-xl bg-gradient-to-br from-[#0e0e1a] via-[#121222] to-[#0c0c18] border border-red-400/20 backdrop-blur-xl shadow-[0_0_60px_rgba(0,255,255,0.07)] overflow-hidden before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_30%_30%,rgba(0,255,255,0.03),transparent_60%)] before:blur-xl before:content-[''] after:absolute after:inset-0 after:bg-[radial-gradient(circle_at_bottom_right,_rgba(0,136,255,0.03),transparent_60%)] after:blur-2xl after:content-[''] min-h-[200px]">
         <motion.div className="absolute inset-0 z-0">
           <Beams
             beamWidth={5}
             beamHeight={15}
             beamNumber={12}
-            lightColor="#2563eb"
+            lightColor="#E11D48"
             speed={2}
             noiseIntensity={1.75}
             scale={0.2}
             rotation={0}
-            className="w-full h-full"
           />
         </motion.div>
         {tabs.map(
@@ -310,7 +309,7 @@ const AnimatedTabs = ({
           </motion.div>
 
           {/* Close hint */}
-          <div className="absolute bottom-8 text-cyan-300/80 text-sm animate-pulse">
+          <div className="absolute bottom-8 text-red-300/80 text-sm animate-pulse">
             Move cursor away to close
           </div>
         </div>

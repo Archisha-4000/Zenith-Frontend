@@ -49,12 +49,11 @@ export function Testimonials() {
           beamWidth={2}
           beamHeight={15}
           beamNumber={12}
-          lightColor="#2563eb"
+          lightColor="#E11D48"
           speed={2}
           noiseIntensity={1.75}
           scale={0.2}
           rotation={0}
-          className="w-full h-full"
         />{" "}
       </div>
       <div className="container mx-auto px-4 relative z-10">
@@ -91,7 +90,7 @@ export function Testimonials() {
             transition={{ duration: 0.5 }}
             className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-8 md:p-12 relative"
           >
-            <Quote className="absolute top-8 left-8 h-12 w-12 text-cyan-500/20 " />
+            <Quote className="absolute top-8 left-8 h-12 w-12 text-red-500/20 " />
             <div className="text-center font-['Poppins']">
               <p className="text-xl md:text-2xl text-gray-200 mb-8 relative z-10">
                 "{testimonials[currentIndex].quote}"
@@ -100,7 +99,7 @@ export function Testimonials() {
                 <p className="text-lg font-semibold text-white">
                   {testimonials[currentIndex].author}
                 </p>
-                <p className="text-cyan-400">
+                <p className="text-red-400">
                   {testimonials[currentIndex].role},{" "}
                   {testimonials[currentIndex].company}
                 </p>
@@ -111,7 +110,7 @@ export function Testimonials() {
           <div className="flex justify-center mt-8 gap-4">
             <button
               onClick={prevTestimonial}
-              className="p-2 rounded-full border border-gray-700 hover:border-cyan-500 text-gray-400 hover:text-cyan-400 transition-colors"
+              className="p-2 rounded-full border border-gray-700 hover:border-red-500 text-gray-400 hover:text-red-400 transition-colors"
               aria-label="Previous testimonial"
             >
               <ChevronLeft className="h-5 w-5" />
@@ -122,7 +121,7 @@ export function Testimonials() {
                   key={index}
                   onClick={() => setCurrentIndex(index)}
                   className={`w-2.5 h-2.5 rounded-full transition-colors ${
-                    index === currentIndex ? "bg-cyan-500" : "bg-gray-700"
+                    index === currentIndex ? "bg-red-500" : "bg-gray-700"
                   }`}
                   aria-label={`Go to testimonial ${index + 1}`}
                 />
@@ -130,7 +129,7 @@ export function Testimonials() {
             </div>
             <button
               onClick={nextTestimonial}
-              className="p-2 rounded-full border border-gray-700 hover:border-cyan-500 text-gray-400 hover:text-cyan-400 transition-colors"
+              className="p-2 rounded-full border border-gray-700 hover:border-red-500 text-gray-400 hover:text-red-400 transition-colors"
               aria-label="Next testimonial"
             >
               <ChevronRight className="h-5 w-5" />

@@ -110,7 +110,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
       className={cn(
         "relative z-[60] mx-auto hidden w-full max-w-7xl flex-row items-center justify-between self-start rounded-full px-4 py-2 lg:flex",
         !visible
-          ? "bg-transparent text-white border-2 border-blue-800"
+          ? "bg-transparent text-white border-2 border-rose-800"
           : "bg-black blur(10px) border border-white",
         className
       )}
@@ -121,11 +121,11 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
 };
 
 export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
-  const [hovered, setHovered] = useState<number | null>(null);
+  const [hoverose, setHoverose] = useState<number | null>(null);
 
   return (
     <motion.div
-      onMouseLeave={() => setHovered(null)}
+      onMouseLeave={() => setHoverose(null)}
       className={cn(
         "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-zinc-600 transition duration-200 hover:text-zinc-800 lg:flex lg:space-x-2",
         className
@@ -133,16 +133,16 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
     >
       {items.map((item, idx) => (
         <a
-          onMouseEnter={() => setHovered(idx)}
+          onMouseEnter={() => setHoverose(idx)}
           onClick={onItemClick}
           className="relative px-4 py-2 text-gray-300 dark:text-neutral-300"
           key={`link-${idx}`}
           href={item.link}
         >
-          {hovered === idx && (
+          {hoverose === idx && (
             <motion.div
-              layoutId="hovered"
-              className="absolute inset-0 h-full w-full rounded-full bg-blue-800 dark:bg-blue-800"
+              layoutId="hoverose"
+              className="absolute inset-0 h-full w-full rounded-full bg-rose-800 dark:bg-rose-800"
             />
           )}
           <span className="relative z-20">{item.name}</span>
@@ -280,7 +280,7 @@ export const NavbarButton = ({
     secondary: "bg-transparent shadow-none dark:text-white",
     dark: "bg-black text-white shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]",
     gradient:
-      "bg-gradient-to-b from-blue-500 to-blue-700 text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset]",
+      "bg-gradient-to-b from-rose-500 to-rose-700 text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset]",
   };
 
   return (

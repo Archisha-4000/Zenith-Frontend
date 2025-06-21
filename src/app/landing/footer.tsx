@@ -8,7 +8,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center mb-4">
-              <span className="text-2xl font-bold text-blue-800 bg-clip-text  font-display">
+              <span className="text-2xl font-bold text-rose-800 bg-clip-text  font-display">
                 Zenith
               </span>
             </Link>
@@ -18,28 +18,28 @@ export function Footer() {
             <div className="flex space-x-4">
               <a
                 href="#"
-                className="text-gray-400 hover:text-cyan-400 transition-colors"
+                className="text-gray-400 hover:text-red-400 transition-colors"
               >
                 <Github className="h-5 w-5" />
                 <span className="sr-only">GitHub</span>
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-cyan-400 transition-colors"
+                className="text-gray-400 hover:text-red-400 transition-colors"
               >
                 <Twitter className="h-5 w-5" />
                 <span className="sr-only">Twitter</span>
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-cyan-400 transition-colors"
+                className="text-gray-400 hover:text-red-400 transition-colors"
               >
                 <Linkedin className="h-5 w-5" />
                 <span className="sr-only">LinkedIn</span>
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-cyan-400 transition-colors"
+                className="text-gray-400 hover:text-red-400 transition-colors"
               >
                 <Mail className="h-5 w-5" />
                 <span className="sr-only">Email</span>
@@ -53,7 +53,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-400 hover:text-cyan-400 transition-colors"
+                  className="text-gray-400 hover:text-red-400 transition-colors"
                 >
                   Features
                 </Link>
@@ -61,7 +61,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-400 hover:text-cyan-400 transition-colors"
+                  className="text-gray-400 hover:text-red-400 transition-colors"
                 >
                   Pricing
                 </Link>
@@ -69,7 +69,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-400 hover:text-cyan-400 transition-colors"
+                  className="text-gray-400 hover:text-red-400 transition-colors"
                 >
                   API
                 </Link>
@@ -77,7 +77,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-400 hover:text-cyan-400 transition-colors"
+                  className="text-gray-400 hover:text-red-400 transition-colors"
                 >
                   Integrations
                 </Link>
@@ -91,7 +91,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-400 hover:text-cyan-400 transition-colors"
+                  className="text-gray-400 hover:text-red-400 transition-colors"
                 >
                   Documentation
                 </Link>
@@ -99,7 +99,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-400 hover:text-cyan-400 transition-colors"
+                  className="text-gray-400 hover:text-red-400 transition-colors"
                 >
                   Guides
                 </Link>
@@ -107,7 +107,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-400 hover:text-cyan-400 transition-colors"
+                  className="text-gray-400 hover:text-red-400 transition-colors"
                 >
                   Blog
                 </Link>
@@ -115,7 +115,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-400 hover:text-cyan-400 transition-colors"
+                  className="text-gray-400 hover:text-red-400 transition-colors"
                 >
                   Support
                 </Link>
@@ -129,7 +129,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-400 hover:text-cyan-400 transition-colors"
+                  className="text-gray-400 hover:text-red-400 transition-colors"
                 >
                   About
                 </Link>
@@ -137,7 +137,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-400 hover:text-cyan-400 transition-colors"
+                  className="text-gray-400 hover:text-red-400 transition-colors"
                 >
                   Careers
                 </Link>
@@ -145,7 +145,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-400 hover:text-cyan-400 transition-colors"
+                  className="text-gray-400 hover:text-red-400 transition-colors"
                 >
                   Contact
                 </Link>
@@ -153,7 +153,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-400 hover:text-cyan-400 transition-colors"
+                  className="text-gray-400 hover:text-red-400 transition-colors"
                 >
                   Privacy Policy
                 </Link>
@@ -169,19 +169,19 @@ export function Footer() {
           <div className="flex space-x-6">
             <Link
               href="#"
-              className="text-gray-500 hover:text-cyan-400 text-sm transition-colors"
+              className="text-gray-500 hover:text-red-400 text-sm transition-colors"
             >
               Terms of Service
             </Link>
             <Link
               href="#"
-              className="text-gray-500 hover:text-cyan-400 text-sm transition-colors"
+              className="text-gray-500 hover:text-red-400 text-sm transition-colors"
             >
               Privacy Policy
             </Link>
             <Link
               href="#"
-              className="text-gray-500 hover:text-cyan-400 text-sm transition-colors"
+              className="text-gray-500 hover:text-red-400 text-sm transition-colors"
             >
               Cookie Policy
             </Link>

@@ -31,7 +31,7 @@ const Hero = () => {
           beamWidth={2}
           beamHeight={15}
           beamNumber={12}
-          lightColor="#2563eb"
+          lightColor="#E11D48"
           speed={2}
           noiseIntensity={1.75}
           scale={0.2}
@@ -78,7 +78,7 @@ const Hero = () => {
                   <RotatingText
                     texts={["Plan", "Build", "Deploy"]}
                     mainClassName="font-['Poppins'] text-7xl font-bold"
-                    style={{ color: "#2563eb" }}
+                    style={{ color: "#E11D48" }}
                     initial={{ y: "100%" }}
                     animate={{ y: 0 }}
                     exit={{ y: "-120%" }}
@@ -113,7 +113,7 @@ const Hero = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.5 }}
         >
-          <Button className="rounded-lg border border-white/10 bg-[#2563eb] px-6 py-3 text-lg font-['Poppins'] backdrop-blur-3xl hover:cursor-pointer">
+          <Button className="rounded-lg border border-white/10 bg-[#E11D48] px-6 py-3 text-lg font-['Poppins'] backdrop-blur-3xl hover:cursor-pointer">
             Get Started
           </Button>
           <Link href="#features">
