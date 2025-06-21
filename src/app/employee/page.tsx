@@ -1,9 +1,12 @@
 import { getUser } from "@civic/auth/nextjs"
 import { redirect } from "next/navigation"
-import { EmployeeDashboard } from "./employee-dashboard"
+import { EmployeeSidebar } from "@/components/employee/employee-sidebar"
+import { EmployeeDashboardOverview } from "@/components/employee/dashboard-overview"
+import { EmployeeMyTasks } from "@/components/employee/my-tasks"
 import { OrganizationNotFound } from "./organization-not-found"
 import { getUserByEmail } from "@/services/userService"
 import { getTasksByEmail } from "@/services/taskService"
+import { EmployeeClientLayout } from "./employee-client-layout"
 
 export default async function EmployeePage() {
   const user = await getUser()
@@ -20,5 +23,10 @@ export default async function EmployeePage() {
 
   const tasks = await getTasksByEmail(user.email)
 
-  return <EmployeeDashboard user={orgUser} tasks={tasks} />
+  return (
+    <EmployeeClientLayout 
+      user={orgUser} 
+      tasks={tasks}
+    />
+  )
 }

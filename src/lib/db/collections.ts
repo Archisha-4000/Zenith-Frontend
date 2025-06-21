@@ -8,6 +8,7 @@ import {
   AuditLog,
   InstallerLink,
   AITask,
+  AITaskDocument,
   AIAllocationLog
 } from "@/models/types";
 
@@ -21,7 +22,7 @@ export const getCollections = async () => {
     tasks: db.collection<Task>("tasks"),
     audit_logs: db.collection<AuditLog>("audit_logs"),
     installer_links: db.collection<InstallerLink>("installer_links"),
-    aiTasks: db.collection<AITask>("processing_results"),
+    aiTasks: db.collection<AITaskDocument>("processing_results"),
     aiAllocationLogs: db.collection<AIAllocationLog>("processing_results")
   };
 };

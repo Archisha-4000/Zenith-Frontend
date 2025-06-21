@@ -155,6 +155,59 @@ export async function getAIAllocationLogsAction(orgId: string): Promise<ActionRe
   }
 }
 
+export async function getTasksByEmailAction(email: string): Promise<ActionResult<AITask[]>> {
+  try {
+    const { aiTasks } = await getCollections();
+    
+    console.log(`Searching for tasks assigned to email: ${email}`);
+    
+    // Find all processing_results documents that contain task allocations for this email
+    const documents = await aiTasks.find({
+      "task_allocations.employee_email": email
+    }).sort({ created_at: -1 }).toArray();
+    
+    console.log(`Found ${documents.length} documents with tasks for ${email}`);
+    
+    // Extract tasks from all documents
+    let allTasks: AITask[] = [];
+    
+    for (const doc of documents) {
+      if (doc.task_allocations && Array.isArray(doc.task_allocations)) {
+        for (const allocation of doc.task_allocations) {
+          if (allocation.employee_email === email && allocation.tasks && Array.isArray(allocation.tasks)) {
+            for (const task of allocation.tasks) {              const aiTask: AITask = {
+                _id: task._id || `${doc._id}_${allocation.employee_email}_${Math.random()}`,
+                id: task.id || task._id,
+                title: task.title || "Untitled Task",
+                description: task.description || "No description",
+                priority: task.priority || "medium",
+                estimated_duration_hours: task.estimated_duration_hours || 0,
+                due_date: task.due_date || doc.created_at,
+                status: task.status || "pending",
+                assigned_to: allocation.employee_name || "Unknown",
+                assigned_to_email: allocation.employee_email || email,
+                created_by_agent: "AI System",
+                org_id: doc.org_id,
+                additional_details: task.additional_details || "",
+                created_at: doc.created_at,
+                updated_at: task.updated_at,
+                allocation_id: doc._id?.toString()
+              };
+              allTasks.push(aiTask);
+            }
+          }
+        }
+      }
+    }
+    
+    console.log(`Extracted ${allTasks.length} tasks for ${email}`);
+    return { success: true, data: allTasks };
+  } catch (error) {
+    console.error("Failed to fetch tasks by email:", error);
+    return { success: false, error: "Failed to fetch tasks by email" };
+  }
+}
+
 // Test function to debug database connection and data
 export async function testDatabaseConnection(orgId: string): Promise<ActionResult<any>> {
   try {

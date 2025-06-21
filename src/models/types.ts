@@ -174,6 +174,7 @@ export type AITaskDocument = {
 
 // Individual Task within allocation
 export type AITask = {
+  _id?: string;
   id?: string | null;
   title: string;
   description: string;
@@ -188,6 +189,7 @@ export type AITask = {
   additional_details?: string | null;
   created_at?: Date | { $date: { $numberLong: string } } | null;
   updated_at?: Date | { $date: { $numberLong: string } } | null;
+  allocation_id?: string;
 };
 
 export type AIAllocationLog = {
