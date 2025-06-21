@@ -48,9 +48,9 @@ export default function FeaturesPage() {
             </span>
             <h2 className="text-4xl md:text-5xl font-['Kagitingan'] mb-4 bg-clip-text text-transparent">
               <span className="text-gray-200">Straight</span>{" "}
-              <span className="text-blue-800">Talk.</span>
+              <span className="text-rose-800">Talk.</span>
               <br className="hidden md:block" />{" "}
-              <span className="text-blue-800">No</span>{" "}
+              <span className="text-rose-800">No</span>{" "}
               <span className="text-gray-200">Nonsense.</span>
             </h2>
             <p className="text-lg font-['Poppins'] text-medhive-300 mx-auto max-w-2xl text-white">

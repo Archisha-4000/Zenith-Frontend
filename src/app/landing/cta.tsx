@@ -9,7 +9,7 @@ export function CTA() {
       <div className="absolute inset-0 bg-black pointer-events-none"></div>
       <div className="container mx-auto px-4">
         <motion.div
-          className="max-w-4xl mx-auto bg-gradient-to-r from-cyan-950/50 to-blue-950/50 backdrop-blur-sm border border-cyan-800/30 rounded-2xl p-8 md:p-12 text-center relative overflow-hidden"
+          className="max-w-4xl mx-auto bg-gradient-to-r from-red-950/50 to-rose-950/50 backdrop-blur-sm border border-red-800/30 rounded-2xl p-8 md:p-12 text-center relative overflow-hidden"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -20,7 +20,7 @@ export function CTA() {
               beamWidth={2}
               beamHeight={15}
               beamNumber={12}
-              lightColor="#2563eb"
+              lightColor="#E11D48"
               speed={2}
               noiseIntensity={1.75}
               scale={0.2}
@@ -28,8 +28,8 @@ export function CTA() {
             />
           </div>
           <div className="absolute top-0 left-0 w-full h-full z-10">
-            <div className="absolute top-0 left-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 right-0 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl"></div>
+            <div className="absolute top-0 left-0 w-32 h-32 bg-red-500/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 right-0 w-40 h-40 bg-rose-500/10 rounded-full blur-3xl"></div>
           </div>
 
           <motion.h2
@@ -39,7 +39,7 @@ export function CTA() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-red-400 to-rose-500 bg-clip-text text-transparent">
               Empower Your Workforce
             </span>
             <br />
@@ -63,10 +63,10 @@ export function CTA() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            <button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white text-lg py-3 px-8 rounded-lg transition-all duration-200 font-['Poppins']">
+            <button className="bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white text-lg py-3 px-8 rounded-lg transition-all duration-200 font-['Poppins']">
               Get Started Now
             </button>
-            <button className="border border-cyan-500 text-cyan-400 hover:bg-cyan-500/10 text-lg py-3 px-8 rounded-lg transition-all duration-200 font-['Poppins']">
+            <button className="border border-red-500 text-red-400 hover:bg-red-500/10 text-lg py-3 px-8 rounded-lg transition-all duration-200 font-['Poppins']">
               Schedule a Demo
             </button>
           </motion.div>

@@ -11,21 +11,21 @@ const steps = [
     title: "Connect",
     description:
       "Integrate employee data and GitHub repositories to create a comprehensive knowledge base.",
-    color: "from-cyan-500 to-blue-600",
+    color: "from-red-500 to-rose-600",
   },
   {
     icon: Cpu,
     title: "Analyze",
     description:
       "AI scans project requirements and employee skills to determine optimal task allocation.",
-    color: "from-blue-500 to-purple-600",
+    color: "from-rose-500 to-red-600",
   },
   {
     icon: Share2,
     title: "Distribute",
     description:
       "Tasks are automatically assigned with transparency and auditability via blockchain.",
-    color: "from-purple-500 to-pink-600",
+    color: "from-red-500 to-rose-600",
   },
 ];
 
@@ -37,7 +37,7 @@ export function HowItWorks() {
           beamWidth={2}
           beamHeight={15}
           beamNumber={12}
-          lightColor="#2563eb"
+          lightColor="#E11D48"
           speed={2}
           noiseIntensity={1.75}
           scale={0.2}
@@ -80,7 +80,7 @@ export function HowItWorks() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.2 }}
             >
-              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-8 h-full relative z-10 hover:border-cyan-500/50 transition-all duration-300">
+              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-8 h-full relative z-10 hover:border-red-500/50 transition-all duration-300">
                 <div
                   className={`w-16 h-16 rounded-full bg-gradient-to-r ${step.color} flex items-center justify-center mb-6 mx-auto`}
                 >
@@ -94,7 +94,7 @@ export function HowItWorks() {
 
               {/* Connection line between steps */}
               {index < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-gradient-to-r from-cyan-500 to-purple-500 z-0"></div>
+                <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-gradient-to-r from-red-500 to-red-500 z-0"></div>
               )}
             </motion.div>
           ))}
