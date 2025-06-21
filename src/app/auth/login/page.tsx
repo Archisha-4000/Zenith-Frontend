@@ -50,9 +50,8 @@ export default function LoginPage() {
     const [error, setError] = useState<string | null>(null)
     const [isProcessing, setIsProcessing] = useState(false)
 
-    const { signIn, signOut, isLoading } = useUser()
+    const { signIn, signOut, isLoading, user } = useUser()
     const router = useRouter()
-    const { user } = useUser()
 
     useEffect(() => {
         if (!isLoading && user) {
@@ -74,6 +73,13 @@ export default function LoginPage() {
                 return
             }
 
+            // For signin, we need a selected role
+            if (!selectedRole) {
+                setError("Please select a role to continue")
+                setIsProcessing(false)
+                return
+            }
+
             // For signin, fetch user from database and check role
             const response = await fetch("/api/auth/me", {
                 method: "POST",
@@ -87,14 +93,18 @@ export default function LoginPage() {
             })
 
             if (!response.ok) {
+                const errorData = await response.json()
                 if (response.status === 404) {
-                    setError("Please contact your administrator or register your organization first")
+                    setError("User not found. Please contact your administrator or register your organization first")
                 } else if (response.status === 403) {
-                    setError("You do not have permission to access this application")
+                    setError("You selected the wrong role. Please try again with the correct role.")
+                } else if (response.status === 400) {
+                    setError("Invalid request. Please try again.")
                 } else {
-                    setError("Failed to fetch user data")
+                    setError(errorData.error || "Failed to authenticate user")
                 }
                 await signOut()
+                setIsProcessing(false)
                 return
             }
 
@@ -112,6 +122,7 @@ export default function LoginPage() {
                 default:
                     setError("Invalid user role")
                     await signOut()
+                    setIsProcessing(false)
             }
         } catch (err) {
             console.error("Authentication error:", err)
@@ -126,7 +137,13 @@ export default function LoginPage() {
 
         try {
             setIsProcessing(true)
-            setSelectedRole(role || null)
+            
+            if (authMode === "signin" && role) {
+                setSelectedRole(role)
+            } else if (authMode === "signup") {
+                setSelectedRole(null) // No role needed for signup
+            }
+            
             await signIn()
         } catch (err) {
             setSelectedRole(null)
@@ -257,7 +274,10 @@ export default function LoginPage() {
                             Welcome to <span className="bg-gradient-to-r from-rose-400 to-red-500 bg-clip-text text-transparent">Zenith</span>
                         </h1>
                         <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
-                            Choose your access level to continue with secure Civic authentication
+                            {authMode === "signin" 
+                                ? "Choose your access level to continue with secure Civic authentication"
+                                : "Create your organization account with secure Civic authentication"
+                            }
                         </p>
                     </motion.div>
 
