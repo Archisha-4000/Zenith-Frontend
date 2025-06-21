@@ -221,13 +221,14 @@ export async function getCurrentUserAction(): Promise<ActionResult<ClientUser>> 
     // This would typically get the current user from session/auth
     // For demo purposes, we'll get the first user from the database
     // TODO: Replace with actual authentication logic
-    
-    const { users } = await getCollections();
+      const { users } = await getCollections();
     const user = await users.findOne({});
+    
+    console.log("getCurrentUserAction - Found user:", user ? { email: user.email, name: user.name, role: user.role } : "No user found");
     
     if (!user) {
       return { success: false, error: "No users found in database" };
-    }    // Convert to ClientUser format
+    }// Convert to ClientUser format
     const clientUser: ClientUser = {
       ...user,
       _id: user._id.toString(),
@@ -257,5 +258,54 @@ export async function getUsersByOrgAction(orgId: string): Promise<ActionResult<C
   } catch (error) {
     console.error("Failed to get users by organization:", error);
     return { success: false, error: "Failed to get users by organization" };
+  }
+}
+
+// DEBUG: Function to list all users (for development only)
+export async function getAllUsersAction(): Promise<ActionResult<ClientUser[]>> {
+  try {
+    const { users } = await getCollections();
+    const allUsers = await users.find({}).toArray();
+    
+    const clientUsers: ClientUser[] = allUsers.map(user => ({
+      ...user,
+      _id: user._id.toString(),
+      org_id: user.org_id instanceof ObjectId ? user.org_id.toHexString() : String(user.org_id),
+      created_at: user.created_at
+    }));
+    
+    console.log("All users in database:", clientUsers.map(u => ({ email: u.email, name: u.name, role: u.role })));
+    
+    return { success: true, data: clientUsers };
+  } catch (error) {
+    console.error("Failed to get all users:", error);
+    return { success: false, error: "Failed to get all users" };
+  }
+}
+
+// TEMP: Function to get user by email for development
+export async function getCurrentUserByEmailAction(email: string): Promise<ActionResult<ClientUser>> {
+  try {
+    const { users } = await getCollections();
+    const user = await users.findOne({ email: email });
+    
+    console.log(`getCurrentUserByEmailAction - Searching for email: ${email}`);
+    console.log("Found user:", user ? { email: user.email, name: user.name, role: user.role } : "No user found");
+    
+    if (!user) {
+      return { success: false, error: `User with email ${email} not found` };
+    }
+    
+    const clientUser: ClientUser = {
+      ...user,
+      _id: user._id.toString(),
+      org_id: user.org_id instanceof ObjectId ? user.org_id.toHexString() : String(user.org_id),
+      created_at: user.created_at
+    };
+    
+    return { success: true, data: clientUser };
+  } catch (error) {
+    console.error("Failed to get user by email:", error);
+    return { success: false, error: "Failed to get user by email" };
   }
 }

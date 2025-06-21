@@ -1,24 +1,36 @@
-import { getUser } from "@civic/auth/nextjs"
-import { redirect } from "next/navigation"
-import { EmployeeDashboard } from "./employee-dashboard"
-import { OrganizationNotFound } from "./organization-not-found"
-import { getUserByEmail } from "@/services/userService"
-import { getTasksByEmail } from "@/services/taskService"
+"use client"
 
-export default async function EmployeePage() {
-  const user = await getUser()
+import { useState } from "react"
+import { EmployeeSidebar } from "@/components/employee/employee-sidebar"
+import { EmployeeDashboardOverview } from "@/components/employee/dashboard-overview"
+import { EmployeeMyTasks } from "@/components/employee/my-tasks"
 
-  if (!user || !user.email) {
-    redirect("/")
+export default function EmployeePage() {
+  const [activeSection, setActiveSection] = useState("overview")
+  const [sidebarOpen, setSidebarOpen] = useState(true)
+
+  const renderContent = () => {
+    switch (activeSection) {
+      case "overview":
+        return <EmployeeDashboardOverview />
+      case "my-tasks":
+        return <EmployeeMyTasks />
+      default:
+        return <EmployeeDashboardOverview />
+    }
   }
 
-  const orgUser = await getUserByEmail(user.email)
-
-  if (!orgUser) {
-    return <OrganizationNotFound userEmail={user.email} />
-  }
-
-  const tasks = await getTasksByEmail(user.email)
-
-  return <EmployeeDashboard user={orgUser} tasks={tasks} />
+  return (
+    <div className="min-h-screen bg-black text-white flex">
+      <EmployeeSidebar 
+        activeSection={activeSection} 
+        setActiveSectionAction={setActiveSection}
+        isOpen={sidebarOpen}
+        onToggleAction={() => setSidebarOpen(!sidebarOpen)}
+      />
+      <main className="flex-1 p-6 bg-gradient-to-br from-black via-gray-900 to-black min-h-screen">
+        {renderContent()}
+      </main>
+    </div>
+  )
 }
