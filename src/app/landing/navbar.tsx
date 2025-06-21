@@ -23,7 +23,6 @@ export default function LandingNavbar() {
   const [visible, setVisible] = useState(false);
   const [active, setActive] = useState<string | null>(null);
 
-  // smooth scroll
   useEffect(() => {
     document.documentElement.style.scrollBehavior = "smooth";
     return () => {
@@ -31,7 +30,6 @@ export default function LandingNavbar() {
     };
   }, []);
 
-  // toggle visible state on scroll
   useMotionValueEvent(scrollY, "change", (latest) => {
     setVisible(latest > 30);
   });
@@ -52,16 +50,12 @@ export default function LandingNavbar() {
 
   return (
     <div className="w-full">
-      {/* Fixed Resizable Navbar */}
       <Navbar className="fixed inset-x-0 top-0 z-50 pt-2">
-        {/* Desktop NavBody */}
         <NavBody visible={visible}>
-          {/* Logo on left */}
           <NavbarLogo />
 
-          {/* Centered nav items */}
           <NavItems
-            className="font-['Poppins'] text-base"
+            className="font-['Poppins'] text-base "
             items={navItems.map((item) => ({
               name: item.name,
               link: item.link,
@@ -69,14 +63,15 @@ export default function LandingNavbar() {
             onItemClick={() => setIsMobileOpen(false)}
           />
 
-          {/* User avatar section on right */}
           <div className="flex items-center gap-4">
             <motion.div
               className="hidden md:flex items-center relative z-[100]"
               animate={{ scale: visible ? 0.85 : 1 }}
               style={{ transformStyle: "preserve-3d" }}
             >
-              <UserButton />
+              <div className="rounded-md transition-colors duration-200 hover:bg-transparent [&_*]:!text-black">
+                <UserButton className="bg-[#E11D48] font-['Poppins']" />
+              </div>
             </motion.div>
           </div>
         </NavBody>
@@ -107,9 +102,10 @@ export default function LandingNavbar() {
               </Link>
             ))}
 
-            {/* Mobile user section */}
             <div className="mt-4 border-t border-neutral-200 dark:border-neutral-700 pt-4 flex justify-start">
-              <UserButton />
+              <div className="rounded-md transition-colors duration-200 hover:bg-red-600 [&_*]:!text-white">
+                <UserButton className="bg-[#E11D48] font-['Poppins']" />
+              </div>
             </div>
           </MobileNavMenu>
         </MobileNav>

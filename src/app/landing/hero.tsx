@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/moving-border";
 import Beams from "@/components/ui/Beams";
 import RotatingText from "@/components/ui/RotatingText";
 import { LayoutGroup } from "framer-motion";
+import { Play, Pause } from "lucide-react";
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -40,17 +41,15 @@ const Hero = () => {
         />
       </motion.div>
 
-      {/* Dark Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/20 z-10" />
 
-      {/* Hero Content */}
       <motion.div
         style={{ y: textY }}
         className="relative z-20 mx-auto flex h-screen max-w-5xl flex-col justify-center px-4 py-8 text-center sm:px-6 md:px-16 lg:px-24"
       >
         <LayoutGroup>
           <motion.h1
-            className="font-['Poppins'] text-7xl leading-snug text-sky-100"
+            className="font-['Poppins'] text-7xl leading-snug text-white"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
@@ -67,7 +66,7 @@ const Hero = () => {
                   className="
                   inline-flex items-center justify-center
                   w-[22rem]
-                  bg-sky-50   
+                  bg-white   
                   whitespace-nowrap
                   border border-white rounded-lg
                   overflow-hidden
@@ -99,7 +98,7 @@ const Hero = () => {
           </motion.h1>
         </LayoutGroup>
 
-        <div className="mt-8 sm:mt-12 text-lg text-sky-100 font-['Poppins']">
+        <div className="mt-8 sm:mt-12 text-lg text-white font-['Poppins']">
           <span>Unified planning, building, testing, and deployment</span>
           <br />
           <span>

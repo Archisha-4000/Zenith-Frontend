@@ -6,12 +6,12 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Beams from "@/components/ui/Beams";
 import {
-  Shield,
-  Lock,
-  Brain,
-  UserPlus,
-  Server,
-  Database,
+  Eye,
+  Zap,
+  BarChart2,
+  GitMerge,
+  Lightbulb,
+  Monitor,
   Play,
   Pause,
 } from "lucide-react";
@@ -38,48 +38,48 @@ const features = [
     title: "Blockchain-backed Audit Trail",
     description:
       "Every task allocation is recorded on the blockchain, ensuring complete transparency and accountability",
-    icon: <Shield className="h-8 w-8 text-deepRed" />,
-    label: "Feature 1",
+    icon: <Eye className="h-8 w-8 text-deepRed" />,
+    label: "Transparency",
     image: "/feature1.png",
   },
   {
     title: "AI-driven Smart Work Allocation",
     description:
       "Our AI analyzes employee skills and workloads to optimally distribute tasks for maximum efficiency.",
-    icon: <Lock className="h-8 w-8 text-deepRed" />,
-    label: "Feature 2",
+    icon: <Zap className="h-8 w-8 text-deepRed" />,
+    label: "Efficiency",
     image: "/feature2.png",
   },
   {
     title: "Employee Skill Graph Analysis",
     description:
       "Visualize and leverage your team's skills with our comprehensive skill mapping system.",
-    icon: <Brain className="h-8 w-8 text-deepRed" />,
-    label: "Feature 3",
+    icon: <BarChart2 className="h-8 w-8 text-deepRed" />,
+    label: "Visualization",
     image: "/feature3.png",
   },
   {
     title: "GitHub Issue Syncing",
     description:
       "Automatically import and prioritize GitHub issues for seamless project management.",
-    icon: <UserPlus className="h-8 w-8 text-deepRed" />,
-    label: "Feature 4",
+    icon: <GitMerge className="h-8 w-8 text-deepRed" />,
+    label: "Sync",
     image: "/feature4.png",
   },
   {
     title: "Transparent Decision Making",
     description:
       "Understand why tasks are assigned to specific team members with clear AI reasoning.",
-    icon: <Server className="h-8 w-8 text-deepRed" />,
-    label: "Feature 5",
+    icon: <Lightbulb className="h-8 w-8 text-deepRed" />,
+    label: "Clarity",
     image: "/feature5.png",
   },
   {
     title: "Real-time Work Status Dashboard",
     description:
       "Monitor project progress and team workloads with intuitive, real-time dashboards.",
-    icon: <Database className="h-7 w-7 text-deepRed" />,
-    label: "Feature 6",
+    icon: <Monitor className="h-7 w-7 text-deepRed" />,
+    label: "Monitoring",
     image: "/feature6.png",
   },
 ].map((feature) => ({
@@ -91,26 +91,26 @@ const defaultTabs: Tab[] = features.map((feature, index) => ({
   id: `tab${index + 1}`,
   label: feature.label,
   icon: feature.icon,
-  tooltip: feature.tooltip,
+  tooltip: feature.label,
   title: feature.title,
   description: feature.description,
   image: feature.image,
   content: (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-      <div className="relative w-full h-54 md:h-64 rounded-xl overflow-hidden shadow-[0_0_20px_rgba(0,255,255,0.1)] cursor-zoom-in">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center min-h-[320px]">
+      <div className="relative w-full h-full md:h-full rounded-2xl overflow-hidden shadow-[0_0_32px_rgba(0,255,255,0.13)] cursor-zoom-in flex items-center justify-center bg-black/40">
         <Image
           src={feature.image}
           alt={
             typeof feature.title === "string" ? feature.title : "Feature Image"
           }
           fill
-          className="object-cover"
+          className="object-contain"
         />
       </div>
-      <div className="flex flex-col gap-3 text-white">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col gap-5 text-white">
+        <div className="flex items-center gap-3">
           {feature.icon}
-          <h3 className="text-xl font-bold tracking-wide">{feature.title}</h3>
+          <h3 className="text-2xl font-bold tracking-wide">{feature.title}</h3>
         </div>
         <p className="text-lg text-gray-300 text-center md:text-left">
           {feature.description}
@@ -130,7 +130,6 @@ const AnimatedTabs = ({
   const [hoveredImage, setHoveredImage] = useState<string | null>(null);
   const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
@@ -172,18 +171,18 @@ const AnimatedTabs = ({
 
   return (
     <div
-      className={cn("w-full max-w-5xl mx-auto flex flex-col gap-6", className)}
+      className={cn("w-full max-w-5xl mx-auto flex flex-col gap-1", className)}
     >
       {/* Tab Buttons */}
-      <div className="relative flex gap-2 flex-wrap items-center justify-between bg-gradient-to-br from-[#1b1b2f]/80 via-[#0e0e20]/80 to-[#0a0a14]/90 p-3 rounded-xl border border-red-400/20 backdrop-blur-xl shadow-[0_0_40px_rgba(0,255,255,0.08)] overflow-hidden">
-        <div className="flex flex-wrap gap-2">
+      <div className="relative flex gap-1 flex-wrap items-center justify-between bg-gradient-to-br from-[#1b1b2f]/80 via-[#0e0e20]/80 to-[#0a0a14]/90 p-3 rounded-xl border border-red-400/20 backdrop-blur-xl shadow-[0_0_40px_rgba(0,255,255,0.08)] overflow-hidden">
+        <div className="flex flex-wrap gap-1">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               title={tab.tooltip}
               className={cn(
-                "relative px-4 py-2 flex items-center gap-2 text-sm font-semibold rounded-md transition z-10 hover:text-deepRed text-white",
+                "relative px-4 py-2 flex items-center gap-1 text-sm font-semibold rounded-md transition z-10 hover:text-deepRed text-white",
                 activeTab === tab.id ? "text-deepRed" : "text-white"
               )}
             >
@@ -194,7 +193,7 @@ const AnimatedTabs = ({
                   transition={{ type: "spring", duration: 0.6 }}
                 />
               )}
-              <span className="relative z-10 flex items-center gap-1">
+              <span className="relative z-10 flex items-center gap-0.5">
                 {tab.icon}
                 {tab.label}
               </span>
@@ -202,10 +201,9 @@ const AnimatedTabs = ({
           ))}
         </div>
 
-        {/* Auto-scroll toggle */}
         <button
           onClick={() => setAutoScroll((prev) => !prev)}
-          className="ml-auto flex items-center gap-1 text-xs text-gray-400 hover:text-deepRed transition"
+          className="flex items-center gap-1 text-xs text-gray-400 hover:text-deepRed transition ml-0 md:ml-auto"
         >
           {autoScroll ? <Pause size={16} /> : <Play size={16} />}
           {autoScroll ? "Stop Auto-Slide" : "Start Auto-Slide"}
@@ -213,7 +211,7 @@ const AnimatedTabs = ({
       </div>
 
       {/* Tab Content */}
-      <div className="relative p-6 rounded-xl bg-gradient-to-br from-[#0e0e1a] via-[#121222] to-[#0c0c18] border border-red-400/20 backdrop-blur-xl shadow-[0_0_60px_rgba(0,255,255,0.07)] overflow-hidden before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_30%_30%,rgba(0,255,255,0.03),transparent_60%)] before:blur-xl before:content-[''] after:absolute after:inset-0 after:bg-[radial-gradient(circle_at_bottom_right,_rgba(0,136,255,0.03),transparent_60%)] after:blur-2xl after:content-[''] min-h-[200px]">
+      <div className="relative p-6 rounded-xl bg-gradient-to-br from-[#0e0e1a] via-[#121222] to-[#0c0c18] border border-red-400/20 backdrop-blur-xl overflow-hidden before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_30%_30%,rgba(0,255,255,0.03),transparent_60%)] before:blur-xl before:content-[''] after:absolute after:inset-0 after:bg-[radial-gradient(circle_at_bottom_right,_rgba(0,136,255,0.03),transparent_60%)] after:blur-2xl after:content-[''] min-h-[200px]">
         <motion.div className="absolute inset-0 z-0">
           <Beams
             beamWidth={5}
