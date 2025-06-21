@@ -50,7 +50,7 @@ const features = [
     icon: <Lock className="h-8 w-8 text-deepRed" />,
     label: "Feature 2",
     tooltip: "End-to-end secure data flow",
-    image: "/feature2.jpg",
+    image: "/feature2.png",
   },
   {
     title: "Employee Skill Graph Analysis",
@@ -59,7 +59,7 @@ const features = [
     icon: <Brain className="h-8 w-8 text-deepRed" />,
     label: "Feature 3",
     tooltip: "AI-based predictive analysis",
-    image: "/feature3.jpg",
+    image: "/feature3.png",
   },
   {
     title: "GitHub Issue Syncing",
@@ -68,7 +68,7 @@ const features = [
     icon: <UserPlus className="h-8 w-8 text-deepRed" />,
     label: "Feature 4",
     tooltip: "Collaborative hospital network",
-    image: "/feature4.svg",
+    image: "/feature4.png",
   },
   {
     title: "Transparent Decision Making",
@@ -77,7 +77,7 @@ const features = [
     icon: <Server className="h-8 w-8 text-deepRed" />,
     label: "Feature 5",
     tooltip: "Distributed backend architecture",
-    image: "/feature5.jpg",
+    image: "/feature5.png",
   },
   {
     title: "Real-time Work Status Dashboard",
@@ -86,7 +86,7 @@ const features = [
     icon: <Database className="h-7 w-7 text-deepRed" />,
     label: "Feature 6",
     tooltip: "Track model usage and metrics",
-    image: "/feature6.jpg",
+    image: "/feature6.png",
   },
 ].map((feature) => ({
   ...feature,

@@ -86,10 +86,10 @@ export function HowItWorks() {
                 >
                   <step.icon className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4 text-center text-white">
+                <h3 className="text-2xl font-['Kagitingan'] mb-4 text-center text-white">
                   {step.title}
                 </h3>
-                <p className="text-gray-300 text-center">{step.description}</p>
+                <p className="text-gray-300 text-center font-['Poppins']">{step.description}</p>
               </div>
 
               {/* Connection line between steps */}
