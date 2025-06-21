@@ -40,7 +40,6 @@ const features = [
       "Every task allocation is recorded on the blockchain, ensuring complete transparency and accountability",
     icon: <Shield className="h-8 w-8 text-deepRed" />,
     label: "Feature 1",
-    tooltip: "Federated training without moving data",
     image: "/feature1.png",
   },
   {
@@ -49,7 +48,6 @@ const features = [
       "Our AI analyzes employee skills and workloads to optimally distribute tasks for maximum efficiency.",
     icon: <Lock className="h-8 w-8 text-deepRed" />,
     label: "Feature 2",
-    tooltip: "End-to-end secure data flow",
     image: "/feature2.png",
   },
   {
@@ -58,7 +56,6 @@ const features = [
       "Visualize and leverage your team's skills with our comprehensive skill mapping system.",
     icon: <Brain className="h-8 w-8 text-deepRed" />,
     label: "Feature 3",
-    tooltip: "AI-based predictive analysis",
     image: "/feature3.png",
   },
   {
@@ -67,7 +64,6 @@ const features = [
       "Automatically import and prioritize GitHub issues for seamless project management.",
     icon: <UserPlus className="h-8 w-8 text-deepRed" />,
     label: "Feature 4",
-    tooltip: "Collaborative hospital network",
     image: "/feature4.png",
   },
   {
@@ -76,7 +72,6 @@ const features = [
       "Understand why tasks are assigned to specific team members with clear AI reasoning.",
     icon: <Server className="h-8 w-8 text-deepRed" />,
     label: "Feature 5",
-    tooltip: "Distributed backend architecture",
     image: "/feature5.png",
   },
   {
@@ -85,7 +80,6 @@ const features = [
       "Monitor project progress and team workloads with intuitive, real-time dashboards.",
     icon: <Database className="h-7 w-7 text-deepRed" />,
     label: "Feature 6",
-    tooltip: "Track model usage and metrics",
     image: "/feature6.png",
   },
 ].map((feature) => ({

@@ -9,7 +9,7 @@ export function TechStack() {
           <h2 className="text-center text-white font-['Kagitingan'] bg-clip-text text-5xl leading-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight">
             Pricing
           </h2>
-          <p className="text-center text-base text-muted-foreground md:text-lg">
+          <p className="text-center text-base text-muted-foreground md:text-lg font-['Poppins']">
             Use it for free for yourself, upgrade when your team needs advanced
             control.
           </p>

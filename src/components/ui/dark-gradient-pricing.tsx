@@ -19,7 +19,7 @@ const Benefit = ({ text, checked }: BenefitProps) => {
         </span>
       ) : (
         <span className="grid size-4 place-content-center rounded-full dark:bg-zinc-800 bg-zinc-200 text-sm text-white">
-          <X className="size-3 text-white" />
+          <X className="size-3 text-black" />
         </span>
       )}
       <span className="text-sm text-white">{text}</span>
@@ -71,7 +71,7 @@ export const PricingCard = ({
             rotation={0}
           />
         </div>
-        <div className="relative z-10">
+        <div className="relative z-10 font-['Poppins']">
           <div className="flex flex-col items-center border-b pb-6 dark:border-zinc-700 border-zinc-200">
             <span className="mb-6 inline-block text-white">{tier}</span>
             <span className="mb-3 inline-block text-4xl font-medium text-white">

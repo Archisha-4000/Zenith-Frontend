@@ -30,7 +30,7 @@ const Hero = () => {
         <Beams
           beamWidth={2}
           beamHeight={15}
-          beamNumber={12}
+          beamNumber={14}
           lightColor="#E11D48"
           speed={2}
           noiseIntensity={1.75}
