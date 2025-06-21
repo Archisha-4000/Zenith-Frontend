@@ -230,7 +230,7 @@ export function SetupForm({ userId, userName }: SetupFormProps) {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-black text-white flex items-center justify-center p-4 font-['Poppins']">
       <div className="w-full max-w-6xl">
         {/* Header */}
         <div className="text-center mb-8">
