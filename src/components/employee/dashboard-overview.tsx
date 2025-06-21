@@ -16,54 +16,28 @@ import {
   TrendingUp,
   Activity
 } from "lucide-react"
-import { getCurrentUserAction, getCurrentUserByEmailAction, getAllUsersAction } from "@/actions/user"
-import { getTasksByEmailAction } from "@/actions/aiTasks"
 import { AITask } from "@/models/types"
 
-export function EmployeeDashboardOverview() {
-  const [loading, setLoading] = useState(true)
-  const [tasks, setTasks] = useState<AITask[]>([])
-  const [userEmail, setUserEmail] = useState("")
+interface EmployeeDashboardOverviewProps {
+  user?: any
+  tasks?: any[]
+}
+
+export function EmployeeDashboardOverview({ user, tasks: propTasks }: EmployeeDashboardOverviewProps) {
+  const [loading, setLoading] = useState(false)
+  const [tasks, setTasks] = useState<any[]>(propTasks || [])
+  const [userEmail, setUserEmail] = useState(user?.email || "")
 
   useEffect(() => {
-    async function loadData() {
-      try {
-        setLoading(true)
-        
-        // DEBUG: Show all users in console
-        const allUsers = await getAllUsersAction()
-        if (allUsers.success) {
-          console.log("All users in database:", allUsers.data?.map(u => ({ email: u.email, name: u.name, role: u.role })))
-        }
-        
-        // FOR DEVELOPMENT: You can hardcode an employee email here to test specific users
-        // const testEmail = "john.doe@example.com"; // Replace with actual employee email
-        // const user = await getCurrentUserByEmailAction(testEmail);
-        
-        const user = await getCurrentUserAction()
-        if (!user.success || !user.data?.email) {
-          console.error("No user found or user has no email:", user)
-          return
-        }
-
-        console.log("Dashboard Overview - Loading tasks for user:", user.data.email)
-        setUserEmail(user.data.email)
-        const tasksResult = await getTasksByEmailAction(user.data.email)
-        if (tasksResult.success && tasksResult.data) {
-          console.log(`Dashboard Overview - Found ${tasksResult.data.length} tasks for ${user.data.email}`)
-          setTasks(tasksResult.data)
-        } else {
-          console.error("Failed to load tasks:", tasksResult.error)
-        }
-      } catch (error) {
-        console.error("Error loading employee dashboard data:", error)
-      } finally {
-        setLoading(false)
-      }
+    if (propTasks) {
+      setTasks(propTasks)
+      console.log(`Dashboard Overview - Using ${propTasks.length} tasks from props`)
     }
-
-    loadData()
-  }, [])
+    if (user?.email) {
+      setUserEmail(user.email)
+      console.log("Dashboard Overview - User email:", user.email)
+    }
+  }, [propTasks, user])
 
   const formatDuration = (hours: any): number => {
     if (!hours) return 0

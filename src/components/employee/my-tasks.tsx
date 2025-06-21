@@ -20,10 +20,13 @@ import {
   Zap,
   AlertTriangle
 } from "lucide-react"
-import { getCurrentUserAction, getCurrentUserByEmailAction } from "@/actions/user"
-import { getTasksByEmailAction } from "@/actions/aiTasks"
 import { updateEmployeeTaskStatusAction } from "@/actions/task"
 import { AITask } from "@/models/types"
+
+interface EmployeeMyTasksProps {
+  user?: any
+  tasks?: any[]
+}
 
 const priorityConfig = {
   low: {
@@ -79,9 +82,9 @@ const statusConfig = {
   },
 };
 
-export function EmployeeMyTasks() {
-  const [loading, setLoading] = useState(true)
-  const [tasks, setTasks] = useState<AITask[]>([])
+export function EmployeeMyTasks({ user, tasks: propTasks }: EmployeeMyTasksProps) {
+  const [loading, setLoading] = useState(false)
+  const [tasks, setTasks] = useState<any[]>(propTasks || [])
   const [isPending, startTransition] = useTransition()
   const [filterStatus, setFilterStatus] = useState<string>("all")
   const [filterPriority, setFilterPriority] = useState<string>("all")
@@ -92,38 +95,16 @@ export function EmployeeMyTasks() {
     const diff = today.getDate() - dayOfWeek
     return new Date(today.setDate(diff))
   })
+
   useEffect(() => {
-    async function loadTasks() {
-      try {
-        setLoading(true)
-        
-        // FOR DEVELOPMENT: You can hardcode an employee email here to test specific users
-        // const testEmail = "jane.smith@example.com"; // Replace with actual employee email
-        // const user = await getCurrentUserByEmailAction(testEmail);
-        
-        const user = await getCurrentUserAction()
-        if (!user.success || !user.data?.email) {
-          console.error("No user found or user has no email:", user)
-          return
-        }
-
-        console.log("My Tasks - Loading tasks for user:", user.data.email)
-        const tasksResult = await getTasksByEmailAction(user.data.email)
-        if (tasksResult.success && tasksResult.data) {
-          console.log(`My Tasks - Found ${tasksResult.data.length} tasks for ${user.data.email}`)
-          setTasks(tasksResult.data)
-        } else {
-          console.error("Failed to load tasks:", tasksResult.error)
-        }
-      } catch (error) {
-        console.error("Error loading tasks:", error)
-      } finally {
-        setLoading(false)
-      }
+    if (propTasks) {
+      setTasks(propTasks)
+      console.log(`My Tasks - Using ${propTasks.length} tasks from props`)
     }
-
-    loadTasks()
-  }, [])
+    if (user?.email) {
+      console.log("My Tasks - User email:", user.email)
+    }
+  }, [propTasks, user])
 
   const formatDate = (
     dateValue: Date | { $date: { $numberLong: string } } | null | undefined
