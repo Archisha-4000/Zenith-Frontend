@@ -1,14 +1,14 @@
-import { getCollections } from "@/lib/db/collections";
-import { ObjectId } from "mongodb";
-import { Task } from "@/models/types";
+import { getCollections } from "@/lib/db/collections"
+import { ObjectId } from "mongodb"
+import type { Task } from "@/models/types"
 
 export async function createTask(input: {
-  quest_id: ObjectId;
-  assigned_to: ObjectId;
-  type: "frontend" | "backend" | "onchain" | "testing" | "deployment";
-  chain_tx_hash?: string;
+  quest_id: ObjectId
+  assigned_to: ObjectId
+  type: "frontend" | "backend" | "onchain" | "testing" | "deployment"
+  chain_tx_hash?: string
 }): Promise<Task> {
-  const { tasks } = await getCollections();
+  const { tasks } = await getCollections()
 
   const task: Task = {
     _id: new ObjectId(),
@@ -20,157 +20,144 @@ export async function createTask(input: {
     chain_tx_hash: input.chain_tx_hash || "",
     created_at: new Date(),
     started_at: null,
-    completed_at: null
-  };
+    completed_at: null,
+  }
 
-  await tasks.insertOne(task);
-  return task;
+  await tasks.insertOne(task)
+  return task
 }
 
 export async function getTaskById(id: string): Promise<Task | null> {
-  const { tasks } = await getCollections();
-  return await tasks.findOne({ _id: new ObjectId(id) });
+  const { tasks } = await getCollections()
+  return await tasks.findOne({ _id: new ObjectId(id) })
 }
 
 export async function getTasksByQuestId(questId: string): Promise<Task[]> {
-  const { tasks } = await getCollections();
-  return await tasks.find({ quest_id: new ObjectId(questId) }).toArray();
+  const { tasks } = await getCollections()
+  return await tasks.find({ quest_id: new ObjectId(questId) }).toArray()
 }
 
 export async function getTasksByAssignedTo(userId: string): Promise<Task[]> {
-  const { tasks } = await getCollections();
-  return await tasks.find({ assigned_to: new ObjectId(userId) }).toArray();
+  const { tasks } = await getCollections()
+  return await tasks.find({ assigned_to: new ObjectId(userId) }).toArray()
 }
 
-export async function updateTask(
-  id: string,
-  updates: Partial<Omit<Task, "_id" | "created_at">>
-): Promise<Task | null> {
-  const { tasks } = await getCollections();
-  
+export async function updateTask(id: string, updates: Partial<Omit<Task, "_id" | "created_at">>): Promise<Task | null> {
+  const { tasks } = await getCollections()
+
   // Handle status changes to update timestamps
-  const updateData = { ...updates };
+  const updateData = { ...updates }
   if (updates.status === "started" && !updates.started_at) {
-    updateData.started_at = new Date();
+    updateData.started_at = new Date()
   }
   if (updates.status === "done" && !updates.completed_at) {
-    updateData.completed_at = new Date();
+    updateData.completed_at = new Date()
   }
-  
-  await tasks.updateOne(
-    { _id: new ObjectId(id) },
-    { $set: updateData }
-  );
 
-  return await getTaskById(id);
+  await tasks.updateOne({ _id: new ObjectId(id) }, { $set: updateData })
+
+  return await getTaskById(id)
 }
 
-export async function addTaskLog(
-  id: string,
-  message: string
-): Promise<Task | null> {
-  const { tasks } = await getCollections();
-  
+export async function addTaskLog(id: string, message: string): Promise<Task | null> {
+  const { tasks } = await getCollections()
+
   await tasks.updateOne(
     { _id: new ObjectId(id) },
-    { 
-      $push: { 
-        logs: { 
-          message, 
-          timestamp: new Date() 
-        } 
-      } 
-    }
-  );
+    {
+      $push: {
+        logs: {
+          message,
+          timestamp: new Date(),
+        },
+      },
+    },
+  )
 
-  return await getTaskById(id);
+  return await getTaskById(id)
 }
 
 export async function deleteTask(id: string): Promise<boolean> {
-  const { tasks } = await getCollections();
-  const result = await tasks.deleteOne({ _id: new ObjectId(id) });
-  return result.deletedCount > 0;
+  const { tasks } = await getCollections()
+  const result = await tasks.deleteOne({ _id: new ObjectId(id) })
+  return result.deletedCount > 0
 }
 
 export async function getTasksByEmail(email: string): Promise<any[]> {
-  const { tasks } = await getCollections();
-  const rawTasks = await tasks.find({ assigned_to_email: email }).toArray();
-  
+  const { tasks } = await getCollections()
+  const rawTasks = await tasks.find({ assigned_to_email: email }).toArray()
+
   // Convert MongoDB objects to plain serializable objects
-  return rawTasks.map(task => {
-    const serializedTask: any = {};
-    
+  return rawTasks.map((task) => {
+    const serializedTask: any = {}
+
     // Convert all properties
     for (const [key, value] of Object.entries(task)) {
       if (value instanceof ObjectId) {
-        serializedTask[key] = value.toString();
+        serializedTask[key] = value.toString()
       } else if (value instanceof Date) {
-        serializedTask[key] = value.toISOString();
-      } else if (value && typeof value === 'object' && value.constructor === Object) {
-        // Handle nested objects
-        serializedTask[key] = JSON.parse(JSON.stringify(value));
+        serializedTask[key] = value.toISOString()
+      } else if (value && typeof value === "object" && value.constructor === Object) {
+        serializedTask[key] = JSON.parse(JSON.stringify(value))
       } else {
-        serializedTask[key] = value;
+        serializedTask[key] = value
       }
     }
-    
-    return serializedTask;
-  });
+
+    return serializedTask
+  })
 }
 
 export async function updateTaskStatusForEmployee(
   id: string,
-  status: "pending" | "in_progress" | "completed"
+  status: "pending" | "in_progress" | "completed",
 ): Promise<any | null> {
-  const { tasks } = await getCollections();
-  
+  const { tasks } = await getCollections()
+
   // Map employee dashboard status to internal status
-  let internalStatus: "pending" | "started" | "done";
+  let internalStatus: "pending" | "started" | "done"
   switch (status) {
     case "pending":
-      internalStatus = "pending";
-      break;
+      internalStatus = "pending"
+      break
     case "in_progress":
-      internalStatus = "started";
-      break;
+      internalStatus = "started"
+      break
     case "completed":
-      internalStatus = "done";
-      break;
+      internalStatus = "done"
+      break
     default:
-      throw new Error("Invalid status");
+      throw new Error("Invalid status")
   }
-  
+
   // Handle status changes to update timestamps
-  const updateData: any = { status: internalStatus };
+  const updateData: any = { status: internalStatus }
   if (internalStatus === "started") {
-    updateData.started_at = new Date();
+    updateData.started_at = new Date()
   }
   if (internalStatus === "done") {
-    updateData.completed_at = new Date();
+    updateData.completed_at = new Date()
   }
-  
-  await tasks.updateOne(
-    { _id: new ObjectId(id) },
-    { $set: updateData }
-  );
+
+  await tasks.updateOne({ _id: new ObjectId(id) }, { $set: updateData })
 
   // Return the updated task with serialized data for the client
-  const updatedTask = await tasks.findOne({ _id: new ObjectId(id) });
-  if (!updatedTask) return null;
+  const updatedTask = await tasks.findOne({ _id: new ObjectId(id) })
+  if (!updatedTask) return null
 
   // Convert to serializable format
-  const serializedTask: any = {};
+  const serializedTask: any = {}
   for (const [key, value] of Object.entries(updatedTask)) {
     if (value instanceof ObjectId) {
-      serializedTask[key] = value.toString();
+      serializedTask[key] = value.toString()
     } else if (value instanceof Date) {
-      serializedTask[key] = value.toISOString();
-    } else if (value && typeof value === 'object' && value.constructor === Object) {
-      serializedTask[key] = JSON.parse(JSON.stringify(value));
+      serializedTask[key] = value.toISOString()
+    } else if (value && typeof value === "object" && value.constructor === Object) {
+      serializedTask[key] = JSON.parse(JSON.stringify(value))
     } else {
-      serializedTask[key] = value;
+      serializedTask[key] = value
     }
   }
-  
-  return serializedTask;
+
+  return serializedTask
 }
