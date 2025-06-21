@@ -63,7 +63,10 @@ export function CTA() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            <button className="bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white text-lg py-3 px-8 rounded-lg transition-all duration-200 font-['Poppins']">
+            <button 
+              onClick={() => window.location.href = '/auth/login'}
+              className="bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white text-lg py-3 px-8 rounded-lg transition-all duration-200 font-['Poppins']"
+            >
               Get Started Now
             </button>
             <button className="border border-red-500 text-red-400 hover:bg-red-500/10 text-lg py-3 px-8 rounded-lg transition-all duration-200 font-['Poppins']">

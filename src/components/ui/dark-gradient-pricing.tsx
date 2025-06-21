@@ -87,6 +87,11 @@ export const PricingCard = ({
           <Button
             className="w-full"
             variant={tier === "Pro" ? "default" : "ghost"}
+            onClick={() => {
+              if (CTA === "Get started free") {
+                window.location.href = '/auth/login'
+              }
+            }}
           >
             {CTA}
           </Button>

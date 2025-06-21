@@ -113,9 +113,11 @@ const Hero = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.5 }}
         >
-          <Button className="rounded-lg border border-white/10 bg-[#E11D48] px-6 py-3 text-lg font-['Poppins'] backdrop-blur-3xl hover:cursor-pointer">
-            Get Started
-          </Button>
+          <Link href="/auth/login">
+            <Button className="rounded-lg border border-white/10 bg-[#E11D48] px-6 py-3 text-lg font-['Poppins'] backdrop-blur-3xl hover:cursor-pointer">
+              Get Started
+            </Button>
+          </Link>
           <Link href="#features">
             <Button className="rounded-lg border border-white/20 px-6 py-3 text-lg font-['Poppins'] backdrop-blur-md transition-transform duration-300 hover:scale-105 hover:cursor-pointer hover:bg-white hover:text-black">
               Learn More
