@@ -57,7 +57,7 @@ export function TaskUpload() {
 
     const fetchFilteredLogs = async () => {
       try {
-        const response = await fetch('https://1160-203-171-240-122.ngrok-free.app/logs/showcase')
+        const response = await fetch('http://localhost:8000/logs/showcase')
         if (response.ok) {
           const logText = await response.text()
           
@@ -131,7 +131,7 @@ export function TaskUpload() {
 
       console.log("Sending payload:", payload)
 
-      const response = await fetch('https://1160-203-171-240-122.ngrok-free.app/process-requirement', {
+      const response = await fetch('http://localhost:8000/process-requirement', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
