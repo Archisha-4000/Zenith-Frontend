@@ -65,13 +65,13 @@ const statusConfig = {
     label: "To Do",
     icon: Circle,
   },
-  in_progress: {
+  started: {
     color: "bg-green-500",
     label: "In Progress",
     icon: PlayCircle,
   },
-  completed: {
-    color: "bg-emerald-500",
+  done: {
+    color: "bg-emerald-600",
     label: "Done",
     icon: CheckCircle2,
   },
@@ -79,6 +79,12 @@ const statusConfig = {
     color: "bg-red-500",
     label: "Blocked",
     icon: AlertTriangle,
+  },
+  // Default fallback
+  default: {
+    color: "bg-green-500",
+    label: "Unknown",
+    icon: Circle,
   },
 };
 
@@ -100,6 +106,14 @@ export function EmployeeMyTasks({ user, tasks: propTasks }: EmployeeMyTasksProps
     if (propTasks) {
       setTasks(propTasks)
       console.log(`My Tasks - Using ${propTasks.length} tasks from props`)
+      console.log("Tasks data:", propTasks)
+      
+      // Log sample task data structure
+      if (propTasks.length > 0) {
+        console.log("Sample task structure:", propTasks[0])
+        console.log("Sample task created_at:", propTasks[0].created_at)
+        console.log("Sample task due_date:", propTasks[0].due_date)
+      }
     }
     if (user?.email) {
       console.log("My Tasks - User email:", user.email)
@@ -107,14 +121,46 @@ export function EmployeeMyTasks({ user, tasks: propTasks }: EmployeeMyTasksProps
   }, [propTasks, user])
 
   const formatDate = (
-    dateValue: Date | { $date: { $numberLong: string } } | null | undefined
+    dateValue: Date | { $date: { $numberLong: string } } | string | number | null | undefined
   ) => {
-    if (!dateValue) return new Date()
-    if (dateValue instanceof Date) {
-      return dateValue
-    } else if (dateValue && typeof dateValue === "object" && dateValue.$date) {
-      return new Date(Number.parseInt(dateValue.$date.$numberLong))
+    console.log("formatDate input:", dateValue, typeof dateValue)
+    if (!dateValue) {
+      console.log("No date value, returning current date")
+      return new Date()
     }
+    
+    if (dateValue instanceof Date) {
+      console.log("Date instance:", dateValue)
+      return dateValue
+    } 
+    
+    if (typeof dateValue === 'string') {
+      const parsedStringDate = new Date(dateValue)
+      console.log("Parsed string date:", parsedStringDate)
+      if (!isNaN(parsedStringDate.getTime())) {
+        return parsedStringDate
+      }
+    }
+    
+    if (dateValue && typeof dateValue === "object" && dateValue.$date) {
+      const parsedDate = new Date(Number.parseInt(dateValue.$date.$numberLong))
+      console.log("Parsed MongoDB date:", parsedDate)
+      if (!isNaN(parsedDate.getTime())) {
+        return parsedDate
+      }
+    }
+    
+    // Try to parse as timestamp
+    if (typeof dateValue === 'number' || (typeof dateValue === 'string' && !isNaN(Number(dateValue)))) {
+      const timestamp = Number(dateValue)
+      const parsedTimestamp = new Date(timestamp)
+      console.log("Parsed timestamp:", parsedTimestamp)
+      if (!isNaN(parsedTimestamp.getTime())) {
+        return parsedTimestamp
+      }
+    }
+    
+    console.log("Fallback to current date for:", dateValue)
     return new Date()
   }
 
@@ -137,14 +183,14 @@ export function EmployeeMyTasks({ user, tasks: propTasks }: EmployeeMyTasksProps
 
   const getTaskStats = () => {
     const pending = tasks.filter((t) => t.status === "pending").length
-    const inProgress = tasks.filter((t) => t.status === "in_progress").length
-    const completed = tasks.filter((t) => t.status === "completed").length
+    const inProgress = tasks.filter((t) => t.status === "started").length
+    const completed = tasks.filter((t) => t.status === "done").length
     const totalHours = tasks.reduce(
       (acc, task) => acc + getDurationHours(task.estimated_duration_hours),
       0
     )
     const completedHours = tasks
-      .filter((t) => t.status === "completed")
+      .filter((t) => t.status === "done")
       .reduce(
         (acc, task) => acc + getDurationHours(task.estimated_duration_hours),
         0
@@ -165,14 +211,20 @@ export function EmployeeMyTasks({ user, tasks: propTasks }: EmployeeMyTasksProps
     taskId: string,
     newStatus: "pending" | "in_progress" | "completed"
   ) => {
+    console.log(`Updating task ${taskId} to status: ${newStatus}`)
     startTransition(async () => {
       try {
         const result = await updateEmployeeTaskStatusAction(taskId, newStatus)
+        console.log("Status update result:", result)
         if (result.success) {
           // Update the local state
-          setTasks(prev => prev.map(task => 
-            getTaskId(task) === taskId ? { ...task, status: newStatus } : task
-          ))
+          setTasks(prev => {
+            const updatedTasks = prev.map(task => 
+              getTaskId(task) === taskId ? { ...task, status: newStatus } : task
+            )
+            console.log("Updated tasks state:", updatedTasks)
+            return updatedTasks
+          })
         } else {
           console.error("Failed to update task status:", result.error)
         }
@@ -222,20 +274,38 @@ export function EmployeeMyTasks({ user, tasks: propTasks }: EmployeeMyTasksProps
     const dueDate = formatDate(task.due_date)
     const duration = getDurationHours(task.estimated_duration_hours)
 
+    console.log("Task timeline calculation for:", task.title)
+    console.log("Created date:", createdDate)
+    console.log("Due date:", dueDate)
+    console.log("Duration hours:", duration)
+
     // Calculate start and end positions relative to timeline
     const timelineStart = timelineDates[0]
     const timelineEnd = timelineDates[timelineDates.length - 1]
 
+    console.log("Timeline start:", timelineStart)
+    console.log("Timeline end:", timelineEnd)
+
     const taskStart = createdDate < timelineStart ? timelineStart : createdDate
     const taskEnd = dueDate > timelineEnd ? timelineEnd : dueDate
+
+    console.log("Task start (adjusted):", taskStart)
+    console.log("Task end (adjusted):", taskEnd)
 
     // Calculate position as percentage
     const totalTimelineWidth = timelineEnd.getTime() - timelineStart.getTime()
     const taskStartOffset = taskStart.getTime() - timelineStart.getTime()
     const taskDuration = taskEnd.getTime() - taskStart.getTime()
 
+    console.log("Timeline width (ms):", totalTimelineWidth)
+    console.log("Task start offset (ms):", taskStartOffset)
+    console.log("Task duration (ms):", taskDuration)
+
     const leftPercent = (taskStartOffset / totalTimelineWidth) * 100
     const widthPercent = (taskDuration / totalTimelineWidth) * 100
+
+    console.log("Left percent:", leftPercent)
+    console.log("Width percent:", widthPercent)
 
     return {
       left: `${Math.max(0, leftPercent)}%`,
@@ -246,96 +316,105 @@ export function EmployeeMyTasks({ user, tasks: propTasks }: EmployeeMyTasksProps
 
   const stats = getTaskStats()
 
+  const getStatusConfig = (status: string) => {
+    return statusConfig[status as keyof typeof statusConfig] || statusConfig.default
+  }
+
+  const getPriorityConfig = (priority: string) => {
+    return priorityConfig[priority as keyof typeof priorityConfig] || priorityConfig.low
+  }
+
   const GanttTaskRow = ({ task, index }: { task: AITask; index: number }) => {
     const timelinePosition = getTaskTimelinePosition(task)
-    const PriorityIcon = priorityConfig[task.priority].icon
+    const statusConf = getStatusConfig(task.status)
+    const priorityConf = getPriorityConfig(task.priority)
+    const PriorityIcon = priorityConf.icon
+
+    console.log("Task status:", task.status, "Status config:", statusConf)
 
     return (
       <div
-        className={`grid grid-cols-[300px_1fr] border-b border-zinc-700 hover:bg-zinc-800/50 transition-colors ${
+        className={`grid grid-cols-[400px_1fr] border-b border-zinc-700 hover:bg-zinc-800/50 transition-colors ${
           index % 2 === 0 ? "bg-zinc-900" : "bg-zinc-900/80"
         }`}
       >
-        {/* Task Info Column */}
-        <div className="p-4 border-r border-zinc-700 flex items-center space-x-3">
+        {/* Task Info Column - Made wider */}
+        <div className="p-6 border-r border-zinc-700 flex items-center space-x-4">
           <div
-            className={`w-3 h-3 rounded-full ${
-              statusConfig[task.status].color
-            }`}
+            className={`w-4 h-4 rounded-full ${statusConf.color}`}
           ></div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center space-x-1 mb-1">
+            <div className="flex items-center space-x-2 mb-2">
               <PriorityIcon
-                className={`w-3 h-3 ${priorityConfig[task.priority].textColor}`}
+                className={`w-4 h-4 ${priorityConf.textColor}`}
               />
               <span
-                className={`text-xs px-2 py-0.5 rounded-full ${
-                  priorityConfig[task.priority].bgColor
-                } ${priorityConfig[task.priority].textColor} font-medium`}
+                className={`text-sm px-3 py-1 rounded-full ${
+                  priorityConf.bgColor
+                } ${priorityConf.textColor} font-medium`}
               >
-                {priorityConfig[task.priority].label}
+                {priorityConf.label}
               </span>
             </div>
             <h3
-              className="font-semibold text-sm text-zinc-200 truncate"
+              className="font-semibold text-base text-zinc-200 truncate mb-1"
               title={task.title}
             >
               {task.title}
             </h3>
             <p
-              className="text-xs text-zinc-400 truncate"
+              className="text-sm text-zinc-400 truncate mb-2"
               title={task.description}
             >
               {task.description}
             </p>
-            <div className="flex items-center space-x-3 mt-1 text-xs text-zinc-500">
+            <div className="flex items-center space-x-4 text-sm text-zinc-500">
               <span className="flex items-center">
-                <Timer className="w-3 h-3 mr-1" />
+                <Timer className="w-4 h-4 mr-1" />
                 {getDurationHours(task.estimated_duration_hours)}h
               </span>
               <span className="flex items-center">
-                <User className="w-3 h-3 mr-1" />
+                <User className="w-4 h-4 mr-1" />
                 {task.created_by_agent || 'AI System'}
               </span>
+            </div>
+            <div className="flex items-center space-x-4 mt-2 text-xs text-zinc-600">
+              <span>Created: {formatDate(task.created_at).toLocaleDateString()}</span>
+              <span>Due: {formatDate(task.due_date).toLocaleDateString()}</span>
             </div>
           </div>
         </div>
 
-        {/* Timeline Column */}
-        <div className="relative p-4 min-h-[80px] flex items-center group">
+        {/* Timeline Column - Made taller */}
+        <div className="relative p-6 min-h-[120px] flex items-center group">
           {timelinePosition.isVisible && (
             <div
-              className={`absolute h-6 rounded-full ${
-                statusConfig[task.status].color
-              } opacity-90 hover:opacity-100 transition-all cursor-pointer shadow-sm`}
+              className={`absolute h-10 rounded-lg ${
+                statusConf.color
+              } opacity-90 hover:opacity-100 transition-all cursor-pointer shadow-lg border-2 border-white/20`}
               style={{
                 left: timelinePosition.left,
                 width: timelinePosition.width,
-                minWidth: "20px",
+                minWidth: "40px",
               }}
-              title={`${task.title} - ${statusConfig[task.status].label}`}
+              title={`${task.title} - ${statusConf.label}
+Created: ${formatDate(task.created_at).toLocaleDateString()}
+Due: ${formatDate(task.due_date).toLocaleDateString()}`}
             >
-              <div className="absolute inset-0 rounded-full bg-white/20"></div>
+              <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-white/10 to-white/5"></div>
+              <div className="absolute inset-x-2 top-1/2 transform -translate-y-1/2 text-xs font-medium text-white truncate">
+                {task.title}
+              </div>
             </div>
           )}
 
           {/* Task action buttons - show on hover */}
-          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity flex space-x-1">
-            {task.status !== "pending" && (
-              <button
-                onClick={() => handleStatusChange(getTaskId(task), "pending")}
-                disabled={isPending}
-                className="px-2 py-1 text-xs bg-zinc-700 text-zinc-200 rounded hover:bg-zinc-600 transition-colors disabled:opacity-50"
-                title="Move to To Do"
-              >
-                To Do
-              </button>
-            )}
+          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity flex space-x-2">
             {task.status !== "in_progress" && (
               <button
                 onClick={() => handleStatusChange(getTaskId(task), "in_progress")}
                 disabled={isPending}
-                className="px-2 py-1 text-xs bg-blue-700 text-white rounded hover:bg-blue-600 transition-colors disabled:opacity-50"
+                className="px-3 py-1.5 text-sm bg-blue-700 text-white rounded-md hover:bg-blue-600 transition-colors disabled:opacity-50"
                 title="Start Progress"
               >
                 Start
@@ -345,7 +424,7 @@ export function EmployeeMyTasks({ user, tasks: propTasks }: EmployeeMyTasksProps
               <button
                 onClick={() => handleStatusChange(getTaskId(task), "completed")}
                 disabled={isPending}
-                className="px-2 py-1 text-xs bg-emerald-700 text-white rounded hover:bg-emerald-600 transition-colors disabled:opacity-50"
+                className="px-3 py-1.5 text-sm bg-emerald-700 text-white rounded-md hover:bg-emerald-600 transition-colors disabled:opacity-50"
                 title="Mark Done"
               >
                 Done
@@ -477,21 +556,24 @@ export function EmployeeMyTasks({ user, tasks: propTasks }: EmployeeMyTasksProps
         </CardHeader>
         <CardContent className="p-0">
           {/* Timeline Header */}
-          <div className="grid grid-cols-[300px_1fr] border-b border-zinc-800 bg-zinc-800">
-            <div className="p-4 border-r border-zinc-800 flex items-center justify-between">
-              <h3 className="font-semibold text-zinc-200">Tasks</h3>
+          <div className="grid grid-cols-[400px_1fr] border-b border-zinc-800 bg-zinc-800">
+            <div className="p-6 border-r border-zinc-800 flex items-center justify-between">
+              <h3 className="font-semibold text-zinc-200 text-lg">Tasks</h3>
               <div className="flex items-center space-x-2">
+                <span className="text-sm text-zinc-400">
+                  {currentWeekStart.toLocaleDateString()} - {new Date(currentWeekStart.getTime() + 13 * 24 * 60 * 60 * 1000).toLocaleDateString()}
+                </span>
                 <button
                   onClick={() => navigateWeek("prev")}
-                  className="p-1 hover:bg-zinc-700 rounded transition-colors"
+                  className="p-2 hover:bg-zinc-700 rounded transition-colors"
                 >
-                  <ChevronLeft className="w-4 h-4 text-zinc-400" />
+                  <ChevronLeft className="w-5 h-5 text-zinc-400" />
                 </button>
                 <button
                   onClick={() => navigateWeek("next")}
-                  className="p-1 hover:bg-zinc-700 rounded transition-colors"
+                  className="p-2 hover:bg-zinc-700 rounded transition-colors"
                 >
-                  <ChevronRight className="w-4 h-4 text-zinc-400" />
+                  <ChevronRight className="w-5 h-5 text-zinc-400" />
                 </button>
               </div>
             </div>
@@ -499,12 +581,12 @@ export function EmployeeMyTasks({ user, tasks: propTasks }: EmployeeMyTasksProps
               {timelineDates.map((date, index) => (
                 <div
                   key={index}
-                  className="p-2 text-center border-r border-zinc-800 last:border-r-0"
+                  className="p-3 text-center border-r border-zinc-800 last:border-r-0 min-h-[80px] flex flex-col justify-center"
                 >
-                  <div className="text-xs text-zinc-400 font-medium">
+                  <div className="text-sm text-zinc-400 font-medium mb-1">
                     {date.toLocaleDateString("en-US", { month: "short" })}
                   </div>
-                  <div className="text-sm font-semibold text-zinc-200">
+                  <div className="text-lg font-bold text-zinc-200 mb-1">
                     {date.getDate()}
                   </div>
                   <div className="text-xs text-zinc-500">

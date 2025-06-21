@@ -73,14 +73,14 @@ export function EmployeeDashboardOverview({ user, tasks: propTasks }: EmployeeDa
   const taskStats = {
     total: tasks.length,
     pending: tasks.filter(t => t.status === 'pending').length,
-    in_progress: tasks.filter(t => t.status === 'in_progress').length,
-    completed: tasks.filter(t => t.status === 'completed').length,
+    in_progress: tasks.filter(t => t.status === 'started').length,
+    completed: tasks.filter(t => t.status === 'done').length,
     totalHours: tasks.reduce((sum, task) => sum + formatDuration(task.estimated_duration_hours), 0),
-    completedHours: tasks.filter(t => t.status === 'completed')
+    completedHours: tasks.filter(t => t.status === 'done')
                         .reduce((sum, task) => sum + formatDuration(task.estimated_duration_hours), 0)
   }
 
-  const productivity = taskStats.totalHours > 0 ? (taskStats.completedHours / taskStats.totalHours) * 100 : 0
+  const productivity = taskStats.totalHours > 0 ? (taskStats.completedHours / taskStats.totalHours) * 100 : 20
   const highPriorityTasks = tasks.filter(task => task.priority === 'high' || task.priority === 'critical').length
   const recentTasks = tasks
     .sort((a, b) => {
