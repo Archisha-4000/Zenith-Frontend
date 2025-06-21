@@ -5,7 +5,7 @@ import type React from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { setupOrganizationAndUser } from "@/actions/setup";
-import { Check } from "lucide-react";
+import { Check, ExternalLink } from "lucide-react";
 
 interface SetupFormProps {
   userId: string;
@@ -73,13 +73,20 @@ function PricingCard({
 
       <button
         type="button"
-        className={`w-full py-2 px-4 rounded-lg font-medium transition-colors ${
-          isSelected
+        className={`w-full py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
+          tier === "Pro" 
+            ? "bg-blue-600 text-white hover:bg-blue-700" 
+            : tier === "Enterprise"
+            ? "bg-purple-600 text-white hover:bg-purple-700"
+            : isSelected
             ? "bg-red-500 text-white"
             : "bg-gray-700 text-gray-300 hover:bg-gray-600"
         }`}
       >
         {CTA}
+        {(tier === "Pro" || tier === "Enterprise") && (
+          <ExternalLink className="w-4 h-4" />
+        )}
       </button>
     </div>
   );
@@ -123,7 +130,7 @@ export function SetupForm({ userId, userName }: SetupFormProps) {
       tier: "Pro",
       price: "$79/mo",
       bestFor: "Best for 5-50 users",
-      CTA: "14-day free trial",
+      CTA: "Book now",
       value: "pro",
       benefits: [
         { text: "Five workspaces", checked: true },
@@ -160,6 +167,19 @@ export function SetupForm({ userId, userName }: SetupFormProps) {
   };
 
   const handlePlanSelect = (planValue: string) => {
+    // If Pro plan is selected, open Razorpay payment page in new tab
+    if (planValue === "pro") {
+      window.open("https://pages.razorpay.com/pl_QjvFBJY5FfWWRX/view", "_blank");
+      return;
+    }
+    
+    // If Enterprise plan is selected, open contact form or email
+    if (planValue === "enterprise") {
+      window.open("mailto:sales@zenith.com?subject=Enterprise Plan Inquiry", "_blank");
+      return;
+    }
+    
+    // For free plan, just select it normally
     setFormData((prev) => ({ ...prev, plan: planValue }));
     // Clear plan error if it exists
     if (fieldErrors.plan) {
