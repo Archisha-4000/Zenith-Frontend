@@ -2,12 +2,13 @@
 
 import React from 'react'
 import { cn } from '@/lib/utils'
+import Image from 'next/image'
 import { 
   LayoutDashboard, 
   Users, 
   FolderOpen, 
   Bot, 
-  CreditCard, 
+  CreditCard,
   Github, 
   Shield, 
   BarChart3, 
@@ -169,13 +170,18 @@ export function Sidebar({
         isOpen ? "translate-x-0" : "-translate-x-full",
         collapsed ? "w-16" : "w-64",
         className
-      )}>
-        {/* Sidebar Header */}
+      )}>        {/* Sidebar Header */}
         <div className="flex items-center justify-between h-16 px-4 border-b border-gray-800">
           {!collapsed && (
             <div className="flex items-center">
-              <div className="w-8 h-8 bg-gradient-to-br from-rose-800 to-red-700 rounded-lg flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-sm">Z</span>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center shadow-lg overflow-hidden">
+                <Image
+                  src="/logo.png"
+                  alt="Zenith Logo"
+                  width={32}
+                  height={32}
+                  className="object-contain"
+                />
               </div>
               <div className="ml-3">
                 <h1 className="text-lg font-bold text-white">Zenith</h1>
@@ -185,8 +191,14 @@ export function Sidebar({
           )}
           
           {collapsed && (
-            <div className="w-8 h-8 bg-gradient-to-br from-rose-800 to-red-700 rounded-lg flex items-center justify-center shadow-lg mx-auto">
-              <span className="text-white font-bold text-sm">Z</span>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center shadow-lg mx-auto overflow-hidden">
+              <Image
+                src="/logo.png"
+                alt="Zenith Logo"
+                width={32}
+                height={32}
+                className="object-contain"
+              />
             </div>
           )}
 

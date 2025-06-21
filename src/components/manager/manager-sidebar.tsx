@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import Image from "next/image"
 import {
   LayoutDashboard,
   PlusCircle,
@@ -68,12 +69,17 @@ export function ManagerSidebar({
     <div className={cn(
       "fixed inset-y-0 left-0 z-50 w-64 bg-black border-r border-gray-800 transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
       isOpen ? "translate-x-0" : "-translate-x-full"
-    )}>
-      {/* Sidebar Header */}
+    )}>      {/* Sidebar Header */}
       <div className="flex items-center justify-between h-16 px-6 border-b border-gray-800">
         <div className="flex items-center">
-          <div className="w-8 h-8 bg-gradient-to-br from-rose-800 to-red-700 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">Z</span>
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden">
+            <Image
+              src="/logo.png"
+              alt="Zenith Logo"
+              width={32}
+              height={32}
+              className="object-contain"
+            />
           </div>
           <span className="ml-3 text-lg font-semibold text-white">Zenith Manager</span>
         </div>
