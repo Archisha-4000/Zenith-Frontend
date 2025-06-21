@@ -6,7 +6,9 @@ import {
   Quest,
   Task,
   AuditLog,
-  InstallerLink
+  InstallerLink,
+  AITask,
+  AIAllocationLog
 } from "@/models/types";
 
 export const getCollections = async () => {
@@ -18,6 +20,8 @@ export const getCollections = async () => {
     quests: db.collection<Quest>("quests"),
     tasks: db.collection<Task>("tasks"),
     audit_logs: db.collection<AuditLog>("audit_logs"),
-    installer_links: db.collection<InstallerLink>("installer_links")
+    installer_links: db.collection<InstallerLink>("installer_links"),
+    aiTasks: db.collection<AITask>("processing_results"),
+    aiAllocationLogs: db.collection<AIAllocationLog>("processing_results")
   };
 };

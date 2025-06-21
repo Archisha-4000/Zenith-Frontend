@@ -1,13 +1,13 @@
 "use client"
 
-import { User } from "@/models/types"
+import { User, ClientUser } from "@/models/types"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { X, Mail, User as UserIcon, Briefcase, TrendingUp, DollarSign, Star, Calendar } from "lucide-react"
 
 interface UserDetailsModalProps {
-  user: User | null
+  user: User | ClientUser | null
   isOpen: boolean
   onCloseAction: () => void
 }
