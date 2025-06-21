@@ -46,13 +46,13 @@ const sidebarItems: SidebarItem[] = [
     id: 'employees', 
     label: 'Employee Directory', 
     icon: Users,
-    badge: 23
+    badge: 4
   },
   { 
     id: 'projects', 
     label: 'Project Tracker', 
     icon: FolderOpen,
-    badge: 8
+    badge: 5
   },
   { 
     id: 'ai-monitor', 
@@ -70,12 +70,6 @@ const sidebarItems: SidebarItem[] = [
     label: 'GitHub Integration', 
     icon: Github,
     badge: 5
-  },
-  { 
-    id: 'blockchain', 
-    label: 'Blockchain Ledger', 
-    icon: Shield,
-    badge: 2
   },
   { 
     id: 'analytics', 

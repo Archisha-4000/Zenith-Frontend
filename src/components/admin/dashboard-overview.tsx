@@ -7,28 +7,28 @@ export function DashboardOverview() {
   const metrics = [
     {
       title: "Total Employees",
-      value: "247",
+      value: "4",
       change: "+12%",
       icon: Users,
       color: "text-blue-400",
     },
     {
       title: "Active Projects",
-      value: "18",
+      value: "5",
       change: "+3",
       icon: FolderOpen,
       color: "text-green-400",
     },
     {
       title: "Tasks Assigned Today",
-      value: "156",
+      value: "25",
       change: "+23%",
       icon: CheckCircle,
       color: "text-purple-400",
     },
     {
       title: "Pending Payments",
-      value: "$47,230",
+      value: "$4,230",
       change: "-8%",
       icon: DollarSign,
       color: "text-yellow-400",
