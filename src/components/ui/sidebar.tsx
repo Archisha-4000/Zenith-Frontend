@@ -124,16 +124,15 @@ export function Sidebar({
               : "text-gray-400 hover:text-white hover:bg-gray-800/50",
             collapsed && "justify-center px-2"
           )}
-        >
-          <div className="flex items-center min-w-0 flex-1">
-            <item.icon 
-              size={18} 
-              className={cn(
+        >          <div className="flex items-center min-w-0 flex-1">
+            {React.createElement(item.icon, {
+              size: 18,
+              className: cn(
                 "flex-shrink-0",
                 !collapsed && "mr-3",
                 isActive ? "text-white" : "text-gray-400"
-              )} 
-            />
+              )
+            })}
             {!collapsed && (
               <span className="truncate">{item.label}</span>
             )}
@@ -206,9 +205,8 @@ export function Sidebar({
           {onCollapseToggle && (
             <button
               onClick={onCollapseToggle}
-              className="hidden lg:flex items-center justify-center w-8 h-8 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
-            >
-              {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+              className="hidden lg:flex items-center justify-center w-8 h-8 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"            >
+              {collapsed ? React.createElement(ChevronRight, { size: 16 }) : React.createElement(ChevronLeft, { size: 16 })}
             </button>
           )}
         </div>        {/* Navigation */}
@@ -219,9 +217,8 @@ export function Sidebar({
         {/* Sidebar Footer */}
         <div className="p-4 border-t border-gray-800">
           {!collapsed && (
-            <div className="mb-4 p-3 bg-red-900/20 border border-rose-800 rounded-lg">
-              <div className="flex items-center">
-                <Bell size={16} className="text-red-400 mr-2" />
+            <div className="mb-4 p-3 bg-red-900/20 border border-rose-800 rounded-lg">              <div className="flex items-center">
+                {React.createElement(Bell, { size: 16, className: "text-red-400 mr-2" })}
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-medium text-red-400">System Alert</p>
                   <p className="text-xs text-gray-400 truncate">AI engine running optimally</p>
@@ -233,17 +230,15 @@ export function Sidebar({
           <div className={cn("space-y-2", collapsed && "space-y-1")}>
             <button className={cn(
               "w-full flex items-center text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors duration-200",
-              collapsed ? "justify-center p-2" : "px-3 py-2"
-            )}>
-              <Settings size={18} className={cn(!collapsed && "mr-3")} />
+              collapsed ? "justify-center p-2" : "px-3 py-2"            )}>
+              {React.createElement(Settings, { size: 18, className: cn(!collapsed && "mr-3") })}
               {!collapsed && "Settings"}
             </button>
             
             <button className={cn(
               "w-full flex items-center text-sm font-medium text-gray-400 hover:text-red-400 hover:bg-red-900/20 rounded-lg transition-colors duration-200",
-              collapsed ? "justify-center p-2" : "px-3 py-2"
-            )}>
-              <LogOut size={18} className={cn(!collapsed && "mr-3")} />
+              collapsed ? "justify-center p-2" : "px-3 py-2"            )}>
+              {React.createElement(LogOut, { size: 18, className: cn(!collapsed && "mr-3") })}
               {!collapsed && "Logout"}
             </button>
           </div>
