@@ -17,7 +17,9 @@ import {
   Zap,
   CheckCircle,
   AlertCircle,
-  Loader2
+  Loader2,
+  Terminal,
+  Eye
 } from "lucide-react"
 import { getCurrentUserAction } from "@/actions/user"
 
@@ -31,6 +33,9 @@ export function TaskUpload() {
   const [orgId, setOrgId] = useState("")
   const [uploading, setUploading] = useState(false)
   const [uploadResult, setUploadResult] = useState<{ success: boolean; message: string; data?: any } | null>(null)
+  const [logs, setLogs] = useState("")
+  const [showLogs, setShowLogs] = useState(false)
+  const [requestStartTime, setRequestStartTime] = useState<Date | null>(null)
 
   useEffect(() => {
     async function loadUserData() {
@@ -46,6 +51,60 @@ export function TaskUpload() {
     loadUserData()
   }, [])
 
+  // Fetch and filter logs from showcase endpoint when logs are visible
+  useEffect(() => {
+    if (!showLogs) return
+
+    const fetchFilteredLogs = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/logs/showcase')
+        if (response.ok) {
+          const logText = await response.text()
+          
+          // Filter logs: only show lines containing $$$$ and after request time
+          const logLines = logText.split('\n').filter((line: string) => {
+            if (!line.includes('$$$$')) return false
+            
+            // Extract timestamp from log line (format: 2025-06-21 23:48:28.662)
+            const timestampMatch = line.match(/^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3})/)
+            if (!timestampMatch || !requestStartTime) return true
+            
+            try {
+              const logTime = new Date(timestampMatch[1])
+              return logTime >= requestStartTime
+            } catch {
+              return true // Include if timestamp parsing fails
+            }
+          }).map((line: string) => {
+            // Remove timestamp and log level prefix, keep only the message part
+            // Pattern: timestamp | level | module:function:line - message
+            const messageMatch = line.match(/^[\d-\s:.]+\|\s*\w+\s*\|\s*[^-]+-\s*(.*)$/)
+            const cleanMessage = messageMatch ? messageMatch[1] : line
+            // Replace $$$$ with single $
+            return cleanMessage.replace(/\$\$\$\$/g, '$')
+          })
+          
+          const filteredLogs = logLines.join('\n')
+          // Add dot to the last line if there are logs
+          const finalLogs = filteredLogs && logLines.length > 0 
+            ? filteredLogs.replace(/([^\n]+)$/, '$1.')
+            : filteredLogs
+          setLogs(finalLogs)
+        }
+      } catch (error) {
+        console.error("Failed to fetch logs:", error)
+      }
+    }
+
+    // Fetch immediately
+    fetchFilteredLogs()
+
+    // Set up interval to fetch every 2 seconds
+    const interval = setInterval(fetchFilteredLogs, 2000)
+
+    return () => clearInterval(interval)
+  }, [showLogs, requestStartTime])
+
   const handleSubmit = async () => {
     if (!requirementData.requirement_text || !orgId) {
       setUploadResult({
@@ -55,9 +114,12 @@ export function TaskUpload() {
       return
     }
 
+    // Clear logs, set request start time, and show logs panel
+    setLogs("")
+    setRequestStartTime(new Date())
+    setShowLogs(true)
     setUploading(true)
     setUploadResult(null)
-
     try {
       const payload = {
         org_id: orgId,
@@ -69,7 +131,7 @@ export function TaskUpload() {
 
       console.log("Sending payload:", payload)
 
-      const response = await fetch('https://anirban-majumder-zenith-agent.hf.space/process-requirement', {
+      const response = await fetch('http://localhost:8000/process-requirement', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -114,6 +176,39 @@ export function TaskUpload() {
         <h1 className="text-3xl font-bold text-white">Process Requirement</h1>
         <p className="text-zinc-400 mt-1">Submit requirements for AI-powered task generation and allocation</p>
       </div>
+
+      {/* AI Processing Logs - Top Section */}
+      {showLogs && (
+        <Card className="bg-zinc-900/50 border-cyan-600/50">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Terminal className="w-5 h-5 text-cyan-400" />
+                AI Processing Logs
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowLogs(false)}
+                className="border-cyan-600 text-cyan-400 hover:bg-cyan-600 hover:text-white"
+              >
+                <Eye className="w-4 h-4 mr-2" />
+                Hide Logs
+              </Button>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-black/80 p-4 rounded-lg border border-cyan-600/30 max-h-64 overflow-y-auto">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              </div>
+              <pre className="text-xs text-green-400 font-mono whitespace-pre-wrap leading-relaxed">
+                {logs || "Waiting for logs..."}
+              </pre>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Task Upload Form */}
