@@ -29,7 +29,7 @@ export function AIMonitor() {
     {
       id: 1,
       task: "Code Review - DeFi Protocol",
-      assignedTo: "Alice Johnson",
+      assignedTo: "Anirban Majumder",
       priority: "High",
       estimatedTime: "2h 30m",
       skills: ["Solidity", "Security"],
@@ -38,7 +38,7 @@ export function AIMonitor() {
     {
       id: 2,
       task: "UI Component Development",
-      assignedTo: "Bob Smith",
+      assignedTo: "Nasiruddin Thander",
       priority: "Medium",
       estimatedTime: "4h 15m",
       skills: ["React", "TypeScript"],
@@ -47,7 +47,7 @@ export function AIMonitor() {
     {
       id: 3,
       task: "Database Optimization",
-      assignedTo: "David Wilson",
+      assignedTo: "Archisha Upadhyaya",
       priority: "Low",
       estimatedTime: "3h 45m",
       skills: ["PostgreSQL", "Performance"],
@@ -80,10 +80,10 @@ export function AIMonitor() {
   ]
 
   const employeeWorkload = [
-    { name: "Alice Johnson", currentLoad: 85, optimalLoad: 75, efficiency: 94 },
-    { name: "Bob Smith", currentLoad: 92, optimalLoad: 80, efficiency: 87 },
-    { name: "Carol Davis", currentLoad: 68, optimalLoad: 75, efficiency: 96 },
-    { name: "David Wilson", currentLoad: 45, optimalLoad: 70, efficiency: 91 },
+    { name: "Anirban Majumder", currentLoad: 85, optimalLoad: 75, efficiency: 94 },
+    { name: "Nasiruddin Thander", currentLoad: 92, optimalLoad: 80, efficiency: 87 },
+    { name: "Debarati Seal", currentLoad: 68, optimalLoad: 75, efficiency: 96 },
+    { name: "Archisha Upadhyaya", currentLoad: 45, optimalLoad: 70, efficiency: 91 },
   ]
 
   return (

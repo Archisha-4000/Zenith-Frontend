@@ -8,7 +8,6 @@ import { ProjectTracker } from "@/components/admin/project-tracker"
 import { AIMonitor } from "@/components/admin/ai-monitor"
 import { PaymentsPanel } from "@/components/admin/payments-panel"
 import { GitHubIntegration } from "@/components/admin/github-integration"
-import { BlockchainLedger } from "@/components/admin/blockchain-ledger"
 import { Analytics } from "@/components/admin/analytics"
 import { ActivityLogs } from "@/components/admin/activity-logs"
 
@@ -30,8 +29,6 @@ export default function AdminDashboard() {
         return <PaymentsPanel />
       case "github":
         return <GitHubIntegration />
-      case "blockchain":
-        return <BlockchainLedger />
       case "analytics":
         return <Analytics />
       case "logs":

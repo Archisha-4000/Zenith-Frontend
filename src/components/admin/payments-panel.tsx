@@ -16,7 +16,7 @@ export function PaymentsPanel() {
   const pendingPayments = [
     {
       id: 1,
-      employee: "Alice Johnson",
+      employee: "Anirban Majumder",
       amount: 8500,
       type: "Milestone",
       project: "DeFi Protocol V2",
@@ -27,7 +27,7 @@ export function PaymentsPanel() {
     },
     {
       id: 2,
-      employee: "Bob Smith",
+      employee: "Nasiruddin Thander",
       amount: 6200,
       type: "Monthly",
       project: "Mobile Wallet",
@@ -38,7 +38,7 @@ export function PaymentsPanel() {
     },
     {
       id: 3,
-      employee: "Carol Davis",
+      employee: "Debarati Seal",
       amount: 12000,
       type: "Bonus",
       project: "Security Audit",
@@ -49,7 +49,7 @@ export function PaymentsPanel() {
     },
     {
       id: 4,
-      employee: "David Wilson",
+      employee: "Archisha Upadhyaya",
       amount: 4500,
       type: "Task-based",
       project: "API Gateway",
@@ -63,7 +63,7 @@ export function PaymentsPanel() {
   const recentTransactions = [
     {
       id: "tx_001",
-      employee: "Alice Johnson",
+      employee: "Anirban Majumder",
       amount: 7500,
       date: "2024-01-20",
       status: "Completed",
@@ -72,7 +72,7 @@ export function PaymentsPanel() {
     },
     {
       id: "tx_002",
-      employee: "Bob Smith",
+      employee: "Nasiruddin Thander",
       amount: 5800,
       date: "2024-01-18",
       status: "Completed",
@@ -81,7 +81,7 @@ export function PaymentsPanel() {
     },
     {
       id: "tx_003",
-      employee: "Carol Davis",
+      employee: "Debarati Seal",
       amount: 3200,
       date: "2024-01-15",
       status: "Failed",

@@ -59,7 +59,7 @@ export function GitHubIntegration() {
 
   const employeeActivity = [
     {
-      name: "Alice Johnson",
+      name: "Anirban Majumder",
       avatar: "/placeholder.svg?height=32&width=32",
       commits: 47,
       pullRequests: 12,
@@ -70,7 +70,7 @@ export function GitHubIntegration() {
       contributionScore: 94,
     },
     {
-      name: "Bob Smith",
+      name: "Nasiruddin Thander",
       avatar: "/placeholder.svg?height=32&width=32",
       commits: 32,
       pullRequests: 8,
@@ -81,7 +81,7 @@ export function GitHubIntegration() {
       contributionScore: 87,
     },
     {
-      name: "Carol Davis",
+      name: "Debarati Seal",
       avatar: "/placeholder.svg?height=32&width=32",
       commits: 28,
       pullRequests: 6,
@@ -92,7 +92,7 @@ export function GitHubIntegration() {
       contributionScore: 0,
     },
     {
-      name: "David Wilson",
+      name: "Archisha Upadhyaya",
       avatar: "/placeholder.svg?height=32&width=32",
       commits: 19,
       pullRequests: 4,
