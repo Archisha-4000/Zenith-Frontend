@@ -35,9 +35,9 @@ interface AnimatedTabsProps {
 
 const features = [
   {
-    title: "Blockchain-backed Audit Trail",
+    title: "serverless-backed Audit Trail",
     description:
-      "Every task allocation is recorded on the blockchain, ensuring complete transparency and accountability",
+      "Every task allocation is recorded on the serverless, ensuring complete transparency and accountability",
     icon: <Eye className="h-8 w-8 text-deepRed" />,
     label: "Transparency",
     image: "/feature1.png",

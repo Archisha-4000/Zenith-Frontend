@@ -24,7 +24,7 @@ const steps = [
     icon: Share2,
     title: "Distribute",
     description:
-      "Tasks are automatically assigned with transparency and auditability via blockchain.",
+      "Tasks are automatically assigned with transparency and auditability via serverless.",
     color: "from-red-500 to-rose-600",
   },
 ];

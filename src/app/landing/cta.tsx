@@ -54,7 +54,7 @@ export function CTA() {
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             Join the organizations that are revolutionizing their workflow with
-            Zenith's AI-powered blockchain solution.
+            Zenith's AI-powered serverless solution.
           </motion.p>
           <motion.div
             className="flex flex-col sm:flex-row gap-4 justify-center relative z-20"

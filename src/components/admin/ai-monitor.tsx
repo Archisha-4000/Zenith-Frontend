@@ -66,7 +66,7 @@ export function AIMonitor() {
     {
       type: "skill",
       title: "Skill Gap Identified",
-      description: "Need more Rust developers for upcoming blockchain projects.",
+      description: "Need more Rust developers for upcoming serverless projects.",
       impact: "Medium",
       action: "Hire/Train",
     },

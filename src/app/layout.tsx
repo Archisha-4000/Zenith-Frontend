@@ -11,9 +11,9 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Zenith - AI-Powered Blockchain Work Distribution",
+  title: "Zenith - AI-Powered serverless Work Distribution",
   description:
-    "Redefining work allocation with AI and blockchain technology. Connect your teams, automate task distribution, and build with transparency.",
+    "Redefining work allocation with AI and serverless technology. Connect your teams, automate task distribution, and build with transparency.",
 }
 
 export default function RootLayout({

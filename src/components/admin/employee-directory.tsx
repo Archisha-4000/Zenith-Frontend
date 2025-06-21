@@ -340,7 +340,7 @@ export function EmployeeDirectory() {
               <li><strong>employee_id</strong> or <strong>employeeId</strong> - Unique employee identifier (required)</li>
               <li><strong>email</strong> - Employee email address (optional)</li>
               <li><strong>role</strong> - System role: admin, manager, or employee (optional, defaults to employee)</li>
-              <li><strong>job_role</strong> or <strong>jobRole</strong> - Job title/position like "Software Engineer", "Blockchain Architect" etc. (optional)</li>
+              <li><strong>job_role</strong> or <strong>jobRole</strong> - Job title/position like "Software Engineer", "serverless Architect" etc. (optional)</li>
               <li><strong>seniority</strong> - Experience level: junior, mid, or senior (optional, defaults to mid)</li>
               <li><strong>skills</strong> - Hash-separated skills list (e.g., JavaScript#React#Node.js) (optional)</li>
               <li><strong>current_workload</strong> or <strong>currentWorkload</strong> - Current workload percentage (optional)</li>
@@ -352,11 +352,11 @@ export function EmployeeDirectory() {
             <p className="mt-2 text-xs">
               <strong>Example CSV:</strong><br/>              <code className="bg-zinc-700 px-2 py-1 rounded">
                 name,employee_id,email,role,job_role,seniority,skills,current_workload,hourly_rate,performance_rating,is_on_leave<br/>
-                John Doe,EMP001,john@company.com,employee,Blockchain Developer,mid,JavaScript#React#Solidity,75,50.00,8.5,false<br/>
-                Jane Smith,EMP002,jane@company.com,manager,Blockchain Architect,senior,Management#Architecture#Solidity,60,75.00,9.0,false
+                John Doe,EMP001,john@company.com,employee,serverless Developer,mid,JavaScript#React#Solidity,75,50.00,8.5,false<br/>
+                Jane Smith,EMP002,jane@company.com,manager,serverless Architect,senior,Management#Architecture#Solidity,60,75.00,9.0,false
               </code>
             </p>            <p className="mt-2 text-xs text-amber-400">
-              <strong>Important:</strong> "role" is for system permissions (admin/manager/employee), while "job_role" is for job titles like "Blockchain Architect".
+              <strong>Important:</strong> "role" is for system permissions (admin/manager/employee), while "job_role" is for job titles like "serverless Architect".
             </p>            <p className="mt-1 text-xs text-amber-400">
               <strong>Skills Note:</strong> Use hash (#) to separate multiple skills (e.g., JavaScript#React#Node.js).
             </p>

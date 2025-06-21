@@ -14,7 +14,7 @@ export function Analytics() {
   }
 
   const teamEfficiency = [
-    { team: "Blockchain Core", efficiency: 94, trend: "up", projects: 3, members: 8 },
+    { team: "serverless Core", efficiency: 94, trend: "up", projects: 3, members: 8 },
     { team: "Frontend Team", efficiency: 82, trend: "down", projects: 2, members: 5 },
     { team: "Backend Team", efficiency: 91, trend: "up", projects: 4, members: 6 },
     { team: "Security Team", efficiency: 96, trend: "up", projects: 2, members: 3 },

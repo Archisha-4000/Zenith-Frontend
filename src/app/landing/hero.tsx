@@ -102,7 +102,7 @@ const Hero = () => {
           <span>Unified planning, building, testing, and deployment</span>
           <br />
           <span>
-            AI‑native, blockchain‑secure, audit‑ready workflow for your teams.
+            AI‑native, serverless‑secure, audit‑ready workflow for your teams.
           </span>
         </div>
 

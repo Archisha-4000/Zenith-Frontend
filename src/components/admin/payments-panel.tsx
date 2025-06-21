@@ -22,7 +22,7 @@ export function PaymentsPanel() {
       project: "DeFi Protocol V2",
       dueDate: "2024-01-25",
       tasksCompleted: 8,
-      blockchainVerified: true,
+      serverlessVerified: true,
       status: "Ready",
     },
     {
@@ -33,7 +33,7 @@ export function PaymentsPanel() {
       project: "Mobile Wallet",
       dueDate: "2024-01-30",
       tasksCompleted: 12,
-      blockchainVerified: true,
+      serverlessVerified: true,
       status: "Ready",
     },
     {
@@ -44,7 +44,7 @@ export function PaymentsPanel() {
       project: "Security Audit",
       dueDate: "2024-01-28",
       tasksCompleted: 15,
-      blockchainVerified: false,
+      serverlessVerified: false,
       status: "Pending Verification",
     },
     {
@@ -55,7 +55,7 @@ export function PaymentsPanel() {
       project: "API Gateway",
       dueDate: "2024-02-01",
       tasksCompleted: 6,
-      blockchainVerified: true,
+      serverlessVerified: true,
       status: "Ready",
     },
   ]
@@ -67,7 +67,7 @@ export function PaymentsPanel() {
       amount: 7500,
       date: "2024-01-20",
       status: "Completed",
-      blockchainHash: "0x1a2b3c4d...",
+      serverlessHash: "0x1a2b3c4d...",
       type: "Milestone",
     },
     {
@@ -76,7 +76,7 @@ export function PaymentsPanel() {
       amount: 5800,
       date: "2024-01-18",
       status: "Completed",
-      blockchainHash: "0x5e6f7g8h...",
+      serverlessHash: "0x5e6f7g8h...",
       type: "Monthly",
     },
     {
@@ -85,7 +85,7 @@ export function PaymentsPanel() {
       amount: 3200,
       date: "2024-01-15",
       status: "Failed",
-      blockchainHash: null,
+      serverlessHash: null,
       type: "Task-based",
     },
   ]
@@ -110,7 +110,7 @@ export function PaymentsPanel() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white">Payments & Invoices</h1>
-          <p className="text-zinc-400 mt-1">Manage blockchain-verified payments and employee compensation</p>
+          <p className="text-zinc-400 mt-1">Manage serverless-verified payments and employee compensation</p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" className="bg-zinc-700 border-zinc-600 text-white hover:bg-zinc-600">
@@ -167,7 +167,7 @@ export function PaymentsPanel() {
 
         <Card className="bg-zinc-800 border-zinc-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-zinc-400">Blockchain Status</CardTitle>
+            <CardTitle className="text-sm font-medium text-zinc-400">serverless Status</CardTitle>
             <Shield className="h-4 w-4 text-purple-400" />
           </CardHeader>
           <CardContent>
@@ -184,7 +184,7 @@ export function PaymentsPanel() {
         <CardHeader>
           <CardTitle className="text-white">Pending Payments</CardTitle>
           <CardContent className="text-zinc-400">
-            Payments awaiting approval and blockchain verification
+            Payments awaiting approval and serverless verification
           </CardContent>
         </CardHeader>
         <CardContent>
@@ -206,7 +206,7 @@ export function PaymentsPanel() {
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <span className="font-medium text-white">{payment.employee}</span>
-                      {payment.blockchainVerified && <Shield className="w-4 h-4 text-green-400" />}
+                      {payment.serverlessVerified && <Shield className="w-4 h-4 text-green-400" />}
                     </div>
                   </TableCell>
                   <TableCell className="text-white font-medium">${payment.amount.toLocaleString()}</TableCell>
@@ -242,7 +242,7 @@ export function PaymentsPanel() {
                         </DropdownMenuItem>
                         <DropdownMenuItem className="text-zinc-300 hover:bg-zinc-600">
                           <Shield className="w-4 h-4 mr-2" />
-                          Verify Blockchain
+                          Verify serverless
                         </DropdownMenuItem>
                         <DropdownMenuItem className="text-red-400 hover:bg-red-900/50">
                           <AlertCircle className="w-4 h-4 mr-2" />
@@ -263,7 +263,7 @@ export function PaymentsPanel() {
         <CardHeader>
           <CardTitle className="text-white">Recent Transactions</CardTitle>
           <CardContent className="text-zinc-400">
-            Latest payment transactions with blockchain verification
+            Latest payment transactions with serverless verification
           </CardContent>
         </CardHeader>
         <CardContent>
@@ -276,7 +276,7 @@ export function PaymentsPanel() {
                 <TableHead className="text-zinc-400">Date</TableHead>
                 <TableHead className="text-zinc-400">Type</TableHead>
                 <TableHead className="text-zinc-400">Status</TableHead>
-                <TableHead className="text-zinc-400">Blockchain Hash</TableHead>
+                <TableHead className="text-zinc-400">serverless Hash</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -299,9 +299,9 @@ export function PaymentsPanel() {
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    {transaction.blockchainHash ? (
+                    {transaction.serverlessHash ? (
                       <code className="text-xs text-blue-400 bg-zinc-700 px-2 py-1 rounded">
-                        {transaction.blockchainHash}
+                        {transaction.serverlessHash}
                       </code>
                     ) : (
                       <span className="text-zinc-400 text-xs">N/A</span>

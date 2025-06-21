@@ -36,7 +36,7 @@ export function DashboardOverview() {
   ]
 
   const projects = [
-    { name: "DeFi Protocol V2", team: "Blockchain Core", progress: 78, status: "On Track" },
+    { name: "DeFi Protocol V2", team: "serverless Core", progress: 78, status: "On Track" },
     { name: "Mobile Wallet App", team: "Frontend Team", progress: 45, status: "Delayed" },
     { name: "Smart Contract Audit", team: "Security Team", progress: 92, status: "Nearly Complete" },
     { name: "API Gateway", team: "Backend Team", progress: 34, status: "In Progress" },
@@ -44,7 +44,7 @@ export function DashboardOverview() {
 
   const alerts = [
     { type: "warning", message: "AI assignment engine detected workload imbalance in Frontend Team" },
-    { type: "info", message: "3 employees have completed blockchain certification" },
+    { type: "info", message: "3 employees have completed serverless certification" },
     { type: "error", message: "Payment verification failed for 2 transactions" },
   ]
 
@@ -53,7 +53,7 @@ export function DashboardOverview() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white">Dashboard Overview</h1>
-          <p className="text-zinc-400 mt-1">Monitor your organization's AI-driven blockchain operations</p>
+          <p className="text-zinc-400 mt-1">Monitor your organization's AI-driven serverless operations</p>
         </div>
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="bg-green-900/50 text-green-400 border-green-600">
@@ -62,7 +62,7 @@ export function DashboardOverview() {
           </Badge>
           <Badge variant="outline" className="bg-blue-900/50 text-blue-400 border-blue-600">
             <Link className="w-3 h-3 mr-1" />
-            Blockchain Synced
+            serverless Synced
           </Badge>
         </div>
       </div>

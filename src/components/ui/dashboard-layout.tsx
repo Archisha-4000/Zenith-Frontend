@@ -43,7 +43,7 @@ const defaultAdminSidebarItems: SidebarItem[] = [
   { id: 'ai-engine', label: 'Task Assignment AI Status', icon: Bot },
   { id: 'payments', label: 'Payments & Invoices', icon: CreditCard },
   { id: 'github', label: 'GitHub Integration', icon: Github },
-  { id: 'blockchain', label: 'Blockchain Ledger', icon: Shield },
+  { id: 'serverless', label: 'serverless Ledger', icon: Shield },
   { id: 'analytics', label: 'Analytics & Insights', icon: BarChart3 },
   { id: 'audit', label: 'Activity Logs', icon: FileText },
 ]

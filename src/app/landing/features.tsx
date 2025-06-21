@@ -54,7 +54,7 @@ export default function FeaturesPage() {
               <span className="text-gray-200">Nonsense.</span>
             </h2>
             <p className="text-lg font-['Poppins'] text-medhive-300 mx-auto max-w-2xl text-white">
-              Zenith unites AI-driven workflows with blockchain‑secure
+              Zenith unites AI-driven workflows with serverless‑secure
               auditability for truly seamless development.
             </p>
           </motion.div>

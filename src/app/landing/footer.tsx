@@ -13,7 +13,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-gray-400 mb-4">
-              Redefining work allocation with AI and blockchain technology.
+              Redefining work allocation with AI and serverless technology.
             </p>
             <div className="flex space-x-4">
               <a

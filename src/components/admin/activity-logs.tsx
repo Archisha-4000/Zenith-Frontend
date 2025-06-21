@@ -36,7 +36,7 @@ export function ActivityLogs() {
       status: "success",
       ipAddress: "192.168.1.100",
       details: "Milestone payment for DeFi Protocol V2",
-      blockchainHash: "0x1a2b3c4d5e6f7890",
+      serverlessHash: "0x1a2b3c4d5e6f7890",
     },
     {
       id: 2,
@@ -48,7 +48,7 @@ export function ActivityLogs() {
       status: "success",
       ipAddress: "192.168.1.100",
       details: "Role changed from Manager to Senior Manager",
-      blockchainHash: null,
+      serverlessHash: null,
     },
     {
       id: 3,
@@ -67,7 +67,7 @@ export function ActivityLogs() {
       user: "Admin User",
       action: "Smart Contract Deployed",
       target: "PaymentProcessor v2.1",
-      type: "blockchain",
+      type: "serverless",
       status: "success",
       ipAddress: "192.168.1.100",
       details: "New payment processor contract deployed to mainnet",
@@ -99,7 +99,7 @@ export function ActivityLogs() {
       timestamp: "2024-01-22 09:20:45",
       user: "System",
       action: "Backup Completed",
-      target: "Database & Blockchain State",
+      target: "Database & serverless State",
       type: "system",
       status: "success",
       ipAddress: "system",
@@ -126,7 +126,7 @@ export function ActivityLogs() {
         return <User className="w-4 h-4 text-blue-400" />
       case "ai_assignment":
         return <Settings className="w-4 h-4 text-purple-400" />
-      case "blockchain":
+      case "serverless":
         return <Shield className="w-4 h-4 text-yellow-400" />
       case "security":
         return <AlertTriangle className="w-4 h-4 text-red-400" />
@@ -217,7 +217,7 @@ export function ActivityLogs() {
                 <SelectItem value="payment">Payments</SelectItem>
                 <SelectItem value="user_management">User Management</SelectItem>
                 <SelectItem value="ai_assignment">AI Assignments</SelectItem>
-                <SelectItem value="blockchain">Blockchain</SelectItem>
+                <SelectItem value="serverless">serverless</SelectItem>
                 <SelectItem value="security">Security</SelectItem>
                 <SelectItem value="system">System</SelectItem>
               </SelectContent>

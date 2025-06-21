@@ -15,10 +15,10 @@ const testimonials = [
   },
   {
     quote:
-      "The blockchain integration gives us complete transparency in our workflow. Our team members appreciate understanding why they're assigned specific tasks.",
+      "The serverless integration gives us complete transparency in our workflow. Our team members appreciate understanding why they're assigned specific tasks.",
     author: "Michael Chen",
     role: "Engineering Manager",
-    company: "BlockChain Solutions",
+    company: "serverless Solutions",
   },
   {
     quote:

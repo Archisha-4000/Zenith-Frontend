@@ -11,7 +11,7 @@ export function ProjectTracker() {
       id: 1,
       name: "DeFi Protocol V2",
       description: "Next-generation decentralized finance protocol with enhanced security",
-      team: "Blockchain Core",
+      team: "serverless Core",
       manager: "Anirban Majumder",
       progress: 78,
       status: "On Track",
@@ -26,7 +26,7 @@ export function ProjectTracker() {
         { name: "Nasiruddin Thander", avatar: "/placeholder.svg?height=32&width=32" },
         { name: "Debarati Seal", avatar: "/placeholder.svg?height=32&width=32" },
       ],
-      blockchainTasks: 23,
+      serverlessTasks: 23,
       completedTasks: 18,
     },
     {
@@ -47,7 +47,7 @@ export function ProjectTracker() {
         { name: "Nasiruddin Thander", avatar: "/placeholder.svg?height=32&width=32" },
         { name: "Archisha Upadhyaya", avatar: "/placeholder.svg?height=32&width=32" },
       ],
-      blockchainTasks: 18,
+      serverlessTasks: 18,
       completedTasks: 8,
     },
     {
@@ -65,7 +65,7 @@ export function ProjectTracker() {
       commits: 89,
       issues: { open: 2, closed: 67 },
       teamMembers: [{ name: "Debarati Seal", avatar: "/placeholder.svg?height=32&width=32" }],
-      blockchainTasks: 15,
+      serverlessTasks: 15,
       completedTasks: 14,
     },
   ]
@@ -187,15 +187,15 @@ export function ProjectTracker() {
                 </div>
               </div>
 
-              {/* Blockchain Tasks */}
+              {/* serverless Tasks */}
               <div className="space-y-2 pt-2 border-t border-zinc-700">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-zinc-400">Blockchain Tasks</span>
+                  <span className="text-xs text-zinc-400">serverless Tasks</span>
                   <span className="text-xs text-white">
-                    {project.completedTasks}/{project.blockchainTasks}
+                    {project.completedTasks}/{project.serverlessTasks}
                   </span>
                 </div>
-                <Progress value={(project.completedTasks / project.blockchainTasks) * 100} className="h-1" />
+                <Progress value={(project.completedTasks / project.serverlessTasks) * 100} className="h-1" />
               </div>
 
               {/* Timeline */}
