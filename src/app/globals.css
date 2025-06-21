@@ -41,6 +41,13 @@ body {
     border-color: transparent;
   }
 }
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/Poppins-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
 
 @font-face {
   font-family: "Kagitingan";
