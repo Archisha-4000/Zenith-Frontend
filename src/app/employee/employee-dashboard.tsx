@@ -239,7 +239,7 @@ export function EmployeeDashboard({ user, tasks }: EmployeeDashboardProps) {
 
     return (
       <div
-        className={`grid grid-cols-[300px_1fr] border-b border-gray-700 hover:bg-gray-800/50 transition-colors ${
+        className={`grid grid-cols-[300px_1fr] border-b border-gray-700 hover:bg-gray-800/50 transition-colors font-['Poppins'] ${
           index % 2 === 0 ? "bg-gray-900" : "bg-gray-900/80"
         }`}
       >
@@ -251,7 +251,7 @@ export function EmployeeDashboard({ user, tasks }: EmployeeDashboardProps) {
             }`}
           ></div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center space-x-2 mb-1">
+            <div className="flex items-center space-x-1 mb-1">
               <PriorityIcon
                 className={`w-3 h-3 ${priorityConfig[task.priority].textColor}`}
               />
@@ -464,7 +464,6 @@ export function EmployeeDashboard({ user, tasks }: EmployeeDashboardProps) {
         </div>
       </div>
 
-      {/* Gantt Chart */}
       <div className="bg-gray-900">
         {/* Timeline Header */}
         <div className="grid grid-cols-[300px_1fr] border-b border-gray-800 bg-gray-800">
