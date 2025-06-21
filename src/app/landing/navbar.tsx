@@ -83,7 +83,7 @@ export default function LandingNavbar() {
               ) : (
                 <button
                   onClick={handleGetStarted}
-                  className="px-4 py-2 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                  className="px-4 py-2 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-['Poppins'] rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
                   disabled={isLoading}
                 >
                   {isLoading ? 'Loading...' : 'Get Started'}

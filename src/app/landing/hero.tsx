@@ -4,12 +4,14 @@
 
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/moving-border";
 import Beams from "@/components/ui/Beams";
 import RotatingText from "@/components/ui/RotatingText";
 import { LayoutGroup } from "framer-motion";
 import { Play, Pause } from "lucide-react";
+import { useUser } from "@civic/auth/react";
+import { getCurrentUserAction } from "@/actions/user";
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -17,9 +19,47 @@ const Hero = () => {
     target: heroRef,
     offset: ["start start", "end start"],
   });
+  
+  const { user } = useUser();
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const textY = useTransform(scrollYProgress, [0, 1], [0, 100]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      if (user) {
+        try {
+          const result = await getCurrentUserAction();
+          if (result.success && result.data) {
+            setUserRole(result.data.role);
+          }
+        } catch (error) {
+          console.error("Error fetching user role:", error);
+        }
+      }
+      setLoading(false);
+    };
+
+    fetchUserRole();
+  }, [user]);
+
+  const getRedirectPath = () => {
+    if (!user) return "/auth/login";
+    if (loading) return "/auth/login";
+    
+    switch (userRole) {
+      case "admin":
+        return "/admin";
+      case "manager":
+        return "/manager";
+      case "employee":
+        return "/employee";
+      default:
+        return "/setup"; // Redirect to setup if role is not recognized
+    }
+  };
 
   return (
     <section
@@ -104,21 +144,19 @@ const Hero = () => {
           <span>
             AI‑native, serverless‑secure, audit‑ready workflow for your teams.
           </span>
-        </div>
-
-        <motion.div
+        </div>        <motion.div
           className="absolute bottom-20 inset-x-0 flex justify-center space-x-4 sm:space-x-6"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.5 }}
         >
-          <Link href="/auth/login">
-            <Button className="rounded-lg border border-white/10 bg-[#E11D48] px-6 py-3 text-lg font-['Poppins'] backdrop-blur-3xl hover:cursor-pointer">
-              Get Started
+          <Link href={getRedirectPath()}>
+            <Button className="rounded-lg border border-white/10 bg-[#E11D48] px-6 py-3 text-lg font-[Poppins] backdrop-blur-3xl hover:cursor-pointer hover:bg-[#BE123C] transition-colors">
+              {loading ? "Loading..." : user ? "Get Started":"Get Started"}
             </Button>
           </Link>
           <Link href="#features">
-            <Button className="rounded-lg border border-white/20 px-6 py-3 text-lg font-['Poppins'] backdrop-blur-md transition-transform duration-300 hover:scale-105 hover:cursor-pointer hover:bg-white hover:text-black">
+            <Button className="rounded-lg border border-white/20 px-6 py-3 text-lg font-[Poppins] backdrop-blur-md transition-transform duration-300 hover:scale-105 hover:cursor-pointer hover:bg-white hover:text-black">
               Learn More
             </Button>
           </Link>
