@@ -1,52 +1,185 @@
 "use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { setupOrganizationAndUser } from '@/actions/setup';
+import type React from "react";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { setupOrganizationAndUser } from "@/actions/setup";
+import { Check } from "lucide-react";
 
 interface SetupFormProps {
   userId: string;
   userName?: string;
 }
 
+interface PricingCardProps {
+  tier: string;
+  price: string;
+  bestFor: string;
+  CTA: string;
+  benefits: { text: string; checked: boolean }[];
+  isSelected: boolean;
+  onSelect: () => void;
+}
+
+function PricingCard({
+  tier,
+  price,
+  bestFor,
+  CTA,
+  benefits,
+  isSelected,
+  onSelect,
+}: PricingCardProps) {
+  return (
+    <div
+      className={`relative p-6 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
+        isSelected
+          ? "border-red-500 bg-red-900/10 shadow-lg shadow-red-500/20"
+          : "border-gray-700 bg-gray-800/50 hover:border-gray-600"
+      }`}
+      onClick={onSelect}
+    >
+      {isSelected && (
+        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+          <div className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium">
+            Selected
+          </div>
+        </div>
+      )}
+
+      <div className="text-center mb-4">
+        <h3 className="text-xl font-bold text-white mb-1">{tier}</h3>
+        <div className="text-2xl font-bold text-red-400 mb-1">{price}</div>
+        <p className="text-sm text-gray-400">{bestFor}</p>
+      </div>
+
+      <ul className="space-y-3 mb-6">
+        {benefits.map((benefit, index) => (
+          <li key={index} className="flex items-center text-sm">
+            <Check
+              className={`w-4 h-4 mr-3 ${
+                benefit.checked ? "text-green-400" : "text-gray-600"
+              }`}
+            />
+            <span
+              className={benefit.checked ? "text-gray-300" : "text-gray-500"}
+            >
+              {benefit.text}
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      <button
+        type="button"
+        className={`w-full py-2 px-4 rounded-lg font-medium transition-colors ${
+          isSelected
+            ? "bg-red-500 text-white"
+            : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+        }`}
+      >
+        {CTA}
+      </button>
+    </div>
+  );
+}
+
 export function SetupForm({ userId, userName }: SetupFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  
+
   const [formData, setFormData] = useState({
     // Organization data
-    orgName: '',
-    logoUrl: '',
-    plan: 'basic',
+    orgName: "",
+    logoUrl: "",
+    plan: "free", // Default to free plan
     // User data (auto-filled, not shown to user)
-    employeeId: '000000', // Set to 000000 as requested
-    userName: userName || '',
-    role: 'admin' as 'admin' | 'manager' | 'employee',
-    providerUserId: userId
+    employeeId: "000000", // Set to 000000 as requested
+    userName: userName || "",
+    role: "admin" as "admin" | "manager" | "employee",
+    providerUserId: userId,
   });
 
+  const pricingPlans = [
+    {
+      tier: "Free",
+      price: "$0/mo",
+      bestFor: "Best for 1-5 users",
+      CTA: "Get started free",
+      value: "free",
+      benefits: [
+        { text: "One workspace", checked: true },
+        { text: "Email support", checked: true },
+        { text: "1 day data retention", checked: false },
+        { text: "Custom roles", checked: false },
+        { text: "Priority support", checked: false },
+        { text: "SSO", checked: false },
+      ],
+    },
+    {
+      tier: "Pro",
+      price: "$79/mo",
+      bestFor: "Best for 5-50 users",
+      CTA: "14-day free trial",
+      value: "pro",
+      benefits: [
+        { text: "Five workspaces", checked: true },
+        { text: "Email support", checked: true },
+        { text: "7 day data retention", checked: true },
+        { text: "Custom roles", checked: true },
+        { text: "Priority support", checked: false },
+        { text: "SSO", checked: false },
+      ],
+    },
+    {
+      tier: "Enterprise",
+      price: "Contact us",
+      bestFor: "Best for 50+ users",
+      CTA: "Contact us",
+      value: "enterprise",
+      benefits: [
+        { text: "Unlimited workspaces", checked: true },
+        { text: "Email support", checked: true },
+        { text: "30 day data retention", checked: true },
+        { text: "Custom roles", checked: true },
+        { text: "Priority support", checked: true },
+        { text: "SSO", checked: true },
+      ],
+    },
+  ];
+
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
     // Clear field error when user starts typing
     if (fieldErrors[field]) {
-      setFieldErrors(prev => ({ ...prev, [field]: '' }));
+      setFieldErrors((prev) => ({ ...prev, [field]: "" }));
+    }
+  };
+
+  const handlePlanSelect = (planValue: string) => {
+    setFormData((prev) => ({ ...prev, plan: planValue }));
+    // Clear plan error if it exists
+    if (fieldErrors.plan) {
+      setFieldErrors((prev) => ({ ...prev, plan: "" }));
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
+    setError("");
     setFieldErrors({});
-    
+
     // Basic validation for organization data
     const errors: Record<string, string> = {};
-    if (!formData.orgName.trim()) errors.orgName = 'Organization name is required';
-    if (!formData.logoUrl.trim()) errors.logoUrl = 'Logo URL is required';
-    if (!formData.plan) errors.plan = 'Plan is required';
-    
+    if (!formData.orgName.trim())
+      errors.orgName = "Organization name is required";
+    if (!formData.logoUrl.trim()) errors.logoUrl = "Logo URL is required";
+    if (!formData.plan) errors.plan = "Plan is required";
+
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       setIsLoading(false);
@@ -56,28 +189,41 @@ export function SetupForm({ userId, userName }: SetupFormProps) {
     try {
       const submitData = new FormData();
       // Organization data
-      submitData.append('orgName', formData.orgName);
-      submitData.append('logoUrl', formData.logoUrl);
-      submitData.append('plan', formData.plan);
+      submitData.append("orgName", formData.orgName);
+      submitData.append("logoUrl", formData.logoUrl);
+      submitData.append("plan", formData.plan);
       // User data (auto-filled from auth)
-      submitData.append('employeeId', formData.employeeId);
-      submitData.append('userName', formData.userName);
-      submitData.append('role', formData.role);
-      submitData.append('providerUserId', formData.providerUserId);
+      submitData.append("employeeId", formData.employeeId);
+      submitData.append("userName", formData.userName);
+      submitData.append("role", formData.role);
+      submitData.append("providerUserId", formData.providerUserId);
 
       const result = await setupOrganizationAndUser(submitData);
-      
+
       if (result.success) {
-        router.push('/admin/dashboard');
+        // Store the IDs for potential use in the dashboard
+        if (result.data) {
+          // You can store these in localStorage, sessionStorage, or pass via URL params
+          sessionStorage.setItem(
+            "setupData",
+            JSON.stringify({
+              organizationId: result.data.organizationId,
+              userId: result.data.userId,
+              orgName: formData.orgName,
+              plan: formData.plan,
+            })
+          );
+        }
+        router.push("/admin");
       } else {
         if (result.fieldErrors) {
           setFieldErrors(result.fieldErrors);
         } else {
-          setError(result.error || 'Setup failed. Please try again.');
+          setError(result.error || "Setup failed. Please try again.");
         }
       }
     } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
+      setError("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -85,15 +231,13 @@ export function SetupForm({ userId, userName }: SetupFormProps) {
 
   return (
     <div className="min-h-screen bg-black text-white flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl">
+      <div className="w-full max-w-6xl">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-red-500 to-red-700 bg-clip-text text-transparent">
             Welcome to Zenith
           </h1>
-          <p className="text-gray-400">
-            Let's set up your organization
-          </p>
+          <p className="text-gray-400">Let's set up your organization</p>
         </div>
 
         {/* Error Message */}
@@ -105,64 +249,93 @@ export function SetupForm({ userId, userName }: SetupFormProps) {
 
         {/* Organization Setup Form */}
         <div className="bg-gray-900 p-8 rounded-xl border border-gray-800 shadow-2xl">
-          <h2 className="text-2xl font-bold mb-6 text-red-500">Organization Details</h2>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Organization Details */}
             <div>
-              <label htmlFor="orgName" className="block text-sm font-medium text-gray-300 mb-2">
-                Organization Name *
-              </label>
-              <input
-                type="text"
-                id="orgName"
-                value={formData.orgName}
-                onChange={(e) => handleInputChange('orgName', e.target.value)}
-                className={`w-full px-4 py-3 bg-black border rounded-lg text-white placeholder-gray-500 focus:ring-1 transition-colors ${
-                  fieldErrors.orgName 
-                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500' 
-                    : 'border-gray-700 focus:border-red-500 focus:ring-red-500'
-                }`}
-                placeholder="Enter your organization name"
-              />
-              {fieldErrors.orgName && (
-                <p className="mt-1 text-sm text-red-400">{fieldErrors.orgName}</p>
-              )}
+              <h2 className="text-2xl font-bold mb-6 text-red-500">
+                Organization Details
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label
+                    htmlFor="orgName"
+                    className="block text-sm font-medium text-gray-300 mb-2"
+                  >
+                    Organization Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="orgName"
+                    value={formData.orgName}
+                    onChange={(e) =>
+                      handleInputChange("orgName", e.target.value)
+                    }
+                    className={`w-full px-4 py-3 bg-black border rounded-lg text-white placeholder-gray-500 focus:ring-1 transition-colors ${
+                      fieldErrors.orgName
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                        : "border-gray-700 focus:border-red-500 focus:ring-red-500"
+                    }`}
+                    placeholder="Enter your organization name"
+                  />
+                  {fieldErrors.orgName && (
+                    <p className="mt-1 text-sm text-red-400">
+                      {fieldErrors.orgName}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="logoUrl"
+                    className="block text-sm font-medium text-gray-300 mb-2"
+                  >
+                    Logo URL *
+                  </label>
+                  <input
+                    type="url"
+                    id="logoUrl"
+                    value={formData.logoUrl}
+                    onChange={(e) =>
+                      handleInputChange("logoUrl", e.target.value)
+                    }
+                    className={`w-full px-4 py-3 bg-black border rounded-lg text-white placeholder-gray-500 focus:ring-1 transition-colors ${
+                      fieldErrors.logoUrl
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                        : "border-gray-700 focus:border-red-500 focus:ring-red-500"
+                    }`}
+                    placeholder="https://example.com/logo.png"
+                  />
+                  {fieldErrors.logoUrl && (
+                    <p className="mt-1 text-sm text-red-400">
+                      {fieldErrors.logoUrl}
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
 
+            {/* Pricing Plans */}
             <div>
-              <label htmlFor="logoUrl" className="block text-sm font-medium text-gray-300 mb-2">
-                Logo URL *
-              </label>
-              <input
-                type="url"
-                id="logoUrl"
-                value={formData.logoUrl}
-                onChange={(e) => handleInputChange('logoUrl', e.target.value)}
-                className={`w-full px-4 py-3 bg-black border rounded-lg text-white placeholder-gray-500 focus:ring-1 transition-colors ${
-                  fieldErrors.logoUrl 
-                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500' 
-                    : 'border-gray-700 focus:border-red-500 focus:ring-red-500'
-                }`}
-                placeholder="https://example.com/logo.png"
-              />
-              {fieldErrors.logoUrl && (
-                <p className="mt-1 text-sm text-red-400">{fieldErrors.logoUrl}</p>
+              <h2 className="text-2xl font-bold mb-6 text-red-500">
+                Choose Your Plan
+              </h2>
+              {fieldErrors.plan && (
+                <p className="mb-4 text-sm text-red-400">{fieldErrors.plan}</p>
               )}
-            </div>
-
-            <div>
-              <label htmlFor="plan" className="block text-sm font-medium text-gray-300 mb-2">
-                Billing Plan *
-              </label>
-              <select
-                id="plan"
-                value={formData.plan}
-                onChange={(e) => handleInputChange('plan', e.target.value)}
-                className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg text-white focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors"
-              >
-                <option value="basic">Basic Plan</option>
-                <option value="pro">Pro Plan</option>
-                <option value="enterprise">Enterprise Plan</option>
-              </select>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {pricingPlans.map((plan) => (
+                  <PricingCard
+                    key={plan.value}
+                    tier={plan.tier}
+                    price={plan.price}
+                    bestFor={plan.bestFor}
+                    CTA={plan.CTA}
+                    benefits={plan.benefits}
+                    isSelected={formData.plan === plan.value}
+                    onSelect={() => handlePlanSelect(plan.value)}
+                  />
+                ))}
+              </div>
             </div>
 
             <button
@@ -176,7 +349,7 @@ export function SetupForm({ userId, userName }: SetupFormProps) {
                   Creating Organization...
                 </div>
               ) : (
-                'Create Organization'
+                "Create Organization"
               )}
             </button>
           </form>
