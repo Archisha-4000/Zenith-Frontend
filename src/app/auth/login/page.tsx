@@ -117,7 +117,6 @@ export default function LoginPage() {
             console.error("Authentication error:", err)
             setError("Authentication failed. Please try again.")
             await signOut()
-        } finally {
             setIsProcessing(false)
         }
     }
