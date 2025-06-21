@@ -323,7 +323,7 @@ export function SetupForm({ userId, userName }: SetupFormProps) {
                         ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                         : "border-gray-700 focus:border-red-500 focus:ring-red-500"
                     }`}
-                    placeholder="https://example.com/logo.png"
+                    placeholder="web-app-manifest-512x512.png"
                   />
                   {fieldErrors.logoUrl && (
                     <p className="mt-1 text-sm text-red-400">

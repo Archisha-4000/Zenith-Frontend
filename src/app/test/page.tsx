@@ -34,7 +34,7 @@ export default function TestDBPage() {
     try {
       const formDataObj = new FormData();
       formDataObj.append('name', formData.name);
-      formDataObj.append('logoUrl', formData.logoUrl || 'https://example.com/default-logo.png'); // Provide default logo URL
+      formDataObj.append('logoUrl', formData.logoUrl || 'default-web-app-manifest-512x512.png'); // Provide default logo URL
       formDataObj.append('plan', formData.plan);
 
       const org = await createOrgAction(formDataObj);
@@ -96,8 +96,8 @@ export default function TestDBPage() {
               name="logoUrl"
               value={formData.logoUrl}
               onChange={handleInputChange}
-              placeholder="https://example.com/logo.png"
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="web-app-manifest-512x512.png"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 

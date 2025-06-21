@@ -74,11 +74,11 @@ export function ManagerSidebar({
         <div className="flex items-center">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden">
             <Image
-              src="/logo.png"
+              src="/web-app-manifest-512x512.png"
               alt="Zenith Logo"
               width={32}
               height={32}
-              className="object-contain"
+              className="object-contain rounded-lg"
             />
           </div>
           <span className="ml-3 text-lg font-semibold text-white">Zenith Manager</span>

@@ -245,11 +245,11 @@ export const NavbarLogo = () => {
       className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
     >
       <Image
-        src="/logo.png"
+        src="/web-app-manifest-512x512.png"
         alt="Zenith Logo"
         width={30}
         height={30}
-        className="object-contain"
+        className="object-contain rounded-lg"
       />
       <span className=" text-gray-300 font-['Poppins'] dark:text-gray-300">Zenith</span>
     </a>
