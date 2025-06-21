@@ -3,7 +3,7 @@ import { CivicAuthProvider } from "@civic/auth/nextjs";
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-
+import  ChatUI from "@/components/Chat"
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -26,6 +26,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <CivicAuthProvider>
           {children}
+          <ChatUI />
         </CivicAuthProvider>
 
       </body>
